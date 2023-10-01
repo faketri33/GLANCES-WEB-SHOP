@@ -1,13 +1,14 @@
 package com.faketri.market.entity;
 
-import com.faketri.market.entity.enums.ECategories;
 import com.faketri.market.entity.enums.ERole;
-import com.faketri.market.entity.enums.EStatusOrder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ import java.util.Set;
 @Table(schema = "public")
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User{
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private long id;
@@ -34,6 +35,4 @@ public class User {
         private Set<ERole> role = new HashSet<>();
         @OneToMany
         private Set<Order> orders = new HashSet<>();
-
-
 }

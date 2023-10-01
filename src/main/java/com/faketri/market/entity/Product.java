@@ -27,4 +27,7 @@ public class Product {
 
     @OneToMany
     private Set<Image> image = new HashSet<>();
+
+    @Column
+    private double price;
 }

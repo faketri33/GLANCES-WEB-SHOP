@@ -22,17 +22,15 @@ public class Order {
     @ManyToOne
     @JoinColumn(name="user_id")
     private User userId;
-    @ManyToOne
+    @ManyToMany
     @JoinColumn(name="product_id")
-    private final Set<Product> products = new HashSet<>();
+    private Set<Product> products = new HashSet<>();
     @Column
     private Date dateOfCreate;
     @Column
     private Date dateOfRelease;
     @Column
     private double price;
-    @ElementCollection(targetClass = EStatusOrder.class)
-    @CollectionTable(name = "order_status",
-            joinColumns = @JoinColumn(name = "order_id"))
+    @Enumerated(EnumType.STRING)
     private EStatusOrder statusOrder;
 }
