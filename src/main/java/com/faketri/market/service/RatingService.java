@@ -23,7 +23,7 @@ public class RatingService {
     }
 
    public double findAverageOfRatingByProductId(long productId){
-        return ratingDao.findAverageOfRatingByProductId(productId);
+        return ratingDao.averageOfRatingByProductId(productId);
    }
 
     public void save(Rating rating){ ratingDao.save(rating); }

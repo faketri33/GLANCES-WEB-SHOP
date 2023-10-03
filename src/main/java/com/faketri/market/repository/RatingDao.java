@@ -14,6 +14,8 @@ public interface RatingDao extends JpaRepository<Rating, Long> {
     Optional<Rating> findById(Long id);
     List<Rating> findByProductId(Long productId);
 
-    @Query("SELECT AVG(r.grade) FROM rating r inner join product_rating pr on pr.product_id = :productId")
-    double findAverageOfRatingByProductId(@Param("productId") long productId);
+    @Query(value = "SELECT AVG(r.grade) FROM rating r " +
+            "inner join product_rating pr on pr.product_id = :productId",
+            nativeQuery = true)
+    Double averageOfRatingByProductId(@Param("productId") long productId);
 }
