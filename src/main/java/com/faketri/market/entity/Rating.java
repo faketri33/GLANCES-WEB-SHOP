@@ -20,6 +20,6 @@ public class Rating {
     @Column
     private String description;
     @Column
-    private short rating;
+    private short grade;
 
 }

@@ -20,10 +20,10 @@ public class RatingController {
         return ratingService.findByProductId(productId);
     }
 
-   // @RequestMapping(path = "/product/{productId}",
-     //       method = RequestMethod.GET,
-     //       produces = MediaType.APPLICATION_JSON_VALUE)
-   // public @ResponseBody double getAverage(@PathVariable(value = "productId") Long productId){
-    //    return ratingService.averageOfRatingByProductId(productId);
-   // }
+   @RequestMapping(path = "/product/{productId}",
+          method = RequestMethod.GET,
+          produces = MediaType.APPLICATION_JSON_VALUE)
+   public @ResponseBody double getAverage(@PathVariable(value = "productId") Long productId){
+       return ratingService.findAverageOfRatingByProductId(productId);
+   }
 }

@@ -22,9 +22,9 @@ public class RatingService {
         return ratingDao.findByProductId(productId);
     }
 
-   // public double averageOfRatingByProductId(long productId){
-   //     return ratingDao.averageOfRatingByProductId(productId);
-   // }
+   public double findAverageOfRatingByProductId(long productId){
+        return ratingDao.findAverageOfRatingByProductId(productId);
+   }
 
     public void save(Rating rating){ ratingDao.save(rating); }
 }
