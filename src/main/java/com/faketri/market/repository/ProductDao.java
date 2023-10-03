@@ -15,6 +15,6 @@ public interface ProductDao extends JpaRepository<Product, Long> {
     Optional<Product> findById(Long id);
     List<Product> findByCategories(ECategories eCategories);
 
-    //TODO : MAKE A SEARCH by start price
+    // TODO : search by price range
     //List<Product> findByPriceFromStartBeforeStop(double start, double stop);
 }

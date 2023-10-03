@@ -1,5 +1,6 @@
 package com.faketri.market.entity;
 
+import com.faketri.market.entity.enums.EBrand;
 import com.faketri.market.entity.enums.ECategories;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,16 +19,18 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @OneToOne
+    private EBrand brand;
     @Column
-    private String name;
+    private String name_model;
     @ElementCollection(targetClass = ECategories.class)
     @CollectionTable(name = "product_categories",
             joinColumns = @JoinColumn(name = "product_id"))
     private Set<ECategories> categories = new HashSet<>();
-
     @OneToMany
     private Set<Image> image = new HashSet<>();
-
+    @OneToMany
+    private Set<Rating> ratings = new HashSet<>();
     @Column
     private double price;
 }

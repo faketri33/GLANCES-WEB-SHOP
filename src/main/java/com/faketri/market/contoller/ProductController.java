@@ -5,9 +5,7 @@ import com.faketri.market.entity.Product;
 import com.faketri.market.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,7 +14,7 @@ public class ProductController {
     @Autowired
     private ProductService productDao;
 
-    @GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<Product> welcome(){
         return productDao.findAll();
     }

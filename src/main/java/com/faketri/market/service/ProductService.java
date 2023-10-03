@@ -18,7 +18,7 @@ public class ProductService {
     }
     public Product findById(Long id){
         return productDao.findById(id).orElseThrow(
-                () -> new RuntimeException("Product not found")
+                () -> new RuntimeException(String.format("Not founded product by id - %d", id))
         );
     }
     public List<Product> findByCategories(ECategories eCategories){
