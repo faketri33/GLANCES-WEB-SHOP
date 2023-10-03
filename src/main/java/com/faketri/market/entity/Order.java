@@ -21,7 +21,7 @@ public class Order {
     private long id;
     @ManyToOne
     @JoinColumn(name="user_id")
-    private User userId;
+    private User user;
     @ManyToMany
     @JoinColumn(name="product_id")
     private Set<Product> products = new HashSet<>();

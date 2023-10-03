@@ -12,12 +12,19 @@ public class RatingService {
     @Autowired
     private RatingDao ratingDao;
 
+    public Rating findById(Long id){
+        return ratingDao.findById(id).orElseThrow(
+                () -> new RuntimeException(String.format("Not founded rating by id - %d", id))
+        );
+    }
+
     public List<Rating> findByProductId(Long productId){
         return ratingDao.findByProductId(productId);
     }
-    public double averageOfRatingByProductId(long productId){
-        return ratingDao.averageOfRatingByProductId(productId);
-    }
+
+   // public double averageOfRatingByProductId(long productId){
+   //     return ratingDao.averageOfRatingByProductId(productId);
+   // }
 
     public void save(Rating rating){ ratingDao.save(rating); }
 }

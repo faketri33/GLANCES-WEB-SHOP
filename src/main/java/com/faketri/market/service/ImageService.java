@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ImageService {
@@ -16,11 +15,11 @@ public class ImageService {
 
     public Image findById(Long id){
         return imageDao.findById(id).orElseThrow(
-                () -> new RuntimeException("Not founded")
+                () -> new RuntimeException(String.format("Not founded image by id - %d", id))
         );
     }
     public List<Image> findByProductId(Long productId){
-        return findByProductId(productId);
+        return imageDao.findByProductId(productId);
     }
 
     public void save(Image image){

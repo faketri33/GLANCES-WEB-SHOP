@@ -19,7 +19,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne
+    @Enumerated(EnumType.STRING)
     private EBrand brand;
     @Column
     private String name_model;
@@ -30,7 +30,7 @@ public class Product {
     @OneToMany
     private Set<Image> image = new HashSet<>();
     @OneToMany
-    private Set<Rating> ratings = new HashSet<>();
+    private Set<Rating> rating = new HashSet<>();
     @Column
     private double price;
 }

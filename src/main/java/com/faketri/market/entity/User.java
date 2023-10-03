@@ -34,5 +34,5 @@ public class User{
                 joinColumns = @JoinColumn(name = "user_id"))
         private Set<ERole> role = new HashSet<>();
         @OneToMany
-        private Set<Order> orders = new HashSet<>();
+        private Set<Order> order = new HashSet<>();
 }
