@@ -1,6 +1,7 @@
 package com.faketri.market.service;
 
 import com.faketri.market.entity.Order;
+import com.faketri.market.exception.responseEntity.ResourceNotFoundException;
 import com.faketri.market.repository.OrderDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ public class OrderService {
 
     public Order findById(Long id){
         return orderDao.findById(id).orElseThrow(
-                () -> new RuntimeException(String.format("Not founded order by id - %d", id))
+                () -> new ResourceNotFoundException("Order with id " + id + " not found")
         );
     }
     public List<Order> findByUserId(Long userId){

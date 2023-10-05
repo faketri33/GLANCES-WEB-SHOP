@@ -2,6 +2,7 @@ package com.faketri.market.service;
 
 import com.faketri.market.entity.Product;
 import com.faketri.market.entity.enums.ECategories;
+import com.faketri.market.exception.responseEntity.ResourceNotFoundException;
 import com.faketri.market.repository.ProductDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,13 @@ public class ProductService {
     public List<Product> findAll() {
         return productDao.findAll();
     }
+
     public Product findById(Long id){
         return productDao.findById(id).orElseThrow(
-                () -> new RuntimeException(String.format("Not founded product by id - %d", id))
+                () -> new ResourceNotFoundException("Product with id " + id + " not found")
         );
     }
+
     public List<Product> findByCategories(ECategories eCategories){
         return productDao.findByCategories(eCategories);
     }

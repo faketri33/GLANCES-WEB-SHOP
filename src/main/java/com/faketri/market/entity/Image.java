@@ -17,7 +17,4 @@ public class Image {
     private long id;
     @Column(columnDefinition = "bytea")
     private byte[] photo;
-    @ManyToOne()
-    @JoinColumn(name="product_id")
-    private Product product;
 }

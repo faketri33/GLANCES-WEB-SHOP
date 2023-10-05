@@ -6,9 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Entity(name = "order")
@@ -24,7 +22,7 @@ public class Order {
     private User user;
     @ManyToMany
     @JoinColumn(name="product_id")
-    private Set<Product> products = new HashSet<>();
+    private List<Product> products = new ArrayList<>();
     @Column
     private Date dateOfCreate;
     @Column
