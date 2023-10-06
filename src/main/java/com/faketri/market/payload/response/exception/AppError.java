@@ -1,4 +1,4 @@
-package com.faketri.market.exception.responseEntity;
+package com.faketri.market.payload.response.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

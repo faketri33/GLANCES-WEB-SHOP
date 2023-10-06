@@ -31,6 +31,8 @@ public class Product {
     private Set<Image> image = new HashSet<>();
     @OneToMany
     private Set<Rating> rating = new HashSet<>();
+    @OneToMany
+    private Set<Characteristics> characteristics = new HashSet<>();
     @Column
     private double price;
 }

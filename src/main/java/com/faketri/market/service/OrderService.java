@@ -1,7 +1,7 @@
 package com.faketri.market.service;
 
 import com.faketri.market.entity.Order;
-import com.faketri.market.exception.responseEntity.ResourceNotFoundException;
+import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.OrderDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

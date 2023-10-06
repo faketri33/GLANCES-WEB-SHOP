@@ -1,4 +1,4 @@
-package com.faketri.market.exception.responseEntity;
+package com.faketri.market.payload.response.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
