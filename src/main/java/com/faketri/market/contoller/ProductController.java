@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@Tag(name = "Product", description = "for word with product")
+@Tag(name = "Product", description = "for work with product")
 @RestController()
 @RequestMapping("/api/product")
 public class ProductController {
@@ -52,7 +52,7 @@ public class ProductController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Found the product",
+                    description = "Display of products in the form of a page",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -76,14 +76,6 @@ public class ProductController {
         return productService.findByAllByPage(page);
     }
 
-    @RequestMapping(path = "/brandName",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @Tag(name = "")
-    public @ResponseBody EBrand[] getAllProductBrandName(){
-        return EBrand.values();
-    }
-
     @RequestMapping(path = "/{productId}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -91,10 +83,11 @@ public class ProductController {
         return productService.findById(productId);
     }
 
-    /*@RequestMapping(path = "/pages/{index}",
+    @RequestMapping(path = "/brandName",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<Product> getProductFromIndex(@PathVariable(value = "index") Long index){
-        return productService.getRecordsFromIndex(index);
-    }*/
+    @Tag(name = "")
+    public @ResponseBody EBrand[] getAllProductBrandName(){
+        return EBrand.values();
+    }
 }
