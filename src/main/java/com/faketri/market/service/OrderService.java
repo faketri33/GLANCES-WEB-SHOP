@@ -18,9 +18,9 @@ public class OrderService {
                 () -> new ResourceNotFoundException("Order with id " + id + " not found")
         );
     }
-    public List<Order> findByUserId(Long userId){
+    /*public List<Order> findByUserId(Long userId){
         return orderDao.findByUserId(userId);
-    }
+    }*/
 
     public void save(Order order){
         orderDao.save(order);

@@ -14,17 +14,17 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
-    public List<User> findAll(){
+   /* public List<User> findAll(){
         return userDao.findAll();
     }
-
+*/
     public User findById(Long id){
         return userDao.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("User with id " + id + " not found")
         );
     }
-
+/*
     public void save(User user){
         userDao.save(user);
-    }
+    }*/
 }

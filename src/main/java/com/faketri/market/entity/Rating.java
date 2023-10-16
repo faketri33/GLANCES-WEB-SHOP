@@ -6,17 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity(name = "rating")
-@Table(schema = "public")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Rating {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column
     private String description;
-    @Column
     private short grade;
 
 }
