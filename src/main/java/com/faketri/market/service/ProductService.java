@@ -3,7 +3,7 @@ package com.faketri.market.service;
 import com.faketri.market.entity.Product;
 import com.faketri.market.entity.enums.ECategories;
 import com.faketri.market.payload.response.exception.ResourceNotFoundException;
-import com.faketri.market.repository.ProductDao;
+import com.faketri.market.repository.ProductImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class ProductService {
     @Autowired
-    private ProductDao productDao;
+    private ProductImpl productDao;
 
     public List<Product> findAll() {
         return productDao.findAll();
@@ -30,19 +30,7 @@ public class ProductService {
         return productDao.findByAllByPage(pageable);
     }
 
-    /*public List<Product> getRecordsFromIndex(Long index) {
-        return productDao.findAll(
-                PageRequest.of((int)(index / 100), 100, Sort.by("id"))
-        ).getContent();
-    }*/
-
     public List<Product> findByCategories(ECategories eCategories){
         return productDao.findByCategories(eCategories);
     }
-
-    /*public void save(Product product){
-        productDao.save(product);
-    }
-
-    public void delete(Product product){ productDao.delete(product); }*/
 }

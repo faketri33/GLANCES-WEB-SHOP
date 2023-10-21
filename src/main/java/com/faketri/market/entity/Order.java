@@ -1,8 +1,6 @@
 package com.faketri.market.entity;
 
 import com.faketri.market.entity.enums.EStatusOrder;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

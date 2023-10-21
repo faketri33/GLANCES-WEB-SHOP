@@ -42,41 +42,41 @@ public class Product {
         public Builder() {
         }
 
-        public Builder setId(Long id){
+        public Builder id(Long id){
             Product.this.id = id;
             return this;
         }
-        public Builder setBrand(EBrand brand){
+        public Builder brand(EBrand brand){
             Product.this.brand = brand;
             return this;
         }
 
-        public Builder setNameModel(String nameModel){
+        public Builder nameModel(String nameModel){
             Product.this.name_model = nameModel;
             return this;
         }
 
-        public Builder addCategories(ECategories categories){
+        public Builder categories(ECategories categories){
             Product.this.categories.add(categories);
             return this;
         }
 
-        public Builder addImage(Image image){
+        public Builder image(Image image){
             Product.this.image.add(image);
             return this;
         }
 
-        public Builder addRating(Rating rating){
+        public Builder rating(Rating rating){
             Product.this.rating.add(rating);
             return this;
         }
 
-        public Builder addCharacteristics(Characteristics characteristics){
+        public Builder characteristics(Characteristics characteristics){
             Product.this.characteristics.add(characteristics);
             return this;
         }
 
-        public Builder setPrice(Double price){
+        public Builder price(Double price){
             Product.this.price = price;
             return this;
         }

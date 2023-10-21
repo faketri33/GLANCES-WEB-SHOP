@@ -1,4 +1,4 @@
-package com.faketri.market.databaseConfig;
+package com.faketri.market.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
