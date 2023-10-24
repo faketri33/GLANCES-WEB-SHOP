@@ -1,11 +1,13 @@
 package com.faketri.market.repository.Contract;
 
+import com.faketri.market.entity.Categories;
+import com.faketri.market.entity.Characteristics;
 import com.faketri.market.entity.Product;
-import com.faketri.market.entity.enums.ECategories;
 
 import java.util.List;
 
 public interface ProductDao {
 
-    List<Product> findByCategories(ECategories categories);
+    List<Product> findByCategories(Categories categories);
+    List<Product> findByCharacteristics(Characteristics characteristics);
 }

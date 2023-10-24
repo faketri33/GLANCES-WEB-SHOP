@@ -1,10 +1,6 @@
 package com.faketri.market.repository.jdbcEntiryLiner.extractor;
 
-import com.faketri.market.entity.Characteristics;
-import com.faketri.market.entity.Image;
-import com.faketri.market.entity.Product;
-import com.faketri.market.entity.Rating;
-import com.faketri.market.entity.enums.EBrand;
+import com.faketri.market.entity.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
@@ -30,7 +26,7 @@ public class ProductExtractor implements ResultSetExtractor<List<Product>> {
                     product.Builder() :
                     Product.newBuilder()
                             .id(id)
-                            .brand(EBrand.valueOf(rs.getString("brand")))
+                            .brand(new Brand(null, rs.getString("brand")))
                             .nameModel(rs.getString("name_model"))
                             .price(rs.getDouble("price"));
 

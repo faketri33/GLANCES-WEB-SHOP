@@ -4,7 +4,6 @@ import com.faketri.market.entity.Characteristics;
 import com.faketri.market.entity.Image;
 import com.faketri.market.entity.Product;
 import com.faketri.market.entity.Rating;
-import com.faketri.market.entity.enums.EBrand;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

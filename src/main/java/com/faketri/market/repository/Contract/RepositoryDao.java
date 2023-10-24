@@ -10,7 +10,7 @@ public interface RepositoryDao<T> {
 
     Optional<T> findById(Long id);
     List<T> findAll();
-    Page<T> findByAllByPage(Pageable pageable);
+    Page<T> findAllByPage(Pageable pageable);
     void save(T entity);
     void update(T entity);
     void delete(T entity);

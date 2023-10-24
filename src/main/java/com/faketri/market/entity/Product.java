@@ -1,7 +1,5 @@
 package com.faketri.market.entity;
 
-import com.faketri.market.entity.enums.EBrand;
-import com.faketri.market.entity.enums.ECategories;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,17 +12,17 @@ import java.util.Set;
 @NoArgsConstructor
 public class Product {
     private Long id;
-    private EBrand brand;
+    private Brand brand;
     private String name_model;
-    private Set<ECategories> categories = new HashSet<>();
+    private Set<Categories> categories = new HashSet<>();
     private Set<Image> image = new HashSet<>();
     private Set<Rating> rating = new HashSet<>();
     private Set<Characteristics> characteristics = new HashSet<>();
     private double price;
 
-    public Product(long id, String brand, String name_model, double price) {
+    public Product(long id, Brand brand, String name_model, double price) {
         this.id = id;
-        this.brand = EBrand.valueOf(brand);
+        this.brand = brand;
         this.name_model = name_model;
         this.price = price;
     }
@@ -46,7 +44,7 @@ public class Product {
             Product.this.id = id;
             return this;
         }
-        public Builder brand(EBrand brand){
+        public Builder brand(Brand brand){
             Product.this.brand = brand;
             return this;
         }
@@ -56,7 +54,7 @@ public class Product {
             return this;
         }
 
-        public Builder categories(ECategories categories){
+        public Builder categories(Categories categories){
             Product.this.categories.add(categories);
             return this;
         }

@@ -1,6 +1,5 @@
 package com.faketri.market;
 
-import com.faketri.market.entity.enums.EBrand;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

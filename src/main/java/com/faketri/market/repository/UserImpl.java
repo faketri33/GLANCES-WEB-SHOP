@@ -30,7 +30,7 @@ public class UserImpl implements RepositoryDao<User> {
     }
 
     @Override
-    public Page<User> findByAllByPage(Pageable pageable) {
+    public Page<User> findAllByPage(Pageable pageable) {
         return null;
     }
 

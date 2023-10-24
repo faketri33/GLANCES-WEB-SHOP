@@ -30,7 +30,7 @@ public class OrderImpl implements RepositoryDao<Order> {
     }
 
     @Override
-    public Page<Order> findByAllByPage(Pageable pageable) {
+    public Page<Order> findAllByPage(Pageable pageable) {
         return null;
     }
 
