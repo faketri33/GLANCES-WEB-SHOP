@@ -6,10 +6,10 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
 
-@Configuration
+//@Configuration
 public class DataBaseConfig {
 
-    @Bean
+    //@Bean
     public NamedParameterJdbcTemplate template(DataSource dataSource){
         return new NamedParameterJdbcTemplate(dataSource);
     }

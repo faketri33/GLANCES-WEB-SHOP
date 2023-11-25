@@ -9,8 +9,6 @@ import java.util.Arrays;
 public class MarketApplication {
 
 	public static void main(String[] args) {
-		System.out.println(Arrays.toString(EBrand.values()));
 		SpringApplication.run(MarketApplication.class, args);
-
 	}
 }

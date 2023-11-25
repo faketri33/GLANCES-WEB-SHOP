@@ -1,15 +1,17 @@
 package com.faketri.market.contoller;
 
+
 import com.faketri.market.entity.Product;
+import com.faketri.market.service.BrandService;
 import com.faketri.market.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @RestController()
@@ -18,6 +20,8 @@ import java.util.*;
 public class ProductController {
     @Autowired
     private ProductService productService;
+    @Autowired
+    private BrandService brandService;
 
     @RequestMapping(path = "/",
             method = RequestMethod.GET,
@@ -32,9 +36,7 @@ public class ProductController {
     public @ResponseBody Page<Product> getAllByPages(
             @RequestParam("number") Integer page_number,
             @RequestParam("size") Integer page_size){
-
-        Pageable page = PageRequest.of(page_number, page_size);
-        return productService.findAllByPage(page);
+        return productService.findAll(PageRequest.of(page_number, page_size));
     }
 
     @RequestMapping(path = "/{productId}",

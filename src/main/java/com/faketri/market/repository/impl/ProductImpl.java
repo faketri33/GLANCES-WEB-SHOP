@@ -1,23 +1,17 @@
-package com.faketri.market.repository;
+package com.faketri.market.repository.impl;
 
 import com.faketri.market.entity.Categories;
 import com.faketri.market.entity.Characteristics;
 import com.faketri.market.entity.Product;
-import com.faketri.market.repository.Contract.ProductDao;
-import com.faketri.market.repository.Contract.RepositoryDao;
-import com.faketri.market.repository.jdbcEntiryLiner.extractor.ProductExtractor;
-import com.faketri.market.repository.jdbcEntiryLiner.mapper.ProductRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-@Repository
-public class ProductImpl implements RepositoryDao<Product>, ProductDao {
+
+public class ProductImpl {
 
     private final String basicSQl =
             "SELECT p.id, p.brand, p.name_model, p.price, i.id AS image_id, i.photo, " +
@@ -33,7 +27,7 @@ public class ProductImpl implements RepositoryDao<Product>, ProductDao {
     @Autowired
     private NamedParameterJdbcTemplate template;
 
-    public List<Product> findAll(){
+    /*public List<Product> findAll(){
         return template.query(
                 basicSQl,
                 new ProductExtractor()
@@ -104,21 +98,39 @@ public class ProductImpl implements RepositoryDao<Product>, ProductDao {
                 Map.of("categories", categories),
                 new ProductExtractor())
         ), pageable, total);
+    }*/
+
+    public Optional<Product> findById(Long id) {
+        return Optional.empty();
     }
 
-    @Override
+    public List<Product> findAll() {
+        return null;
+    }
+
+
+    public Page<Product> findAllByPage(Pageable pageable) {
+        return null;
+    }
+
     public void save(Product entity) {
 
     }
 
-    @Override
     public void update(Product entity) {
 
     }
 
-    @Override
     public void delete(Product entity) {
 
+    }
+
+    public List<Product> findByCategories(Categories categories) {
+        return null;
+    }
+
+    public List<Product> findByCharacteristics(Characteristics characteristics) {
+        return null;
     }
 
     // TODO : search by price range
