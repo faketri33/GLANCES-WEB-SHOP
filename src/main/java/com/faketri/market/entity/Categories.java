@@ -6,7 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -17,7 +21,13 @@ public class Categories {
     private Long id;
     @Column
     private String name;
-    @Column
-    private String value;
+    @MappedCollection
+    private Set<Product> products = new HashSet<>();
 
+    public Categories(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public void addProduct(Product product) {this.products.add(product);}
 }

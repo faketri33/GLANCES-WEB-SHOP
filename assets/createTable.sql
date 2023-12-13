@@ -1,13 +1,14 @@
 CREATE TABLE "product" (
   "id" bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  "brand_id" bigint,
-  "name_model" varchar,
-  "price" money
+  "brand_id" bigint NOT NULL,
+  "name_model" varchar NOT NULL,
+  "price" bigint NOT NULL, 
+  "quantity" int not null
 );
 
 CREATE TABLE "brand" (
   "id" bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  "name" varchar
+  "name" varchar NOT NULL
 );
 
 CREATE TABLE "image" (
@@ -17,38 +18,37 @@ CREATE TABLE "image" (
 
 CREATE TABLE "characteristics" (
   "id" bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  "name" varchar,
-  "value" varchar
+  "name" varchar NOT NULL,
+  "value" varchar NOT NULL
 );
 
 CREATE TABLE "categories" (
   "id" bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  "name" varchar,
-  "value" varchar
+  "name" varchar NOT NULL
 );
 
 CREATE TABLE "rating" (
   "id" bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  "product_id" bigint,
-  "user_id" bigint,
-  "description" varchar,
-  "grate" varchar
+  "product_id" bigint NOT NULL,
+  "user_id" bigint NOT NULL,
+  "description" varchar NOT NULL,
+  "grate" varchar NOT NULL
 );
 
 CREATE TABLE "user" (
   "id" bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  "email" varchar,
-  "login" varchar,
+  "email" varchar NOT NULL unique,
+  "login" varchar NOT NULL unique,
   "password" varchar(3000)
 );
 
 CREATE TABLE "order" (
   "id" bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  "user_id" bigint,
-  "date_of_create" timestamp without time zone,
-  "date_of_realese" timestamp without time zone,
-  "price" money,
-  "status" varchar
+  "user_id" bigint NOT NULL,
+  "date_of_create" timestamp without time zone NOT NULL,
+  "date_of_realese" timestamp without time zone NOT NULL,
+  "price" money NOT NULL,
+  "status" varchar NOT NULL
 );
 
 CREATE TABLE "product_image" (

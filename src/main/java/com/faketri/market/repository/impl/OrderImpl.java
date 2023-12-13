@@ -2,6 +2,8 @@ package com.faketri.market.repository.impl;
 
 import com.faketri.market.entity.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -11,70 +13,43 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class OrderImpl implements CrudRepository<Order, Long> {
+public class OrderImpl implements com.faketri.market.repository.Repository<Long, Order> {
 
     @Autowired
     private NamedParameterJdbcTemplate template;
 
-
     @Override
-    public <S extends Order> S save(S entity) {
-        return null;
-    }
-
-    @Override
-    public <S extends Order> Iterable<S> saveAll(Iterable<S> entities) {
-        return null;
-    }
-
-    public Optional<Order> findById(Long id){
-        return Optional.ofNullable(template.queryForObject("select * from order where id = :id",
-                Map.of("id", id),
-                Order.class));
+    public Optional<Order> findById(Long id) {
+        return Optional.empty();
     }
 
     @Override
-    public boolean existsById(Long aLong) {
-        return false;
-    }
-
-
     public List<Order> findAll() {
         return null;
     }
 
     @Override
-    public Iterable<Order> findAllById(Iterable<Long> longs) {
+    public Page<Order> findAll(Pageable pageable) {
         return null;
     }
 
     @Override
-    public long count() {
+    public Long save(Order entity) {
+        return null;
+    }
+
+    @Override
+    public Boolean update(Order entity) {
+        return null;
+    }
+
+    @Override
+    public Boolean delete(Order entity) {
+        return null;
+    }
+
+    @Override
+    public int countAll() {
         return 0;
-    }
-
-    @Override
-    public void deleteById(Long aLong) {
-
-    }
-
-    @Override
-    public void delete(Order entity) {
-
-    }
-
-    @Override
-    public void deleteAllById(Iterable<? extends Long> longs) {
-
-    }
-
-    @Override
-    public void deleteAll(Iterable<? extends Order> entities) {
-
-    }
-
-    @Override
-    public void deleteAll() {
-
     }
 }

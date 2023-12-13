@@ -1,17 +1,23 @@
 package com.faketri.market.service;
 
 import com.faketri.market.entity.Brand;
-import com.faketri.market.repository.BrandDao;
+import com.faketri.market.payload.response.exception.ResourceNotFoundException;
+import com.faketri.market.repository.impl.BrandImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BrandService {
-
     @Autowired
-    private BrandDao brandDao;
+    private BrandImpl brandImpl;
 
-    public void save(Brand brand){
-        brandDao.save(brand);
+    public Brand findById(Long id){
+        return brandImpl.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Brand with id - " + id + " not found" )
+        );
+    }
+
+    public Long save(Brand brand){
+        return brandImpl.save(brand);
     }
 }

@@ -1,20 +1,30 @@
 package com.faketri.market.service;
 
 import com.faketri.market.entity.User;
+import com.faketri.market.entity.enums.ERole;
 import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.impl.UserImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
     @Autowired
-    private UserImpl userDao;
+    private UserImpl userImpl;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User findById(Long id){
-        return userDao.findById(id).orElseThrow(
+        return userImpl.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("User with id " + id + " not found")
         );
+    }
+
+    public Long save(User user){
+        user.getRole().add(ERole.STANDART);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userImpl.save(user);
     }
 }
