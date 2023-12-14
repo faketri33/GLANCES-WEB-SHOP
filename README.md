@@ -16,4 +16,4 @@ Vue.js<br>
   DataBase Diagram
 </h2>
 
-<img src="https://github.com/faketri/OnlineMarket/blob/master/assets/databaseDiagram.jpg">
+<img src="https://github.com/faketri/OnlineMarket/blob/master/assets/lastDiagram.PNG">
