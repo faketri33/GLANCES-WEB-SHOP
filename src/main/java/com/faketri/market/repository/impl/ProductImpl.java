@@ -1,7 +1,6 @@
 package com.faketri.market.repository.impl;
 
 import com.faketri.market.entity.Brand;
-import com.faketri.market.entity.Categories;
 import com.faketri.market.entity.Characteristics;
 import com.faketri.market.entity.Product;
 import com.faketri.market.repository.ProductRepository;
@@ -24,16 +23,13 @@ import java.util.*;
 public class ProductImpl implements ProductRepository {
 
     private final String basicSelectSQl =
-            "SELECT p.*, brand.id as brand_id, brand.name as brand_name, i.id AS image_id, i.image, " +
-            "ch.id as characteristics_id, ch.name as ch_name, ch.value as ch_value, c.id as categories_id, " +
+            "SELECT p.id, p.name_model, p.categories_id, p.price, p.quantity, p.quntitysold, p.is_promotion, " +
+            "p.promotion_price, brand.id as brand_id, brand.name as brand_name, i.id AS image_id, i.image, " +
             "c.name as categories_name " +
             "FROM product p " +
             "LEFT JOIN product_image pi ON p.id = pi.product_id " +
             "LEFT JOIN image i ON pi.image_id = i.id " +
-            "LEFT JOIN product_characteristics pc on p.id = pc.product_id " +
-            "LEFT JOIN characteristics ch on ch.id = pc.characteristics_id " +
-            "LEFT JOIN product_categories pcat on pcat.product_id = p.id " +
-            "LEFT JOIN categories c on c.id = pcat.categories_id " +
+            "LEFT JOIN categories c on c.id = p.categories_id " +
             "LEFT JOIN brand on brand.id = p.brand_id ";
 
     @Autowired
@@ -60,10 +56,10 @@ public class ProductImpl implements ProductRepository {
                 new ProductExtractor()
         );
     }
-    public List<Product> findByCategories(Categories eCategories){
+    public List<Product> findByCategories(Long categoriesId){
         return template.query(
-                basicSelectSQl + "WHERE pc.categories = :categories ",
-                    Map.of("categories", eCategories),
+                basicSelectSQl + "WHERE pcat.categories_id = :categories ",
+                    Map.of("categories", categoriesId),
                 new ProductExtractor());
     }
     public List<Product> findByCharacteristics(Characteristics characteristics) {
@@ -107,14 +103,14 @@ public class ProductImpl implements ProductRepository {
     public Page<Product> findByCharacteristics(List<Characteristics> characteristics, Pageable pageable) {
         return null; // TODO :: FIND BY CHARACTERISTICS
     }
-    public  Page<Product> findByCategories(Categories categories, Pageable pageable) {
+    public  Page<Product> findByCategories(Long categoriesId, Pageable pageable) {
         return new PageImpl<>(Objects.requireNonNull(template.query(
                 basicSelectSQl + "WHERE pcat.categories_id = :categories "+
                         "LIMIT " + pageable.getPageSize() + " " +
                         "OFFSET " + pageable.getOffset(),
-                Map.of("categories", categories.getId()),
+                Map.of("categories", categoriesId),
                 new ProductExtractor())
-        ), pageable, countByCategories(categories));
+        ), pageable, countByCategories(categoriesId));
     }
     @Override
     public Page<Product> findTopSelling(Pageable pageable) {
@@ -132,7 +128,7 @@ public class ProductImpl implements ProductRepository {
                     "values (:brand_id, :name_model, :price, :quantity, :quntitysold);",
                 new MapSqlParameterSource(Map.of(
                         "brand_id", product.getBrand().getId(),
-                        "name_model", product.getName_model(),
+                        "name_model", product.getNameModel(),
                         "price", product.getPrice(),
                         "quantity", product.getQuantity(),
                         "quntitysold", product.getQuantitySold()
@@ -163,17 +159,21 @@ public class ProductImpl implements ProductRepository {
                 "update product " +
                     "set brand_id = :brand_id, " +
                     "name_model = :name_model, " +
-                    "price = :price " +
-                    "quantity = :quantity" +
-                    "quantitySold = :quntitysold" +
+                    "price = :price, " +
+                    "quantity = :quantity, " +
+                    "quantitySold = :quntitysold, " +
+                    "is_promotion = :is_promotion," +
+                    "promotion_price = :promotion_price " +
                     "where product.id = :id",
                 Map.of(
                     "id", product.getId(),
                     "brand_id", product.getBrand().getId(),
-                    "name_model", product.getName_model(),
+                    "name_model", product.getNameModel(),
                     "price", product.getPrice(),
                     "quantity", product.getQuantity(),
-                    "quntitysold", product.getQuantitySold()
+                    "quntitysold", product.getQuantitySold(),
+                    "is_promotion", product.getIsPromotion(),
+                    "promotion_price", product.getPromotionPrice()
                 )
         ) > 0;
     }
@@ -189,9 +189,9 @@ public class ProductImpl implements ProductRepository {
         return template.query("select COUNT(*) from product",
                 (rs, rowNum) -> rs.getInt(1)).get(0);
     }
-    public int countByCategories(Categories categories){
+    public int countByCategories(Long categoriesId){
         return template.query("select COUNT(*) from product_categories pc where pc.categories_id = :id",
-                        Map.of("id", categories.getId()),
+                        Map.of("id", categoriesId),
                         (rs, rowNum) -> rs.getInt(1))
                 .get(0);
     }

@@ -34,8 +34,8 @@ public class ProductService {
                 () -> new ResourceNotFoundException("Product with id " + id + " not found")
         );
     }
-    public List<Product> findByCategories(Categories categories){
-        return productImpl.findByCategories(categories);
+    public List<Product> findByCategories(Long categoriesId){
+        return productImpl.findByCategories(categoriesId);
     }
     public List<Product> findByCharacteristics(Characteristics characteristics, Pageable pageable){
         return productImpl.findByCharacteristics(characteristics);

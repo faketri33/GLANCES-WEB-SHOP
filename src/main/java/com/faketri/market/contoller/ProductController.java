@@ -1,6 +1,7 @@
 package com.faketri.market.contoller;
 
 
+import com.faketri.market.entity.Categories;
 import com.faketri.market.entity.Product;
 import com.faketri.market.service.BrandService;
 import com.faketri.market.service.ProductService;
@@ -17,15 +18,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController()
+@CrossOrigin("http://localhost:8081")
 @RequestMapping("/api/product")
 @Tag(name = "Product", description = "Operation with product")
 public class ProductController {
     private final ProductService productService;
-    private final BrandService brandService;
 
-    public ProductController(ProductService productService, BrandService brandService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.brandService = brandService;
     }
 
     @RequestMapping(path = "/",
@@ -33,6 +33,13 @@ public class ProductController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<Product> getAll(){
         return productService.findAll();
+    }
+
+    @RequestMapping(path = "/categories/{categoriesId}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<Product> getByCategories(@PathVariable(value = "categoriesId") Long categoriesId){
+        return productService.findByCategories(categoriesId);
     }
 
     @RequestMapping(path = "/page",

@@ -21,7 +21,8 @@ public class Product {
     @Column
     private Brand brand;
     @Column
-    private String name_model;
+    private String nameModel;
+    @Column
     private Categories categories;
     @MappedCollection
     private Set<Image> image = new HashSet<>();
@@ -35,14 +36,22 @@ public class Product {
     private int quantitySold = 0;
     @Column
     private Long price;
+    @Column
+    private Boolean isPromotion;
+    @Column
+    private Long promotionPrice;
 
-    public Product(Long id, Brand brand, String name_model, Long price, int quantity, int quantitySold) {
+    public Product(Long id, Brand brand, String name_model,
+                   Long price, int quantity, int quantitySold,
+                   Boolean isPromotion, Long promotionPrice) {
         this.id = id;
         this.brand = brand;
-        this.name_model = name_model;
+        this.nameModel = name_model;
         this.price = price;
         this.quantity = quantity;
         this.quantitySold = quantitySold;
+        this.isPromotion = isPromotion;
+        this.promotionPrice = promotionPrice;
     }
 
     public void addImage(Image image){ this.image.add(image); }
@@ -50,6 +59,5 @@ public class Product {
     public void addCharacteristics(Characteristics characteristics){ this.characteristics.add(characteristics); }
     public void setCategories(Categories categories) {
         this.categories = categories;
-        this.categories.addProduct(this);
     }
 }

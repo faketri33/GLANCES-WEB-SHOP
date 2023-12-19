@@ -26,7 +26,9 @@ public class ProductExtractor implements ResultSetExtractor<List<Product>> {
                         rs.getString("name_model"),
                         rs.getLong("price"),
                         rs.getInt("quantity"),
-                        rs.getInt("quntitysold")
+                        rs.getInt("quntitysold"),
+                        rs.getBoolean("is_promotion"),
+                        rs.getLong("promotion_price")
                 );
             }
             product.setCategories(new Categories(rs.getLong("categories_id"),
@@ -35,11 +37,6 @@ public class ProductExtractor implements ResultSetExtractor<List<Product>> {
             product.addImage(
                     new Image(rs.getLong("image_id"),
                             rs.getBytes("image")
-                    ));
-            product.addCharacteristics(
-                    new Characteristics(rs.getLong("characteristics_id"),
-                            rs.getString("ch_name"),
-                            rs.getString("ch_value")
                     ));
 
            products.put(id, product);

@@ -21,13 +21,4 @@ public class Categories {
     private Long id;
     @Column
     private String name;
-    @MappedCollection
-    private Set<Product> products = new HashSet<>();
-
-    public Categories(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public void addProduct(Product product) {this.products.add(product);}
 }

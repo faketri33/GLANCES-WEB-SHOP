@@ -4,6 +4,7 @@ import com.faketri.market.entity.*;
 import com.faketri.market.service.BrandService;
 import com.faketri.market.service.CategoriesService;
 import com.faketri.market.service.ProductService;
+import com.faketri.market.service.PromotionService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +12,12 @@ import org.springframework.context.annotation.Bean;
 
 import java.beans.BeanProperty;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @SpringBootApplication
@@ -22,26 +28,16 @@ public class MarketApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(ProductService productService, BrandService brandService, CategoriesService categoriesService){
+	public CommandLineRunner commandLineRunner(ProductService productService, PromotionService promotionService){
 		return args -> {
-			Product product = new Product(null,
-					new Brand(null, "apple"),
-					"15",
-					140000L,
-					100,
-					23
-			);
-			product.getCharacteristics().addAll(List.of(new Characteristics[]{
-                    new Characteristics(null, "Диагональ экрана", "14"),
-                    new Characteristics(null, "Тип матрицы", "ips")
-            }));
-			Categories cat = new Categories(null, "Смартфоны");
-			cat.setId(categoriesService.save(cat));
-			product.setCategories(cat);
-			product.getImage().add(new Image(new File("C:\\Users\\rolll\\Downloads\\EXag993PwjE.jpg")));
-			productService.save(
-					product
-			);
+			Promotion promotion = new Promotion(null, Files.readAllBytes(Path.of("sds")), "РАСПРОДАЖА",
+					"Не пропустите Главное событие года в ГОДУУУУ!" +
+							"Мегаскидки и кешбэк на технику, товары для дома, аксессуары и многое другое. " +
+							"А ещё шанс получить главные призы — машину и квартиру в Москве. Участвуйте в розыгрыше уже сейчас!",
+					LocalDateTime.of(2023, 12,20, 12,00),
+					LocalDateTime.of(2023, 12,30, 12,00));
+
+			List<Product> productList = productService.findAll();
 		};
 	}
 }
