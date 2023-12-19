@@ -17,3 +17,12 @@ Technology stack -
 </h2>
 
 <img src="https://github.com/faketri/OnlineMarket/blob/master/assets/%D0%94%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0.png">
+
+# Controller 
+
+# Product
+<h2>GET</h2>  
+<ul>
+  <li> Path = / </li>
+  <p>find all product. Return - List<Product>. MediaType.APPLICATION_JSON_VALUE</p>
+</ul>
