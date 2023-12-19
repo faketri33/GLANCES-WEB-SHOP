@@ -20,9 +20,18 @@ Technology stack -
 
 # Controller 
 
-# Product
+# Product /api/product
 <h2>GET</h2>  
 <ul>
   <li> Path = / </li>
   <p>find all product. Return - List<Product>. MediaType.APPLICATION_JSON_VALUE</p>
+    <li> Path = /categories/{categoriesId} </li>
+  <p>find all product in categories. Return - List<Product>. MediaType.APPLICATION_JSON_VALUE</p>
+    <li> Path = /page?number=1?size=20 </li>
+    <p>number - number pages</p>
+    <p>size - count products on page</p>
+  <p>find all product by pages. Return - Pages<Product>. MediaType.APPLICATION_JSON_VALUE</p>
+    <li> Path = /{productId} </li>
+    <p> productId - id product </p>
+  <p>Find product by id. Return - Product. MediaType.APPLICATION_JSON_VALUE</p>
 </ul>
