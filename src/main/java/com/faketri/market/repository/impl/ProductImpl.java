@@ -152,6 +152,7 @@ public class ProductImpl implements ProductRepository {
                         "values(:categories_id, :productId)",
                 Map.of("categories_id", product.getCategories().getId(),"productId", productId)
         );
+
         return productId;
     }
     public Boolean update(Product product) {

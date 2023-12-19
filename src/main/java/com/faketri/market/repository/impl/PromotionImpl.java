@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,43 +21,61 @@ import java.util.Optional;
 @Repository
 public class PromotionImpl implements com.faketri.market.repository.Repository<Long, Promotion> {
 
-    private final String baseSql = "select p.id as promotion_id, p.banner, p.title, p.discription, p.date_of_start, " +
-            "p.date_if_end, product.id, product.name_model, product.categories_id, product.price, product.quantity, " +
-            "product.quntitysold, product.is_promotion, product.promotion_price, brand.id as brand_id, " +
-            "brand.name as brand_name, i.id AS image_id, i.image, c.name as categories_name " +
-            "from promotion p " +
-            "left join promotion_product_item ppi on ppi.promotion_id = p.id " +
-            "left join product on product.id = ppi.product_id " +
-            "left join brand on brand.id = product.brand_id " +
-            "left join product_image on product_image.product_id = product.id " +
-            "left join image i on i.id = product_image.image_id " +
-            "left join categories c on c.id = product.id ";
-
     @Autowired
     private NamedParameterJdbcTemplate template;
     @Override
     public Optional<Promotion> findById(Long id) {
         return Optional.ofNullable(
                 template.queryForObject(
-                        baseSql + "where p.id = :id",
+                        "select p.id, p.banner, p.title, p.discription, p.date_of_start, p.date_of_end from promotion p where p.id = :id",
                         Map.of("id", id), new PromotionRowMapper()));
     }
 
     @Override
     public List<Promotion> findAll() {
-        return template.query(baseSql, new PromotionExtractor());
+        return template.query(
+                "select * from promotion",
+                Map.of(), new PromotionRowMapper()
+        );
     }
 
     @Override
     public Page<Promotion> findAll(Pageable pageable) {
         return new PageImpl<>(
-                Objects.requireNonNull(template.query(baseSql, new PromotionExtractor())), pageable, countAll()
+                Objects.requireNonNull(
+                        template.query(
+                        "select * from promotion",
+                        Map.of(), new PromotionRowMapper())),
+                pageable, countAll()
         );
     }
 
     @Override
     public Long save(Promotion entity) {
-        return null;
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        template.update("insert into promotion(banner, title, discription, date_of_start, date_of_end) " +
+                "values(:banner, :title, :discription, :date_of_start, :date_of_end)",
+                new MapSqlParameterSource(Map.of("banner", entity.getBanner(),
+                        "title", entity.getTitle(),
+                        "discription", entity.getDiscription(),
+                        "date_of_start", entity.getDateOfStart(),
+                        "date_of_end", entity.getDateOfEnd())), keyHolder, new String[] {"id"}
+        );
+        Long promotionId = Objects.requireNonNull(keyHolder.getKey()).longValue();
+
+        entity.getProducts().forEach((key, productList) ->
+                productList.forEach(product ->
+                    template.update("insert into promotion_product_item(promotion_id, product_id, discount) " +
+                            "values(:promotion_id, :product_id, :discount)",
+                            Map.of("promotion_id", promotionId,
+                                    "product_id", product.getId(),
+                                    "discount", key)
+                    )
+                )
+        );
+
+        return promotionId;
     }
 
     @Override

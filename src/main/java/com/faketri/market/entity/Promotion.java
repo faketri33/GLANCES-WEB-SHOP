@@ -8,9 +8,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -29,8 +27,7 @@ public class Promotion {
     private LocalDateTime dateOfStart;
     @Column
     private LocalDateTime dateOfEnd;
-    @Column
-    private HashMap<Integer, Product> products = new HashMap<>();
+    private Map<Integer, List<Product>> products = new HashMap<>();
 
     public Promotion(Long id, byte[] banner, String title, String discription, LocalDateTime dateOfStart, LocalDateTime dateOfEnd) {
         this.id = id;

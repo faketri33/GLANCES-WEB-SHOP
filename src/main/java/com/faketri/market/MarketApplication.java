@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootApplication
 public class MarketApplication {
@@ -30,7 +31,7 @@ public class MarketApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(ProductService productService, PromotionService promotionService){
 		return args -> {
-			Promotion promotion = new Promotion(null, Files.readAllBytes(Path.of("sds")), "РАСПРОДАЖА",
+			Promotion promotion = new Promotion(null, Files.readAllBytes(Path.of("C:\\Users\\rolll\\Downloads\\14fa9860cff53648c5543a262859347f.jpg")), "РАСПРОДАЖА",
 					"Не пропустите Главное событие года в ГОДУУУУ!" +
 							"Мегаскидки и кешбэк на технику, товары для дома, аксессуары и многое другое. " +
 							"А ещё шанс получить главные призы — машину и квартиру в Москве. Участвуйте в розыгрыше уже сейчас!",
@@ -38,6 +39,9 @@ public class MarketApplication {
 					LocalDateTime.of(2023, 12,30, 12,00));
 
 			List<Product> productList = productService.findAll();
+			promotion.getProducts().put(10, productList);
+			promotionService.save(promotion);
 		};
 	}
 }
+

@@ -23,7 +23,7 @@ public class PromotionExtractor implements ResultSetExtractor<List<Promotion>> {
                 promotion = new Promotion(promotionId, rs.getBytes("banner"),
                         rs.getString("title"), rs.getString("discription"),
                         rs.getTimestamp("date_of_start").toLocalDateTime(),
-                        rs.getTimestamp("date_of_end").toLocalDateTime(), new HashSet<>());
+                        rs.getTimestamp("date_of_end").toLocalDateTime(), new HashMap<>());
             do {
                 Long productId = rs.getLong("id");
                 Product product = productHashMap.get(productId);
@@ -46,7 +46,6 @@ public class PromotionExtractor implements ResultSetExtractor<List<Promotion>> {
                         ));
                 productHashMap.put(productId, product);
             } while (rs.next());
-            promotion.getProducts().addAll(productHashMap.values());
             promotionHashMap.put(promotion.getId(), promotion);
         }
 
