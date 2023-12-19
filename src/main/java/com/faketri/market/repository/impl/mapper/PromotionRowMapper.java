@@ -43,7 +43,7 @@ public class PromotionRowMapper implements RowMapper<Promotion> {
             productHashMap.put(productId, product);
         } while (rs.next());
 
-        promotion.getProducts().addAll(productHashMap.values());
+        promotion.getProducts().putAll(0, productHashMap.values());
 
         return promotion;
     }
