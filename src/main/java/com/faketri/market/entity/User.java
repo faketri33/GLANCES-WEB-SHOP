@@ -33,4 +33,9 @@ public class User{
         private Set<Order> order = new HashSet<>();
         @MappedCollection
         private Set<Product> favoriteProduct = new HashSet<>();
+
+        public User(long id, String login) {
+                this.id = id;
+                this.login = login;
+        }
 }

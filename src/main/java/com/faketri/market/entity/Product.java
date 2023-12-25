@@ -55,9 +55,4 @@ public class Product {
     }
 
     public void addImage(Image image){ this.image.add(image); }
-    public void addRating(Rating rating){ this.rating.add(rating); }
-    public void addCharacteristics(Characteristics characteristics){ this.characteristics.add(characteristics); }
-    public void setCategories(Categories categories) {
-        this.categories = categories;
-    }
 }

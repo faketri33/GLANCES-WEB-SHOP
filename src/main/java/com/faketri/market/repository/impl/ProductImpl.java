@@ -124,14 +124,15 @@ public class ProductImpl implements ProductRepository {
     public Long save(Product product) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         template.update(
-                "insert into product(brand_id, name_model, price, quantity, quntitysold) " +
-                    "values (:brand_id, :name_model, :price, :quantity, :quntitysold);",
+            "insert into product(brand_id, name_model, price, quantity, quntitysold, categories_id) " +
+                "values (:brand_id, :name_model, :price, :quantity, :quntitysold, :categories_id);",
                 new MapSqlParameterSource(Map.of(
                         "brand_id", product.getBrand().getId(),
                         "name_model", product.getNameModel(),
                         "price", product.getPrice(),
                         "quantity", product.getQuantity(),
-                        "quntitysold", product.getQuantitySold()
+                        "quntitysold", product.getQuantitySold(),
+                        "categories_id", product.getCategories().getId()
                     )
                 ), keyHolder, new String[] {"id"});
 
@@ -147,10 +148,6 @@ public class ProductImpl implements ProductRepository {
                                 "values(:characteristics_id, :productId)",
                         Map.of("characteristics_id", x.getId(),"productId", productId)
                 )
-        );
-        template.update("insert into product_categories(categories_id, product_id) " +
-                        "values(:categories_id, :productId)",
-                Map.of("categories_id", product.getCategories().getId(),"productId", productId)
         );
 
         return productId;

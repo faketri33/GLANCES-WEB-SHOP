@@ -27,14 +27,28 @@ public class Promotion {
     private LocalDateTime dateOfStart;
     @Column
     private LocalDateTime dateOfEnd;
-    private Map<Integer, List<Product>> products = new HashMap<>();
+    private Set<PromotionItem> products = new HashSet<>();
 
-    public Promotion(Long id, byte[] banner, String title, String discription, LocalDateTime dateOfStart, LocalDateTime dateOfEnd) {
+    public Promotion(Long id, byte[] banner, String title, String discription,
+                     LocalDateTime dateOfStart, LocalDateTime dateOfEnd) {
         this.id = id;
         this.banner = banner;
         this.title = title;
         this.discription = discription;
         this.dateOfStart = dateOfStart;
         this.dateOfEnd = dateOfEnd;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Promotion promotion = (Promotion) o;
+        return Objects.equals(id, promotion.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

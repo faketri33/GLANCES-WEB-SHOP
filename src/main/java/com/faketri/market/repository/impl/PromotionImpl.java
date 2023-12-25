@@ -21,22 +21,41 @@ import java.util.Optional;
 @Repository
 public class PromotionImpl implements com.faketri.market.repository.Repository<Long, Promotion> {
 
+    private final String basicSQL =
+        "select p.id as promotion_id, p.title as promotion_title, p.banner as promotion_banner, p.discription as promotion_discription, p.date_of_start as promotion_start, p.date_of_end as promotion_end, " +
+        "pr.id as product_id, pr.brand_id as brand_id, br.name as brand_name, pr.name_model as product_name_model, pr.price as product_price, pr.quantity as product_quantity, " +
+        "pr.quntitysold as product_quantitysold, pr.categories_id as categories_id, cat.name as categories_name, pr.is_promotion as product_is_promotion, " +
+        "pr.promotion_price as product_promotion_price, ch.id as characterostics_id, ch.name as characterostics_name, ch.value characterostics_value, " +
+        "ppi.discount as promotion_item_discount,  r.id as rating_id, r.product_id as rating_product_id, r.user_id as user_id, " +
+        "r.description as rating_description, r.grate as rating_grate, u.login as user_login, i.id as image_id, i.image " +
+        "from promotion p " +
+        "left join promotion_product_item ppi on ppi.promotion_id = p.id " +
+        "left join product pr on pr.id = ppi.product_id " +
+        "left join rating r on r.product_id = pr.id " +
+        "left join \"user\" u on u.id = r.user_id " +
+        "left join brand br on br.id = pr.brand_id " +
+        "left join categories cat on pr.categories_id = cat.id " +
+        "left join product_image pi on pi.product_id = pr.id " +
+        "left join image i on i.id = pi.image_id " +
+        "left join product_characteristics pc on pc.product_id = pr.id " +
+        "left join characteristics ch on ch.id = pc.characteristics_id ";
+
     @Autowired
     private NamedParameterJdbcTemplate template;
     @Override
     public Optional<Promotion> findById(Long id) {
         return Optional.ofNullable(
                 template.queryForObject(
-                        "select p.id, p.banner, p.title, p.discription, p.date_of_start, p.date_of_end from promotion p where p.id = :id",
+                        basicSQL + " where p.id = :id",
                         Map.of("id", id), new PromotionRowMapper()));
     }
 
     @Override
     public List<Promotion> findAll() {
         return template.query(
-                "select * from promotion",
-                Map.of(), new PromotionRowMapper()
-        );
+                basicSQL,
+                Map.of(), new PromotionExtractor()
+        ).stream().toList();
     }
 
     @Override
@@ -64,15 +83,13 @@ public class PromotionImpl implements com.faketri.market.repository.Repository<L
         );
         Long promotionId = Objects.requireNonNull(keyHolder.getKey()).longValue();
 
-        entity.getProducts().forEach((key, productList) ->
-                productList.forEach(product ->
+        entity.getProducts().forEach((promotionItem) ->
                     template.update("insert into promotion_product_item(promotion_id, product_id, discount) " +
                             "values(:promotion_id, :product_id, :discount)",
                             Map.of("promotion_id", promotionId,
-                                    "product_id", product.getId(),
-                                    "discount", key)
+                                    "product_id", promotionItem.getProduct().getId(),
+                                    "discount", promotionItem.getDiscount())
                     )
-                )
         );
 
         return promotionId;

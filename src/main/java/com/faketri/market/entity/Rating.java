@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.io.Reader;
 import java.time.LocalDateTime;
 
 @Data
@@ -26,6 +27,14 @@ public class Rating {
     private Long user_id;
     @Column
     private LocalDateTime publishedOn;
+
+    public Rating(Long id, String description, short grade, Long product_id, Long user) {
+        this.id = id;
+        this.description = description;
+        this.grade = grade;
+        this.product_id = product_id;
+        this.user_id = user;
+    }
 
     private void onCreate(){
         publishedOn = LocalDateTime.now();
