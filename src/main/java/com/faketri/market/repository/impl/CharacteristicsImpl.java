@@ -1,6 +1,6 @@
 package com.faketri.market.repository.impl;
 
-import com.faketri.market.entity.Characteristics;
+import com.faketri.market.domain.product.Characteristics;
 import com.faketri.market.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

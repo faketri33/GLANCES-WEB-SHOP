@@ -1,9 +1,8 @@
 package com.faketri.market.repository.impl;
 
-import com.faketri.market.entity.Brand;
-import com.faketri.market.entity.Characteristics;
-import com.faketri.market.entity.Product;
-import com.faketri.market.repository.ProductRepository;
+import com.faketri.market.domain.product.Brand;
+import com.faketri.market.domain.product.Characteristics;
+import com.faketri.market.domain.product.Product;
 import com.faketri.market.repository.impl.mapper.ProductExtractor;
 import com.faketri.market.repository.impl.mapper.ProductRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +19,11 @@ import java.util.*;
 
 
 @Repository
-public class ProductImpl implements ProductRepository {
+public class ProductImpl {
 
     private final String basicSelectSQl =
-            "SELECT p.id, p.name_model, p.categories_id, p.price, p.quantity, p.quntitysold, p.is_promotion, " +
-            "p.promotion_price, brand.id as brand_id, brand.name as brand_name, i.id AS image_id, i.image, " +
+            "SELECT p.id, p.name_model, p.categories_id, p.price, p.quantity, p.quantity_sold, p.is_promotion, " +
+            "p.promotion_price, brand.id as brand_id, brand.name as brand_name, i.id AS image_id, i.photo as image, " +
             "c.name as categories_name " +
             "FROM product p " +
             "LEFT JOIN product_image pi ON p.id = pi.product_id " +
@@ -48,7 +47,6 @@ public class ProductImpl implements ProductRepository {
                 new ProductExtractor()
             );
     }
-    @Override
     public List<Product> findByBrand(Brand brand) {
         return template.query(
                 basicSelectSQl + " WHERE brand.name = :brandName",
@@ -58,7 +56,7 @@ public class ProductImpl implements ProductRepository {
     }
     public List<Product> findByCategories(Long categoriesId){
         return template.query(
-                basicSelectSQl + "WHERE pcat.categories_id = :categories ",
+                basicSelectSQl + "WHERE p.categories_id = :categories ",
                     Map.of("categories", categoriesId),
                 new ProductExtractor());
     }
@@ -68,14 +66,13 @@ public class ProductImpl implements ProductRepository {
                 Map.of("characteristics", characteristics.getId()),
                 new ProductExtractor());
     }
-    @Override
     public Page<Product> findByBrand(Brand brand, Pageable pageable) {
         return new PageImpl<>(
                 Objects.requireNonNull(template.query(
-                        basicSelectSQl + " WHERE brand.name = :brandName" +
+                        basicSelectSQl + " WHERE p.brand_id = :brand_id" +
                                 "LIMIT " + pageable.getPageSize() + " " +
                                 "OFFSET " + pageable.getOffset(),
-                        Map.of("brandName", brand.getName()),
+                        Map.of("brand_id", brand.getId()),
                         new ProductExtractor())
                 ), pageable, countByBrand(brand));
     }
@@ -99,23 +96,21 @@ public class ProductImpl implements ProductRepository {
                         new ProductExtractor())
                 ), pageable, countByCharacteristics(characteristics));
     }
-    @Override
     public Page<Product> findByCharacteristics(List<Characteristics> characteristics, Pageable pageable) {
         return null; // TODO :: FIND BY CHARACTERISTICS
     }
     public  Page<Product> findByCategories(Long categoriesId, Pageable pageable) {
         return new PageImpl<>(Objects.requireNonNull(template.query(
-                basicSelectSQl + "WHERE pcat.categories_id = :categories "+
+                basicSelectSQl + "WHERE p.categories_id = :categories "+
                         "LIMIT " + pageable.getPageSize() + " " +
                         "OFFSET " + pageable.getOffset(),
                 Map.of("categories", categoriesId),
                 new ProductExtractor())
         ), pageable, countByCategories(categoriesId));
     }
-    @Override
     public Page<Product> findTopSelling(Pageable pageable) {
         return new PageImpl<>(Objects.requireNonNull(template.query(
-                basicSelectSQl + "ORDER BY quntitysold desc;"+
+                basicSelectSQl + "ORDER BY quantity_sold desc;"+
                         "LIMIT " + pageable.getPageSize() + " " +
                         "OFFSET " + pageable.getOffset(),
                 new ProductExtractor())
@@ -124,14 +119,14 @@ public class ProductImpl implements ProductRepository {
     public Long save(Product product) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         template.update(
-            "insert into product(brand_id, name_model, price, quantity, quntitysold, categories_id) " +
-                "values (:brand_id, :name_model, :price, :quantity, :quntitysold, :categories_id);",
+            "insert into product(brand_id, name_model, price, quantity, quantity_sold, categories_id) " +
+                "values (:brand_id, :name_model, :price, :quantity, :quantity_sold, :categories_id);",
                 new MapSqlParameterSource(Map.of(
                         "brand_id", product.getBrand().getId(),
                         "name_model", product.getNameModel(),
                         "price", product.getPrice(),
                         "quantity", product.getQuantity(),
-                        "quntitysold", product.getQuantitySold(),
+                        "quantity_sold", product.getQuantitySold(),
                         "categories_id", product.getCategories().getId()
                     )
                 ), keyHolder, new String[] {"id"});
@@ -159,7 +154,7 @@ public class ProductImpl implements ProductRepository {
                     "name_model = :name_model, " +
                     "price = :price, " +
                     "quantity = :quantity, " +
-                    "quantitySold = :quntitysold, " +
+                    "quantity_sold = :quantity_sold, " +
                     "is_promotion = :is_promotion," +
                     "promotion_price = :promotion_price " +
                     "where product.id = :id",
@@ -169,7 +164,7 @@ public class ProductImpl implements ProductRepository {
                     "name_model", product.getNameModel(),
                     "price", product.getPrice(),
                     "quantity", product.getQuantity(),
-                    "quntitysold", product.getQuantitySold(),
+                    "quantity_sold", product.getQuantitySold(),
                     "is_promotion", product.getIsPromotion(),
                     "promotion_price", product.getPromotionPrice()
                 )
@@ -188,19 +183,19 @@ public class ProductImpl implements ProductRepository {
                 (rs, rowNum) -> rs.getInt(1)).get(0);
     }
     public int countByCategories(Long categoriesId){
-        return template.query("select COUNT(*) from product_categories pc where pc.categories_id = :id",
+        return template.query("select COUNT(*) from product p where p.categories_id = :id",
                         Map.of("id", categoriesId),
                         (rs, rowNum) -> rs.getInt(1))
                 .get(0);
     }
     public int countByCharacteristics(Characteristics characteristics){
-        return template.query("select COUNT(*) from product_characteristics pc where pc.id = :id ",
+        return template.query("select COUNT(*) from product_characteristics pc where pc.characteristics_id = :id ",
                         Map.of("id", characteristics.getId()),
                         (rs, rowNum) -> rs.getInt(1))
                 .get(0);
     }
     public int countByBrand(Brand brand){
-        return template.query("select count(*) from product where brand.id = :id",
+        return template.query("select count(*) from product where brand_id = :id",
                         Map.of("id", brand.getId()),
                         (rs, rowNum) -> rs.getInt(1))
                 .get(0);

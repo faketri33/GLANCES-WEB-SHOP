@@ -1,12 +1,11 @@
 package com.faketri.market.repository.impl;
 
-import com.faketri.market.entity.User;
+import com.faketri.market.domain.users.User;
 import com.faketri.market.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -56,11 +55,11 @@ public class UserImpl implements Repository<Long, User> {
     public Long save(User user) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         template.update(
-                "insert into user(email, login, password) values (:email, :login, :password)",
+                "insert into \"user\"(email, login, password) values(:email, :login, :password)",
                 new MapSqlParameterSource(Map.of(
-                        "brand_id", user.getEmail(),
-                        "name_model", user.getLogin(),
-                        "price", user.getPassword()
+                        "email", user.getEmail(),
+                        "login", user.getLogin(),
+                        "password", user.getPassword()
                 )
         ), keyHolder, new String[] {"id"});
         return Objects.requireNonNull(keyHolder.getKey()).longValue();

@@ -1,6 +1,10 @@
 package com.faketri.market.repository.impl.mapper;
 
-import com.faketri.market.entity.*;
+import com.faketri.market.domain.Promo.Promotion;
+import com.faketri.market.domain.image.Image;
+import com.faketri.market.domain.order.Rating;
+import com.faketri.market.domain.product.*;
+import com.faketri.market.domain.users.User;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
@@ -29,8 +33,8 @@ public class PromotionExtractor implements ResultSetExtractor<Collection<Promoti
                 promotionHashMap.put(promotionId, promotion);
             }
 
-           PromotionItem promotionItem = promotionHashMap.get(promotionId).getProducts().stream()
-                   .filter(item -> Objects.equals(item.getProduct().getId(), productId))
+           PromotionItem promotionItem = promotionHashMap.get(promotionId).getPromotionItems().stream()
+                   .filter(item -> Objects.equals(item.getProduct(), productId))
                    .findFirst().orElseGet(() -> {
                        PromotionItem promotionItem1 = new PromotionItem();
                        try {
@@ -63,13 +67,13 @@ public class PromotionExtractor implements ResultSetExtractor<Collection<Promoti
                            rs.getString("characterostics_name"),
                            rs.getString("characterostics_value")
                    ));
+           User user = new User();
+           user.setId(rs.getLong("user_id"));
            promotionItem.getProduct().getRating().add(
                    new Rating(rs.getLong("rating_id"),
                            rs.getString("rating_description"),
-                           rs.getByte("rating_grate"), productId,
-                           rs.getLong("user_id")));
-
-           promotion.getProducts().add(promotionItem);
+                           rs.getByte("rating_grate"), promotionItem.getProduct(),
+                           user));
        }
 
         return promotionHashMap.values();

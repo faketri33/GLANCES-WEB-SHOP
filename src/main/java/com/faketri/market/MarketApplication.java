@@ -1,17 +1,17 @@
 package com.faketri.market;
 
-import com.faketri.market.entity.*;
+import com.faketri.market.domain.Promo.Promotion;
+import com.faketri.market.domain.image.Image;
+import com.faketri.market.domain.order.Rating;
+import com.faketri.market.domain.product.*;
+import com.faketri.market.domain.users.User;
 import com.faketri.market.service.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
-import java.beans.BeanProperty;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -27,8 +27,11 @@ public class MarketApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner
 			(ProductService productService, PromotionService promotionService,
-			 CategoriesService categoriesService, RatingService ratingService){
+			 CategoriesService categoriesService, RatingService ratingService, UserService userService){
 		return args -> {
+
+			Long categoriesId = categoriesService.save(new Categories(null, "phone"));
+
 			List<Product> products = new ArrayList<>();
 
 			products.add(new Product(null,
@@ -59,20 +62,27 @@ public class MarketApplication {
 			products.get(1).getCharacteristics().addAll(List.of(characteristics.get(1), characteristics.get(3)));
 			products.get(2).getCharacteristics().addAll(List.of(characteristics.get(1), characteristics.get(4)));
 
-			products.get(0).setCategories(new Categories(6L, "phone"));
-			products.get(1).setCategories(new Categories(6L, "phone"));
-			products.get(2).setCategories(new Categories(6L, "phone"));
-			products.forEach(System.out::println);
+			Categories categories = new Categories(categoriesId, "phone");//, Set.of(products.get(0),products.get(1), products.get(2)));
+
+			products.get(0).setCategories(categories);
+			products.get(1).setCategories(categories);
+			products.get(2).setCategories(categories);
 			products.forEach(item -> item.setId(productService.save(item)));
 
+			User user = new User();
+			user.setLogin("vasya");
+			user.setPassword("1231231");
+			user.setEmail("ashdasd@mail.ru");
+			user.setId(userService.save(user));
+
 			ratingService.save(
-					new Rating(null, "Крутяк, чел сдох", (short)4, products.get(0).getId(), 2L)
+					new Rating(null, "Крутяк, чел сдох", (short)4, products.get(0),user)
 			);
 			ratingService.save(
-					new Rating(null, "ЯБЛОКООКООКОКОКО", (short)5, products.get(1).getId(), 2L)
+				new Rating(null, "ЯБЛОКООКООКОКОКО", (short)5, products.get(1), user)
 			);
 			ratingService.save(
-					new Rating(null, "нот бэд, ничего нет", (short)3, products.get(2).getId(), 2L)
+					new Rating(null, "нот бэд, ничего нет", (short)3, products.get(2), user)
 			);
 
 			Promotion promotion = new Promotion(null, Files.readAllBytes(Path.of("C:\\Users\\rolll\\Downloads\\14fa9860cff53648c5543a262859347f.jpg")), "РАСПРОДАЖА",
@@ -82,13 +92,8 @@ public class MarketApplication {
 					LocalDateTime.of(2023, 12,20, 12,00),
 					LocalDateTime.of(2023, 12,30, 12,00));
 
-			List<Product> productList = productService.findAll(PageRequest.of(0, 2)).getContent();
-			List<PromotionItem> promotionItems = new ArrayList<>();
-			productList.forEach(item ->
-					promotionItems.add(new PromotionItem(item, 5 + (int) (Math.random() * 45))
-					)
-			);
-			promotion.getProducts().addAll(promotionItems);
+			List<Product> productList = productService.findAll();
+			promotion.getPromotionItems().addAll(productList);
 			promotionService.save(promotion);
 		};
 	}

@@ -1,7 +1,7 @@
 package com.faketri.market.service;
 
-import com.faketri.market.entity.User;
-import com.faketri.market.entity.enums.ERole;
+import com.faketri.market.domain.users.User;
+import com.faketri.market.domain.users.ERole;
 import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.impl.UserImpl;
 import org.springframework.beans.factory.annotation.Autowired;

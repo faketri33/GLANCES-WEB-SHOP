@@ -1,7 +1,6 @@
 package com.faketri.market.repository.impl;
 
-import com.faketri.market.entity.Brand;
-import com.faketri.market.entity.Image;
+import com.faketri.market.domain.image.Image;
 import com.faketri.market.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,7 +43,7 @@ public class ImageImpl implements Repository<Long, Image> {
     @Override
     public Long save(Image entity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        template.update("insert into image(image) values(:photo)",
+        template.update("insert into image(photo) values(:photo)",
                 new MapSqlParameterSource(Map.of("photo", entity.getPhoto())), keyHolder, new String[] {"id"});
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }

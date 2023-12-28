@@ -1,6 +1,6 @@
 package com.faketri.market.service;
 
-import com.faketri.market.entity.Brand;
+import com.faketri.market.domain.product.Brand;
 import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.impl.BrandImpl;
 import org.springframework.beans.factory.annotation.Autowired;

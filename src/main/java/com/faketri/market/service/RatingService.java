@@ -1,6 +1,6 @@
 package com.faketri.market.service;
 
-import com.faketri.market.entity.Rating;
+import com.faketri.market.domain.order.Rating;
 import com.faketri.market.repository.impl.RatingImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

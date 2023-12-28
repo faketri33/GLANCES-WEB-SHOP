@@ -1,13 +1,12 @@
 package com.faketri.market.repository.impl;
 
-import com.faketri.market.entity.Rating;
+import com.faketri.market.domain.order.Rating;
 import com.faketri.market.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
@@ -42,11 +41,11 @@ public class RatingImpl implements Repository<Long, Rating> {
     @Override
     public Long save(Rating entity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        template.update("insert into rating(product_id, description, user_id, grate) " +
+        template.update("insert into rating(product_id, description, user_id, grade) " +
                 "values(:product_id, :description, :user_id, :grate)",
-                new MapSqlParameterSource(Map.of("product_id", entity.getProduct_id(),
+                new MapSqlParameterSource(Map.of("product_id", entity.getProduct().getId(),
                         "description", entity.getDescription(),
-                        "user_id", entity.getUser_id(),
+                        "user_id", entity.getUser().getId(),
                         "grate", entity.getGrade())), keyHolder, new String[] {"id"});
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }

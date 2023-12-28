@@ -1,6 +1,8 @@
 package com.faketri.market.service;
 
-import com.faketri.market.entity.*;
+import com.faketri.market.domain.product.Brand;
+import com.faketri.market.domain.product.Characteristics;
+import com.faketri.market.domain.product.Product;
 import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.impl.CharacteristicsImpl;
 import com.faketri.market.repository.impl.ProductImpl;
@@ -10,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class ProductService {
@@ -23,10 +27,10 @@ public class ProductService {
     private CharacteristicsImpl characteristicsService;
 
     public List<Product> findAll() {
-        return productImpl.findAll();
+        return StreamSupport.stream(productImpl.findAll().spliterator(), false).collect(Collectors.toList());
     }
     public Page<Product> findAll(Pageable pageable) {
-        return productImpl.findAll(pageable);
+        return null;//productImpl.findAll(pageable);
     }
 
     public Product findById(Long id){
@@ -35,10 +39,10 @@ public class ProductService {
         );
     }
     public List<Product> findByCategories(Long categoriesId){
-        return productImpl.findByCategories(categoriesId);
+        return null;//productImpl.findByCategories(categoriesId);
     }
     public List<Product> findByCharacteristics(Characteristics characteristics, Pageable pageable){
-        return productImpl.findByCharacteristics(characteristics);
+        return null;//productImpl.findByCharacteristics(characteristics);
     }
     public Long save(Product product){
         Brand brand = product.getBrand();

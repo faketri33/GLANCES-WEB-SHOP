@@ -1,7 +1,6 @@
 package com.faketri.market.service;
 
-import com.faketri.market.entity.Categories;
-import com.faketri.market.entity.Product;
+import com.faketri.market.domain.product.Categories;
 import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.impl.CategoriesImpl;
 import org.springframework.beans.factory.annotation.Autowired;

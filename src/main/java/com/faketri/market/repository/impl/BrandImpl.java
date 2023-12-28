@@ -1,6 +1,6 @@
 package com.faketri.market.repository.impl;
 
-import com.faketri.market.entity.Brand;
+import com.faketri.market.domain.product.Brand;
 import com.faketri.market.repository.BrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

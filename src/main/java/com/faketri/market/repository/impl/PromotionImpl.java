@@ -1,6 +1,6 @@
 package com.faketri.market.repository.impl;
 
-import com.faketri.market.entity.Promotion;
+import com.faketri.market.domain.Promo.Promotion;
 import com.faketri.market.repository.impl.mapper.PromotionExtractor;
 import com.faketri.market.repository.impl.mapper.PromotionRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,8 +83,8 @@ public class PromotionImpl implements com.faketri.market.repository.Repository<L
         );
         Long promotionId = Objects.requireNonNull(keyHolder.getKey()).longValue();
 
-        entity.getProducts().forEach((promotionItem) ->
-                    template.update("insert into promotion_product_item(promotion_id, product_id, discount) " +
+        entity.getPromotionItems().forEach((promotionItem) ->
+                    template.update("insert into promotion_item(promotion_id, product_id, discount) " +
                             "values(:promotion_id, :product_id, :discount)",
                             Map.of("promotion_id", promotionId,
                                     "product_id", promotionItem.getProduct().getId(),

@@ -1,6 +1,9 @@
 package com.faketri.market.repository.impl.mapper;
 
-import com.faketri.market.entity.*;
+import com.faketri.market.domain.image.Image;
+import com.faketri.market.domain.product.Brand;
+import com.faketri.market.domain.product.Categories;
+import com.faketri.market.domain.product.Product;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
@@ -26,7 +29,7 @@ public class ProductExtractor implements ResultSetExtractor<List<Product>> {
                         rs.getString("name_model"),
                         rs.getLong("price"),
                         rs.getInt("quantity"),
-                        rs.getInt("quntitysold"),
+                        rs.getInt("quantity_sold"),
                         rs.getBoolean("is_promotion"),
                         rs.getLong("promotion_price")
                 );

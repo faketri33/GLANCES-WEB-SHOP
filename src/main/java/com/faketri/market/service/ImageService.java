@@ -1,8 +1,7 @@
 package com.faketri.market.service;
 
-import com.faketri.market.entity.Image;
+import com.faketri.market.domain.image.Image;
 import com.faketri.market.payload.response.exception.ResourceNotFoundException;
-import com.faketri.market.repository.Repository;
 import com.faketri.market.repository.impl.ImageImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

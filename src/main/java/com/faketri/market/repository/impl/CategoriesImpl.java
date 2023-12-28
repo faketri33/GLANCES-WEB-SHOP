@@ -1,9 +1,7 @@
 package com.faketri.market.repository.impl;
 
-import com.faketri.market.entity.Categories;
-import com.faketri.market.entity.Product;
+import com.faketri.market.domain.product.Categories;
 import com.faketri.market.repository.Repository;
-import com.faketri.market.repository.impl.mapper.ProductExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

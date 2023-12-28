@@ -1,18 +1,12 @@
 package com.faketri.market.contoller;
 
 
-import com.faketri.market.entity.Categories;
-import com.faketri.market.entity.Product;
-import com.faketri.market.service.BrandService;
+import com.faketri.market.domain.product.Product;
 import com.faketri.market.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;

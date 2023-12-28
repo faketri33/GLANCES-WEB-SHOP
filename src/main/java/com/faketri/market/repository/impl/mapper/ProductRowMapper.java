@@ -1,6 +1,9 @@
 package com.faketri.market.repository.impl.mapper;
 
-import com.faketri.market.entity.*;
+import com.faketri.market.domain.image.Image;
+import com.faketri.market.domain.product.Brand;
+import com.faketri.market.domain.product.Categories;
+import com.faketri.market.domain.product.Product;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

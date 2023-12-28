@@ -1,12 +1,6 @@
 package com.faketri.market.repository;
 
-import com.faketri.market.entity.Brand;
-import com.faketri.market.entity.Categories;
-import com.faketri.market.entity.Characteristics;
-import com.faketri.market.entity.Product;
-import org.springframework.data.repository.CrudRepository;
-
-import java.util.List;
+import com.faketri.market.domain.product.Brand;
 
 
 public interface BrandRepository extends Repository<Long, Brand> {
