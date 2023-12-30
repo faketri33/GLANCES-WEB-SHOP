@@ -3,6 +3,7 @@ package com.faketri.market.repository.impl;
 import com.faketri.market.domain.product.Categories;
 import com.faketri.market.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,27 +24,40 @@ public class CategoriesImpl implements Repository<Long, Categories> {
     private NamedParameterJdbcTemplate template;
     @Override
     public Optional<Categories> findById(Long id) {
-        return Optional.empty();
+        return Optional.ofNullable(template.queryForObject("select id, name from categories", Map.of(), Categories.class));
     }
+
+    @Override
+    public Categories findByFields(Categories entity) {
+        try {
+            return template.queryForObject("select id, name from categories c where c.name = :name",
+                    Map.of("name", entity.getName()),
+                    (rs, numRows) -> new Categories(rs.getLong("id"), rs.getString("name")));
+        }
+        catch (EmptyResultDataAccessException ex){
+            return null;
+        }
+    }
+
     @Override
     public List<Categories> findAll() {
-        return template.query("select categories.id, categories.name from categories",
-                new BeanPropertyRowMapper<Categories>(Categories.class));
+        return template.query("select id, name from categories", new BeanPropertyRowMapper<>(Categories.class));
     }
     @Override
     public Page<Categories> findAll(Pageable pageable) {
         return new PageImpl<>(
-                template.queryForList("select * from categories", Map.of(), Categories.class),
+                template.query("select id, name from categories", Map.of(), new BeanPropertyRowMapper<>(Categories.class)),
                 pageable,
                 countAll()
         );
     }
     @Override
-    public Long save(Categories entity) {
+    public Categories save(Categories entity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         template.update("insert into categories(name) values(:name)",
                 new MapSqlParameterSource(Map.of("name", entity.getName())), keyHolder, new String[] {"id"});
-        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+        entity.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
+        return entity;
     }
     @Override
     public Boolean update(Categories entity) {
@@ -55,6 +69,8 @@ public class CategoriesImpl implements Repository<Long, Categories> {
         return template.update("delete from categories where id = :id",
                 Map.of("id", entity.getId())) > 0;
     }
+
+
     @Override
     public int countAll() {
         return template.query("select count(*) from categories", (rs, numRow) ->

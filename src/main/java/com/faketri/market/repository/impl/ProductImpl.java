@@ -15,21 +15,24 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Types;
 import java.util.*;
 
 
 @Repository
-public class ProductImpl {
+public class ProductImpl implements com.faketri.market.repository.Repository<Long, Product> {
 
     private final String basicSelectSQl =
-            "SELECT p.id, p.name_model, p.categories_id, p.price, p.quantity, p.quantity_sold, p.is_promotion, " +
-            "p.promotion_price, brand.id as brand_id, brand.name as brand_name, i.id AS image_id, i.photo as image, " +
-            "c.name as categories_name " +
-            "FROM product p " +
-            "LEFT JOIN product_image pi ON p.id = pi.product_id " +
-            "LEFT JOIN image i ON pi.image_id = i.id " +
-            "LEFT JOIN categories c on c.id = p.categories_id " +
-            "LEFT JOIN brand on brand.id = p.brand_id ";
+            "select p.*, b.name as brand_name, c.name as categories_name, " +
+                "i.id as image_id, i.image, ch.id as characteristics_id, ch.name as characteristics_name, " +
+                "ch.value as characteristics_value " +
+            "from product p " +
+                "left join brand b on b.id = p.brand_id " +
+                "left join categories c on c.id = p.categories_id " +
+                "left join product_image pi on pi.product_id = p.id " +
+                "left join image i on i.id = pi.image_id " +
+                "left join product_characteristics pc on pc.product_id = p.id " +
+                "left join characteristics ch on ch.id = pc.characteristics_id ";
 
     @Autowired
     private NamedParameterJdbcTemplate template;
@@ -41,6 +44,12 @@ public class ProductImpl {
                     new ProductRowMapper())
         );
     }
+
+    @Override
+    public Product findByFields(Product entity) {
+        return null;
+    }
+
     public List<Product> findAll(){
         return template.query(
                 basicSelectSQl,
@@ -49,8 +58,8 @@ public class ProductImpl {
     }
     public List<Product> findByBrand(Brand brand) {
         return template.query(
-                basicSelectSQl + " WHERE brand.name = :brandName",
-                Map.of("brandName", brand.getName()),
+                basicSelectSQl + " WHERE p.brand_id = :brand_id",
+                Map.of("brand_id", brand.getId()),
                 new ProductExtractor()
         );
     }
@@ -116,37 +125,33 @@ public class ProductImpl {
                 new ProductExtractor())
         ), pageable, countAll());
     }
-    public Long save(Product product) {
+    public Product save(Product product) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        MapSqlParameterSource sqlParameterSource = getMapSqlParameterSource(product);
         template.update(
-            "insert into product(brand_id, name_model, price, quantity, quantity_sold, categories_id) " +
-                "values (:brand_id, :name_model, :price, :quantity, :quantity_sold, :categories_id);",
-                new MapSqlParameterSource(Map.of(
-                        "brand_id", product.getBrand().getId(),
-                        "name_model", product.getNameModel(),
-                        "price", product.getPrice(),
-                        "quantity", product.getQuantity(),
-                        "quantity_sold", product.getQuantitySold(),
-                        "categories_id", product.getCategories().getId()
-                    )
-                ), keyHolder, new String[] {"id"});
+            "insert into product(brand_id, name_model, price, quantity, quantity_sold, " +
+                    "is_promo_active, promotion_price, discount, categories_id) " +
+                "values (:brand_id, :name_model, :price, :quantity, :quantity_sold, " +
+                    ":is_promo_active, :promotion_price, :discount, :categories_id);",
+                sqlParameterSource, keyHolder, new String[] {"id"});
 
-        Long productId = Objects.requireNonNull(keyHolder.getKey()).longValue();
+        product.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
         product.getImage().forEach(x ->
                 template.update("insert into product_image(image_id, product_id) " +
                                 "values(:imagesId, :productId)",
-                    Map.of("imagesId", x.getId(),"productId", productId)
+                    Map.of("imagesId", x.getId(),"productId", product.getId())
                 )
         );
         product.getCharacteristics().forEach(x ->
                 template.update("insert into product_characteristics(characteristics_id, product_id) " +
                                 "values(:characteristics_id, :productId)",
-                        Map.of("characteristics_id", x.getId(),"productId", productId)
+                        Map.of("characteristics_id", x.getId(),"productId", product.getId())
                 )
         );
 
-        return productId;
+        return product;
     }
+
     public Boolean update(Product product) {
         return template.update(
                 "update product " +
@@ -155,29 +160,23 @@ public class ProductImpl {
                     "price = :price, " +
                     "quantity = :quantity, " +
                     "quantity_sold = :quantity_sold, " +
-                    "is_promotion = :is_promotion," +
-                    "promotion_price = :promotion_price " +
+                    "is_promo_active = :is_promo_active, " +
+                    "promotion_price = :promotion_price, " +
+                    "discount = :discount, " +
+                    "categories_id = :categories_id " +
                     "where product.id = :id",
-                Map.of(
-                    "id", product.getId(),
-                    "brand_id", product.getBrand().getId(),
-                    "name_model", product.getNameModel(),
-                    "price", product.getPrice(),
-                    "quantity", product.getQuantity(),
-                    "quantity_sold", product.getQuantitySold(),
-                    "is_promotion", product.getIsPromotion(),
-                    "promotion_price", product.getPromotionPrice()
-                )
+                getMapSqlParameterSource(product)
         ) > 0;
     }
     public Boolean delete(Product product) {
         return template.update(
                 "delete from product where product.id = :id",
-                Map.of(
-                        "id", product.getId()
-                )
+                Map.of("id", product.getId())
         ) > 0;
     }
+
+
+
     public int countAll(){
         return template.query("select COUNT(*) from product",
                 (rs, rowNum) -> rs.getInt(1)).get(0);
@@ -185,19 +184,31 @@ public class ProductImpl {
     public int countByCategories(Long categoriesId){
         return template.query("select COUNT(*) from product p where p.categories_id = :id",
                         Map.of("id", categoriesId),
-                        (rs, rowNum) -> rs.getInt(1))
-                .get(0);
+                        (rs, rowNum) -> rs.getInt(1)).get(0);
     }
     public int countByCharacteristics(Characteristics characteristics){
         return template.query("select COUNT(*) from product_characteristics pc where pc.characteristics_id = :id ",
                         Map.of("id", characteristics.getId()),
-                        (rs, rowNum) -> rs.getInt(1))
-                .get(0);
+                        (rs, rowNum) -> rs.getInt(1)).get(0);
     }
     public int countByBrand(Brand brand){
         return template.query("select count(*) from product where brand_id = :id",
                         Map.of("id", brand.getId()),
-                        (rs, rowNum) -> rs.getInt(1))
-                .get(0);
+                        (rs, rowNum) -> rs.getInt(1)).get(0);
+    }
+
+    private MapSqlParameterSource getMapSqlParameterSource(Product product) {
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource(
+                Map.of("brand_id", product.getBrand().getId(),
+                        "name_model", product.getNameModel(),
+                        "price", product.getPrice(),
+                        "quantity", product.getQuantity(),
+                        "quantity_sold", product.getQuantitySold(),
+                        "promotion_price", product.getPromoPrice(),
+                        "discount", product.getDiscount(),
+                        "categories_id", product.getCategories().getId())
+        );
+        sqlParameterSource.addValue("is_promo_active", product.getIsPromoActive());
+        return sqlParameterSource;
     }
 }

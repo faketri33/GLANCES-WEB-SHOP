@@ -28,7 +28,7 @@ public class PromotionService {
         return promotionImpl.findAll(pageable);
     }
 
-    public Long save(Promotion promotion){
+    public Promotion save(Promotion promotion){
         return promotionImpl.save(promotion);
     }
 }

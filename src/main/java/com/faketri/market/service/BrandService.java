@@ -17,7 +17,8 @@ public class BrandService {
         );
     }
 
-    public Long save(Brand brand){
-        return brandImpl.save(brand);
+    public Brand save(Brand brand){
+        Brand entity = brandImpl.findByFields(brand);
+        return entity == null ? brandImpl.save(brand) : entity;
     }
 }

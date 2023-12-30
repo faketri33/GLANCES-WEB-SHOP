@@ -28,21 +28,24 @@ public class Product {
     private Set<Rating> rating = new HashSet<>();
     @MappedCollection
     private Set<Characteristics> characteristics = new HashSet<>();
+    private Long price;
+    private Boolean isPromoActive = false;
+    private Long promoPrice;
+    private Integer discount = 0;
     private int quantity;
     private int quantitySold = 0;
-    private Long price;
-    private Integer discount = 0;
 
-    public Product(Long id, Brand brand, String name_model,
-                   Long price, Integer quantity, Integer quantitySold, Integer discount) {
+    public Product(Long id, Brand brand, String nameModel, Categories categories, Long price,
+                   Boolean isPromoActive, Long promoPrice, Integer discount, int quantity, int quantitySold) {
         this.id = id;
         this.brand = brand;
-        this.nameModel = name_model;
+        this.nameModel = nameModel;
+        this.categories = categories;
         this.price = price;
+        this.isPromoActive = isPromoActive;
+        this.promoPrice = promoPrice;
+        this.discount = discount;
         this.quantity = quantity;
         this.quantitySold = quantitySold;
-        this.discount = discount;
     }
-
-    public void addImage(Image image){ this.image.add(image); }
 }

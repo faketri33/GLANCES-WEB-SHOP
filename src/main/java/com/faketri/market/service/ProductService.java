@@ -44,11 +44,7 @@ public class ProductService {
     public List<Product> findByCharacteristics(Characteristics characteristics, Pageable pageable){
         return null;//productImpl.findByCharacteristics(characteristics);
     }
-    public Long save(Product product){
-        Brand brand = product.getBrand();
-        if(brand.getId() == null) brand.setId(brandService.save(brand));
-        product.getCharacteristics().stream().filter(x -> x.getId() == null).forEach(x -> x.setId(characteristicsService.save(x)));
-        product.getImage().stream().filter(x -> x.getId() == null).forEach(x -> x.setId(imageService.save(x)));
+    public Product save(Product product){
         return productImpl.save(product);
     }
 }

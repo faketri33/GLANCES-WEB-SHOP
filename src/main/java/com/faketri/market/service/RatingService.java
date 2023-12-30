@@ -16,7 +16,7 @@ public class RatingService {
         return ratingImpl.findByIdProduct(id);
     }
 
-    public Long save(Rating rating) {
+    public Rating save(Rating rating) {
         return ratingImpl.save(rating);
     }
 }

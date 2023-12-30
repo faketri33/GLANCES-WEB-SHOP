@@ -2,10 +2,12 @@ CREATE TABLE "product" (
   "id" bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   "brand_id" bigint NOT NULL,
   "name_model" varchar NOT NULL,
+  "categories_id" bigint not null,
   "price" bigint NOT NULL, 
   "quantity" int not null,
-  is_promotion bit,
-  promotion_price bigint
+  "is_promo_active" bit not null,
+  "promotion_price" bigint,
+  discount int not null default 0
 );
 
 CREATE TABLE "brand" (
@@ -49,7 +51,7 @@ CREATE TABLE "order" (
   "user_id" bigint NOT NULL,
   "date_of_create" timestamp without time zone NOT NULL,
   "date_of_realese" timestamp without time zone NOT NULL,
-  "price" money NOT NULL,
+  "price" bigint NOT NULL,
   "status" varchar NOT NULL
 );
 
@@ -58,13 +60,8 @@ CREATE TABLE "product_image" (
   "image_id" bigint
 );
 
-CREATE TABLE "product_categories" (
-  "product_id" bigint PRIMARY KEY,
-  "categories_id" bigint
-);
-
 CREATE TABLE "product_characteristics" (
-  "product_id" bigint PRIMARY KEY,
+  "product_id" bigint ,
   "characteristics_id" bigint
 );
 
@@ -74,8 +71,8 @@ CREATE TABLE "product_order" (
 );
 
 create table user_favorite_product(
-       id_user bigint,
-       id_product bigint 
+       "id_user" bigint,
+       "id_product" bigint 
 );
 
 create table promotion(
@@ -84,15 +81,15 @@ create table promotion(
         title varchar not null,
         discription varchar not null,
         date_of_start timestamp without time zone NOT NULL,
-        date_if_end timestamp without time zone NOT NULL
+        date_of_end timestamp without time zone NOT NULL
 );
 
 create table promotion_product_item(
         promotion_id bigint,
-        product_id bigint,
-        discount int 
+        product_id bigint
 );
 
+alter table product add foreign key ("categories_id") references categories("id")
 
 alter table promotion_product_item add foreign key (promotion_id) references promotion(id);
 alter table promotion_product_item add foreign key (product_id) references product(id);

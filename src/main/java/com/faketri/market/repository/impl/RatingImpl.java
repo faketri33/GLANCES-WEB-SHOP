@@ -24,6 +24,11 @@ public class RatingImpl implements Repository<Long, Rating> {
         return Optional.ofNullable(template.queryForObject("select * from rating where id = :id", Map.of("id", id), Rating.class));
     }
 
+    @Override
+    public Rating findByFields(Rating entity) {
+        return null;
+    }
+
     public List<Rating> findByIdProduct(Long id) {
         return template.queryForList("select * from rating where product_id = :id", Map.of("id", id), Rating.class);
     }
@@ -39,7 +44,7 @@ public class RatingImpl implements Repository<Long, Rating> {
     }
 
     @Override
-    public Long save(Rating entity) {
+    public Rating save(Rating entity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         template.update("insert into rating(product_id, description, user_id, grade) " +
                 "values(:product_id, :description, :user_id, :grate)",
@@ -47,7 +52,8 @@ public class RatingImpl implements Repository<Long, Rating> {
                         "description", entity.getDescription(),
                         "user_id", entity.getUser().getId(),
                         "grate", entity.getGrade())), keyHolder, new String[] {"id"});
-        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+        entity.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
+        return entity;
     }
 
     @Override
@@ -59,6 +65,8 @@ public class RatingImpl implements Repository<Long, Rating> {
     public Boolean delete(Rating entity) {
         return null;
     }
+
+
 
     @Override
     public int countAll() {

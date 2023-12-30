@@ -3,9 +3,11 @@ package com.faketri.market.repository.impl;
 import com.faketri.market.domain.product.Brand;
 import com.faketri.market.repository.BrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -30,9 +32,21 @@ public class BrandImpl implements BrandRepository {
                     (rs, numRow) -> new Brand(rs.getLong(1), rs.getString(2))
             ));
     }
+
+    @Override
+    public Brand findByFields(Brand entity) {
+        try {
+            return template.queryForObject("select * from brand b where b.name = :name",
+                    Map.of("name", entity.getName()),
+                    (rs, numRow) -> new Brand(rs.getLong(1), rs.getString(2)));
+        }catch (EmptyResultDataAccessException ex){
+            return null;
+        }
+    }
+
     @Override
     public List<Brand> findAll() {
-        return template.queryForList("select * from brand", Map.of(), Brand.class);
+        return template.query("select * from brand", Map.of(), new BeanPropertyRowMapper<>(Brand.class));
     }
     @Override
     public Page<Brand> findAll(Pageable pageable) {
@@ -41,11 +55,12 @@ public class BrandImpl implements BrandRepository {
                 Brand.class), pageable, countAll());
     }
     @Override
-    public Long save(Brand entity) {
+    public Brand save(Brand entity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         template.update("insert into brand(name) values(:name)",
             new MapSqlParameterSource(Map.of("name", entity.getName())), keyHolder, new String[] {"id"});
-        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+        entity.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
+        return entity;
     }
     @Override
     public Boolean update(Brand entity) {
@@ -57,6 +72,8 @@ public class BrandImpl implements BrandRepository {
     public Boolean delete(Brand entity) {
         return template.update("delete from brand where brand.id = :id", Map.of("id", entity.getId())) > 0;
     }
+
+
     @Override
     public int countAll() {
         return template.query("select count(*) from brand", Map.of(), (rs, numRow) -> rs.getInt(1)).get(0);

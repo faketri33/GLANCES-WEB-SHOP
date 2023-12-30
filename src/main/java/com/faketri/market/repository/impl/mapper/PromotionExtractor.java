@@ -2,9 +2,7 @@ package com.faketri.market.repository.impl.mapper;
 
 import com.faketri.market.domain.Promo.Promotion;
 import com.faketri.market.domain.image.Image;
-import com.faketri.market.domain.order.Rating;
 import com.faketri.market.domain.product.*;
-import com.faketri.market.domain.users.User;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
@@ -16,65 +14,57 @@ public class PromotionExtractor implements ResultSetExtractor<Collection<Promoti
     @Override
     public Collection<Promotion> extractData(ResultSet rs) throws SQLException, DataAccessException {
 
-        HashMap<Long, Promotion> promotionHashMap = new HashMap<>();
+        Map<Long, Promotion> promotionHashMap = new HashMap<>();
+        Map<Long, Product> products = new HashMap<>();
+        Long lastId = null;
 
-       while (rs.next()){
-
+        while (rs.next()){
             Long promotionId = rs.getLong("promotion_id");
-            Long productId = rs.getLong("product_id");
+            if(lastId == null) lastId = promotionId;
             Promotion promotion = promotionHashMap.get(promotionId);
-            int discount = rs.getInt("promotion_item_discount");
-            if(promotion == null){ promotion = new Promotion(promotionId,
-                                                rs.getBytes("promotion_banner"),
-                                                rs.getString("promotion_title"),
-                                                rs.getString("promotion_discription"),
-                                                rs.getTimestamp("promotion_start").toLocalDateTime(),
-                                                rs.getTimestamp("promotion_end").toLocalDateTime() );
-                promotionHashMap.put(promotionId, promotion);
+            if (!promotionId.equals(lastId)) {
+                promotionHashMap.get(lastId).getPromotionItems().addAll(products.values());
+                products.clear();
+                lastId = promotionId;
             }
+            if (promotion == null) promotion = new Promotion(promotionId,
+                    rs.getBytes("banner"),
+                    rs.getString("title"),
+                    rs.getString("description"),
+                    rs.getTimestamp("date_of_start").toLocalDateTime(),
+                    rs.getTimestamp("date_of_end").toLocalDateTime());
 
-           PromotionItem promotionItem = promotionHashMap.get(promotionId).getPromotionItems().stream()
-                   .filter(item -> Objects.equals(item.getProduct(), productId))
-                   .findFirst().orElseGet(() -> {
-                       PromotionItem promotionItem1 = new PromotionItem();
-                       try {
-                           promotionItem1.setProduct(
-                                   new Product(rs.getLong("product_id"),
-                                       new Brand(rs.getLong("brand_id"),
-                                               rs.getString("brand_name")),
-                                               rs.getString("product_name_model"),
-                                               rs.getLong("product_price"),
-                                               rs.getInt("product_quantity"),
-                                               rs.getInt("product_quantitysold"),
-                                               rs.getBoolean("product_is_promotion"),
-                                               rs.getLong("product_promotion_price")
-                           ));
-                       } catch (SQLException e) { throw new RuntimeException(e); };
-                       promotionItem1.setDiscount(discount);
-                       return promotionItem1;
-                   });
+            promotionHashMap.put(promotionId, promotion);
+            // ----------------- Product ------------------------
+            Long productId = rs.getLong("product_id");
+            Product product = products.get(productId);
 
-           promotionItem.getProduct().setCategories(
-                   new Categories(rs.getLong("categories_id"),
-                        rs.getString("categories_name")
-                   ));
-           promotionItem.getProduct().addImage(
-                   new Image(rs.getLong("image_id"),
-                           rs.getBytes("image")
-                   ));
-           promotionItem.getProduct().getCharacteristics().add(
-                   new Characteristics(rs.getLong("characterostics_id"),
-                           rs.getString("characterostics_name"),
-                           rs.getString("characterostics_value")
-                   ));
-           User user = new User();
-           user.setId(rs.getLong("user_id"));
-           promotionItem.getProduct().getRating().add(
-                   new Rating(rs.getLong("rating_id"),
-                           rs.getString("rating_description"),
-                           rs.getByte("rating_grate"), promotionItem.getProduct(),
-                           user));
-       }
+            if(product == null){
+                product = new Product(
+                        rs.getLong("product_id"),
+                        new Brand(rs.getLong("brand_id"), rs.getString("brand_name")),
+                        rs.getString("name_model"),
+                        new Categories(rs.getLong("categories_id"), rs.getString("categories_name")),
+                        rs.getLong("price"),
+                        rs.getBoolean("is_promo_active"),
+                        rs.getLong("promotion_price"),
+                        rs.getInt("discount"),
+                        rs.getInt("quantity"),
+                        rs.getInt("quantity_sold")
+                );
+            }
+            product.getImage().add(
+                    new Image(rs.getLong("image_id"), rs.getBytes("image"))
+            );
+            product.getCharacteristics().add(
+                    new Characteristics(rs.getLong("characteristics_id"),
+                            rs.getString("characteristics_name"),
+                            rs.getString("characteristics_value") )
+            );
+
+            products.put(productId, product);
+        }
+        promotionHashMap.get(lastId).getPromotionItems().addAll(products.values());
 
         return promotionHashMap.values();
     }

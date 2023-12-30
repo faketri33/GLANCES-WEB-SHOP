@@ -28,6 +28,12 @@ public class UserImpl implements Repository<Long, User> {
                 Map.of("id", id),
                 User.class));
     }
+
+    @Override
+    public User findByFields(User entity) {
+        return null;
+    }
+
     public Optional<User> findByLogin(String Login){
         return Optional.ofNullable(template.queryForObject("select * from user where login = :login",
                 Map.of("login", Login),
@@ -52,7 +58,7 @@ public class UserImpl implements Repository<Long, User> {
     }
 
     @Override
-    public Long save(User user) {
+    public User save(User user) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         template.update(
                 "insert into \"user\"(email, login, password) values(:email, :login, :password)",
@@ -62,7 +68,8 @@ public class UserImpl implements Repository<Long, User> {
                         "password", user.getPassword()
                 )
         ), keyHolder, new String[] {"id"});
-        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+        user.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
+        return user;
     }
 
     @Override

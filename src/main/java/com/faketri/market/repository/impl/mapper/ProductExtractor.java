@@ -3,6 +3,7 @@ package com.faketri.market.repository.impl.mapper;
 import com.faketri.market.domain.image.Image;
 import com.faketri.market.domain.product.Brand;
 import com.faketri.market.domain.product.Categories;
+import com.faketri.market.domain.product.Characteristics;
 import com.faketri.market.domain.product.Product;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -24,23 +25,27 @@ public class ProductExtractor implements ResultSetExtractor<List<Product>> {
            Product product = products.get(id);
 
             if(product == null){
-                product = new Product(id,
+                product = new Product(
+                        rs.getLong("id"),
                         new Brand(rs.getLong("brand_id"), rs.getString("brand_name")),
                         rs.getString("name_model"),
+                        new Categories(rs.getLong("categories_id"), rs.getString("categories_name")),
                         rs.getLong("price"),
+                        rs.getBoolean("is_promo_active"),
+                        rs.getLong("promotion_price"),
+                        rs.getInt("discount"),
                         rs.getInt("quantity"),
-                        rs.getInt("quantity_sold"),
-                        rs.getBoolean("is_promotion"),
-                        rs.getLong("promotion_price")
+                        rs.getInt("quantity_sold")
                 );
             }
-            product.setCategories(new Categories(rs.getLong("categories_id"),
-                    rs.getString("categories_name")));
-
-            product.addImage(
-                    new Image(rs.getLong("image_id"),
-                            rs.getBytes("image")
-                    ));
+            product.getImage().add(
+                    new Image(rs.getLong("image_id"), rs.getBytes("image"))
+            );
+            product.getCharacteristics().add(
+                    new Characteristics(rs.getLong("characteristics_id"),
+                            rs.getString("characteristics_name"),
+                            rs.getString("characteristics_value") )
+            );
 
            products.put(id, product);
         };

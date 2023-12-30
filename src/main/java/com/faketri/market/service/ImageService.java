@@ -13,32 +13,33 @@ import java.util.List;
 @Service
 public class ImageService {
     @Autowired
-    private ImageImpl image;
+    private ImageImpl imageImpl;
 
     public Image findById(Long id) {
-        return image.findById(id).orElseThrow(
+        return imageImpl.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Image with id - " + id + " not found")
         );
     }
 
     public List<Image> findAll() {
-        return image.findAll();
+        return imageImpl.findAll();
     }
 
     public Page<Image> findAll(Pageable pageable) {
-        return image.findAll(pageable);
+        return imageImpl.findAll(pageable);
     }
 
-    public Long save(Image entity) {
-        return image.save(entity);
+    public Image save(Image entity) {
+        Image image = imageImpl.findByFields(entity);
+        return image == null ? imageImpl.save(entity) : image;
     }
 
     public Boolean update(Image entity) {
-        return image.update(entity);
+        return imageImpl.update(entity);
     }
 
     public Boolean delete(Image entity) {
-        return image.delete(entity);
+        return imageImpl.delete(entity);
     }
 
 }

@@ -22,7 +22,7 @@ public class UserService {
         );
     }
 
-    public Long save(User user){
+    public User save(User user){
         user.getRole().add(ERole.STANDART);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userImpl.save(user);

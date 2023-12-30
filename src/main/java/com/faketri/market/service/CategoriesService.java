@@ -21,8 +21,9 @@ public class CategoriesService {
     }
     public List<Categories> findAll(){ return categoriesImpl.findAll(); }
     public Page<Categories> findAll(Pageable pageable){ return categoriesImpl.findAll(pageable); }
-    public Long save(Categories categories){
-        return categoriesImpl.save(categories);
+    public Categories save(Categories categories){
+        Categories entity = categoriesImpl.findByFields(categories);
+        return entity == null ? categoriesImpl.save(categories) : entity;
     }
     public Boolean update(Categories categories){
         return categoriesImpl.update(categories);

@@ -22,6 +22,11 @@ public class OrderImpl implements com.faketri.market.repository.Repository<Long,
     }
 
     @Override
+    public Order findByFields(Order entity) {
+        return null;
+    }
+
+    @Override
     public List<Order> findAll() {
         return null;
     }
@@ -32,7 +37,7 @@ public class OrderImpl implements com.faketri.market.repository.Repository<Long,
     }
 
     @Override
-    public Long save(Order entity) {
+    public Order save(Order entity) {
         return null;
     }
 
@@ -45,6 +50,8 @@ public class OrderImpl implements com.faketri.market.repository.Repository<Long,
     public Boolean delete(Order entity) {
         return null;
     }
+
+
 
     @Override
     public int countAll() {
