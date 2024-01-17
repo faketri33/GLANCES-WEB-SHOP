@@ -1,6 +1,7 @@
 package com.faketri.market.repository.impl;
 
 import com.faketri.market.domain.image.Image;
+import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -37,7 +38,7 @@ public class ImageImpl implements Repository<Long, Image> {
                     (rs, numRow) -> rs.next() ?
                             new Image(rs.getLong("id"), rs.getBytes("image")) : null);
         }catch (EmptyResultDataAccessException ex){
-            return null;
+            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
         }
     }
 

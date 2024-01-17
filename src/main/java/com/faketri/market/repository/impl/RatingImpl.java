@@ -1,8 +1,10 @@
 package com.faketri.market.repository.impl;
 
 import com.faketri.market.domain.order.Rating;
+import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -26,7 +28,12 @@ public class RatingImpl implements Repository<Long, Rating> {
 
     @Override
     public Rating findByFields(Rating entity) {
-        return null;
+        try{
+            return null;
+        }
+        catch (EmptyResultDataAccessException ex){
+            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
+        }
     }
 
     public List<Rating> findByIdProduct(Long id) {
@@ -65,8 +72,6 @@ public class RatingImpl implements Repository<Long, Rating> {
     public Boolean delete(Rating entity) {
         return null;
     }
-
-
 
     @Override
     public int countAll() {

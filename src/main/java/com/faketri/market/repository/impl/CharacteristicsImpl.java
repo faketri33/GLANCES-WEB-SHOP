@@ -1,6 +1,7 @@
 package com.faketri.market.repository.impl;
 
 import com.faketri.market.domain.product.Characteristics;
+import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -45,7 +46,7 @@ public class CharacteristicsImpl implements Repository<Long, Characteristics> {
                                     rs.getString("value"))
             );
         }catch (EmptyResultDataAccessException ex){
-            return null;
+            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
         }
     }
 

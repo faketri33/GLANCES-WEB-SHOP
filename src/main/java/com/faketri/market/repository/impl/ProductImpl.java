@@ -3,14 +3,17 @@ package com.faketri.market.repository.impl;
 import com.faketri.market.domain.product.Brand;
 import com.faketri.market.domain.product.Characteristics;
 import com.faketri.market.domain.product.Product;
+import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.impl.mapper.ProductExtractor;
 import com.faketri.market.repository.impl.mapper.ProductRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -44,10 +47,14 @@ public class ProductImpl implements com.faketri.market.repository.Repository<Lon
                     new ProductRowMapper())
         );
     }
-
     @Override
     public Product findByFields(Product entity) {
-        return null;
+        try{
+            return null;
+        }
+        catch (EmptyResultDataAccessException ex){
+            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
+        }
     }
 
     public List<Product> findAll(){
@@ -106,7 +113,17 @@ public class ProductImpl implements com.faketri.market.repository.Repository<Lon
                 ), pageable, countByCharacteristics(characteristics));
     }
     public Page<Product> findByCharacteristics(List<Characteristics> characteristics, Pageable pageable) {
-        return null; // TODO :: FIND BY CHARACTERISTICS
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        characteristics.forEach(item -> mapSqlParameterSource.addValue("characteristics", item.getId()));
+        return new PageImpl<>(
+                Objects.requireNonNull(
+                        template.query(
+                                basicSelectSQl + "WHERE ch.id in (:characteristics) " +
+                                        "LIMIT " + pageable.getPageSize() + " " +
+                                        "OFFSET " + pageable.getOffset(),
+                                mapSqlParameterSource,
+                                new ProductExtractor())
+                ), pageable, countByCharacteristics(characteristics));
     }
     public  Page<Product> findByCategories(Long categoriesId, Pageable pageable) {
         return new PageImpl<>(Objects.requireNonNull(template.query(
@@ -127,13 +144,12 @@ public class ProductImpl implements com.faketri.market.repository.Repository<Lon
     }
     public Product save(Product product) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        MapSqlParameterSource sqlParameterSource = getMapSqlParameterSource(product);
         template.update(
             "insert into product(brand_id, name_model, price, quantity, quantity_sold, " +
                     "is_promo_active, promotion_price, discount, categories_id) " +
                 "values (:brand_id, :name_model, :price, :quantity, :quantity_sold, " +
                     ":is_promo_active, :promotion_price, :discount, :categories_id);",
-                sqlParameterSource, keyHolder, new String[] {"id"});
+                getMapSqlParameterSource(product), keyHolder, new String[] {"id"});
 
         product.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
         product.getImage().forEach(x ->
@@ -151,7 +167,6 @@ public class ProductImpl implements com.faketri.market.repository.Repository<Lon
 
         return product;
     }
-
     public Boolean update(Product product) {
         return template.update(
                 "update product " +
@@ -174,9 +189,6 @@ public class ProductImpl implements com.faketri.market.repository.Repository<Lon
                 Map.of("id", product.getId())
         ) > 0;
     }
-
-
-
     public int countAll(){
         return template.query("select COUNT(*) from product",
                 (rs, rowNum) -> rs.getInt(1)).get(0);
@@ -191,12 +203,18 @@ public class ProductImpl implements com.faketri.market.repository.Repository<Lon
                         Map.of("id", characteristics.getId()),
                         (rs, rowNum) -> rs.getInt(1)).get(0);
     }
+    public int countByCharacteristics(List<Characteristics> characteristics){
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        characteristics.forEach(item -> mapSqlParameterSource.addValue("id", item.getId()));
+        return template.query("select COUNT(*) from product_characteristics pc where pc.characteristics_id in (:id) ",
+                mapSqlParameterSource,
+                (rs, rowNum) -> rs.getInt(1)).get(0);
+    }
     public int countByBrand(Brand brand){
         return template.query("select count(*) from product where brand_id = :id",
                         Map.of("id", brand.getId()),
                         (rs, rowNum) -> rs.getInt(1)).get(0);
     }
-
     private MapSqlParameterSource getMapSqlParameterSource(Product product) {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource(
                 Map.of("brand_id", product.getBrand().getId(),

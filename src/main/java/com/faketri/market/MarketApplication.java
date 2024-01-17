@@ -1,19 +1,7 @@
 package com.faketri.market;
 
-import com.faketri.market.domain.Promo.Promotion;
-import com.faketri.market.domain.image.Image;
-import com.faketri.market.domain.product.*;
-import com.faketri.market.service.*;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.util.*;
 
 @SpringBootApplication
 public class MarketApplication {

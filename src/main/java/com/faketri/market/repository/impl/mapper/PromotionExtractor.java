@@ -1,6 +1,6 @@
 package com.faketri.market.repository.impl.mapper;
 
-import com.faketri.market.domain.Promo.Promotion;
+import com.faketri.market.domain.promo.Promotion;
 import com.faketri.market.domain.image.Image;
 import com.faketri.market.domain.product.*;
 import org.springframework.dao.DataAccessException;
@@ -10,9 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class PromotionExtractor implements ResultSetExtractor<Collection<Promotion>> {
+public class PromotionExtractor implements ResultSetExtractor<List<Promotion>> {
     @Override
-    public Collection<Promotion> extractData(ResultSet rs) throws SQLException, DataAccessException {
+    public List<Promotion> extractData(ResultSet rs) throws SQLException, DataAccessException {
 
         Map<Long, Promotion> promotionHashMap = new HashMap<>();
         Map<Long, Product> products = new HashMap<>();
@@ -66,6 +66,6 @@ public class PromotionExtractor implements ResultSetExtractor<Collection<Promoti
         }
         promotionHashMap.get(lastId).getPromotionItems().addAll(products.values());
 
-        return promotionHashMap.values();
+        return new ArrayList<>(promotionHashMap.values());
     }
 }

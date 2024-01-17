@@ -1,7 +1,10 @@
 package com.faketri.market.repository.impl;
 
 import com.faketri.market.domain.product.Brand;
+import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.BrandRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -40,7 +43,7 @@ public class BrandImpl implements BrandRepository {
                     Map.of("name", entity.getName()),
                     (rs, numRow) -> new Brand(rs.getLong(1), rs.getString(2)));
         }catch (EmptyResultDataAccessException ex){
-            return null;
+            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
         }
     }
 

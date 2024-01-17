@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface Repository<T, E> {
-
     Optional<E> findById(T id);
     E findByFields(E entity);
     List<E> findAll();

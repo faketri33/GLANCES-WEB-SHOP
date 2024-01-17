@@ -1,9 +1,11 @@
 package com.faketri.market.repository.impl;
 
-import com.faketri.market.domain.Promo.Promotion;
+import com.faketri.market.domain.promo.Promotion;
+import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.impl.mapper.PromotionExtractor;
 import com.faketri.market.repository.impl.mapper.PromotionRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +25,7 @@ public class PromotionImpl implements com.faketri.market.repository.Repository<L
 
     private final String basicSQL =
         "select p.id as promotion_id, p.banner, p.title, p.description, p.date_of_start, p.date_of_end, " +
-            "pr.id as product_id, pr.brand_id, pr.name_model, pr.price, pr.quantity, pr.quantity_sold, pr.is_promo_active," +
+            "pr.id, pr.brand_id, pr.name_model, pr.price, pr.quantity, pr.quantity_sold, pr.is_promo_active," +
             "pr.promotion_price, pr.discount, b.name as brand_name, c.name as categories_name,  i.id as image_id, i.image, " +
             "pr.categories_id, ch.id as characteristics_id, ch.name as characteristics_name, ch.value as characteristics_value " +
         "from promotion p " +
@@ -48,7 +50,12 @@ public class PromotionImpl implements com.faketri.market.repository.Repository<L
 
     @Override
     public Promotion findByFields(Promotion entity) {
-        return null;
+        try {
+            return null;
+        }
+        catch (EmptyResultDataAccessException ex){
+            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
+        }
     }
 
     @Override
@@ -56,7 +63,7 @@ public class PromotionImpl implements com.faketri.market.repository.Repository<L
         return template.query(
                 basicSQL,
                 Map.of(), new PromotionExtractor()
-        ).stream().toList();
+        );
     }
 
     @Override

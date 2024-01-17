@@ -1,6 +1,7 @@
 package com.faketri.market.repository.impl;
 
 import com.faketri.market.domain.product.Categories;
+import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -35,7 +36,7 @@ public class CategoriesImpl implements Repository<Long, Categories> {
                     (rs, numRows) -> new Categories(rs.getLong("id"), rs.getString("name")));
         }
         catch (EmptyResultDataAccessException ex){
-            return null;
+            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
         }
     }
 

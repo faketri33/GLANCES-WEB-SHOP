@@ -28,15 +28,13 @@ public class ProductController {
     public @ResponseBody List<Product> getAll(){
         return productService.findAll();
     }
-
     @RequestMapping(path = "/categories/{categoriesId}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<Product> getByCategories(@PathVariable(value = "categoriesId") Long categoriesId){
         return productService.findByCategories(categoriesId);
     }
-
-    @RequestMapping(path = "/page",
+    @RequestMapping(path = "/product",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Page<Product> getAll(
@@ -44,19 +42,36 @@ public class ProductController {
             @RequestParam("size") Integer page_size){
         return productService.findAll(PageRequest.of(page_number, page_size));
     }
-
     @RequestMapping(path = "/{productId}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Product getProduct(@PathVariable(value = "productId") Long productId){
         return productService.findById(productId);
     }
-
-    @RequestMapping(path = "/",
+    @RequestMapping(path = "/top-selling",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody Page<Product> getTopSelling(
+            @RequestParam("number") Integer page_number,
+            @RequestParam("size") Integer page_size){
+        return productService.findTopSelling(PageRequest.of(page_number, page_size));
+    }
+    @RequestMapping(path = "/save",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public void saveProduct(@RequestBody Product product){
+    public void save(@RequestBody Product product){
         productService.save(product);
     }
-
+    @RequestMapping(path = "/update",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public void update(@RequestBody Product product){
+        productService.update(product);
+    }
+    @RequestMapping(path = "/delete",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public void delete(@RequestBody Product product){
+        productService.delete(product);
+    }
 }

@@ -1,4 +1,4 @@
-package com.faketri.market.domain.Promo;
+package com.faketri.market.domain.promo;
 
 import com.faketri.market.domain.product.Product;
 import org.springframework.data.annotation.Id;

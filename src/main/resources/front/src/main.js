@@ -1,11 +1,15 @@
-import  {createApp}  from 'vue'
-import App from '@/App.vue'
-import router from '@/config/router-config.js'
-import '@/css/bootstrap.min.css'
+import { createApp } from 'vue'
+import Vuex from 'vuex';
+import App from './App.vue'
+import router from './router'
+import product from './store/product'
+import promotion from '@/store/promotion'
 
-
-const app = createApp(App)
-app.use(router)
-app.mount("#app")
-
-
+createApp(App).use(
+    new Vuex.Store({
+        modules:{
+            promotion,
+            product,
+        }
+    })
+).use(router).mount('#app')

@@ -1,6 +1,6 @@
 package com.faketri.market.service;
 
-import com.faketri.market.domain.Promo.Promotion;
+import com.faketri.market.domain.promo.Promotion;
 import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.impl.PromotionImpl;
 import org.springframework.beans.factory.annotation.Autowired;

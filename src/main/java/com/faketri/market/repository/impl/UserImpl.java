@@ -1,8 +1,10 @@
 package com.faketri.market.repository.impl;
 
 import com.faketri.market.domain.users.User;
+import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +33,12 @@ public class UserImpl implements Repository<Long, User> {
 
     @Override
     public User findByFields(User entity) {
-        return null;
+        try{
+            return null;
+        }
+        catch (EmptyResultDataAccessException ex){
+            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
+        }
     }
 
     public Optional<User> findByLogin(String Login){
