@@ -57,7 +57,7 @@
   height: 100%;
   cursor: pointer;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: cover;   
 }
 
 .slider img.active {

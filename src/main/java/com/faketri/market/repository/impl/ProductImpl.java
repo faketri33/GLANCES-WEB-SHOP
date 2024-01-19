@@ -3,7 +3,6 @@ package com.faketri.market.repository.impl;
 import com.faketri.market.domain.product.Brand;
 import com.faketri.market.domain.product.Characteristics;
 import com.faketri.market.domain.product.Product;
-import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.impl.mapper.ProductExtractor;
 import com.faketri.market.repository.impl.mapper.ProductRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +12,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Types;
 import java.util.*;
 
 
@@ -26,7 +23,7 @@ import java.util.*;
 public class ProductImpl implements com.faketri.market.repository.Repository<Long, Product> {
 
     private final String basicSelectSQl =
-            "select p.*, b.name as brand_name, c.name as categories_name, " +
+            "select p.*, b.name as brand_name, c.name as categories_name, c.image as categories_image," +
                 "i.id as image_id, i.image, ch.id as characteristics_id, ch.name as characteristics_name, " +
                 "ch.value as characteristics_value " +
             "from product p " +
@@ -50,10 +47,18 @@ public class ProductImpl implements com.faketri.market.repository.Repository<Lon
     @Override
     public Product findByFields(Product entity) {
         try{
-            return null;
+            return template.queryForObject(basicSelectSQl + " where p.brand_id = :brand_id and " +
+                    "p.name_model = :name_model and " +
+                    "p.price = :price and " +
+                    "p.categories_id = :categories_id and " +
+                    "p.quantity = :quantity and " +
+                    "p.quantity_sold = :quantity_sold and " +
+                    "p.promotion_price = :promotion_price and " +
+                    "p.discount = :discount and " +
+                    "p.is_promo_active = :is_promo_active ", getMapSqlParameterSource(entity), new ProductRowMapper());
         }
         catch (EmptyResultDataAccessException ex){
-            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
+            return null;
         }
     }
 

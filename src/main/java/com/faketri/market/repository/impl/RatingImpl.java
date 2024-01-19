@@ -32,7 +32,7 @@ public class RatingImpl implements Repository<Long, Rating> {
             return null;
         }
         catch (EmptyResultDataAccessException ex){
-            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
+            return null;
         }
     }
 

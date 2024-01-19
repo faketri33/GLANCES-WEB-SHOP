@@ -3,29 +3,39 @@
     <section class="main">
         <div class="container" style="margin-top: 50px;">
             <PromotionSlider v-bind:promotions="getPromotion"/>
-            <ProductCard v-bind:products="getProduct"/>
+            <h2>Каталог</h2>
+            <div class="categories--card">
+                <CategoriesCard v-bind:categories="getCategories"/>
+            </div>
+            <h2>Акции</h2>
+            <div class="product">
+                <ProductCard v-bind:products="getProduct"/>
+            </div>
         </div>
     </section>
-
 </template>
 
 <script>
     import ProductCard from '@/components/ProductCard.vue'
     import PromotionSlider from '@/components/PromotionSlider.vue'
+    import CategoriesCard from '@/components/CategoriesCard.vue';
 
 export default{
     name: 'MainPages',
     components:{
         ProductCard,
-        PromotionSlider
+        PromotionSlider,
+        CategoriesCard,
     },
     created() {
         this.$store.dispatch('product/fetchProducts');
         this.$store.dispatch('promotion/fetchPromotion');
+        this.$store.dispatch('categories/fetchCategories');
     },
     computed:{
         getProduct() { return this.$store.getters['product/getProduct']; },
-        getPromotion() { return this.$store.getters['promotion/getPromotion']; }
+        getPromotion() { return this.$store.getters['promotion/getPromotion']; },
+        getCategories() { return this.$store.getters['categories/getCategories']; }
     }
 };
 

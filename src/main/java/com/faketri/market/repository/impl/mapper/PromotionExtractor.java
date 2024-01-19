@@ -36,15 +36,16 @@ public class PromotionExtractor implements ResultSetExtractor<List<Promotion>> {
 
             promotionHashMap.put(promotionId, promotion);
             // ----------------- Product ------------------------
-            Long productId = rs.getLong("product_id");
+            Long productId = rs.getLong("id");
             Product product = products.get(productId);
 
             if(product == null){
                 product = new Product(
-                        rs.getLong("product_id"),
+                        rs.getLong("id"),
                         new Brand(rs.getLong("brand_id"), rs.getString("brand_name")),
                         rs.getString("name_model"),
-                        new Categories(rs.getLong("categories_id"), rs.getString("categories_name")),
+                        new Categories(rs.getLong("categories_id"),
+                                rs.getString("categories_name"), rs.getBytes("categories_image")),
                         rs.getLong("price"),
                         rs.getBoolean("is_promo_active"),
                         rs.getLong("promotion_price"),
@@ -64,7 +65,8 @@ public class PromotionExtractor implements ResultSetExtractor<List<Promotion>> {
 
             products.put(productId, product);
         }
-        promotionHashMap.get(lastId).getPromotionItems().addAll(products.values());
+        if(lastId != null)
+            promotionHashMap.get(lastId).getPromotionItems().addAll(products.values());
 
         return new ArrayList<>(promotionHashMap.values());
     }

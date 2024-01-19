@@ -45,7 +45,8 @@ public class ProductService {
         return productImpl.findTopSelling(pageable);
     }
     public Product save(Product product){
-        return productImpl.save(product);
+        Product ifSavedProduct = productImpl.findByFields(product);
+        return ifSavedProduct == null ? productImpl.save(product) : ifSavedProduct;
     }
     public Boolean update(Product product){
         return productImpl.update(product);

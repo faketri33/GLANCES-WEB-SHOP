@@ -37,7 +37,7 @@ public class UserImpl implements Repository<Long, User> {
             return null;
         }
         catch (EmptyResultDataAccessException ex){
-            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
+            return null;
         }
     }
 

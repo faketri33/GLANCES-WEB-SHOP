@@ -1,6 +1,5 @@
 package com.faketri.market.domain.product;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,4 +17,6 @@ public class Categories {
     private Long id;
     @Column
     private String name;
+    @Column
+    private byte[] image;
 }

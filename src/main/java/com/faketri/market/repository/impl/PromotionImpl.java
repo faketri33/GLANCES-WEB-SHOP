@@ -26,8 +26,9 @@ public class PromotionImpl implements com.faketri.market.repository.Repository<L
     private final String basicSQL =
         "select p.id as promotion_id, p.banner, p.title, p.description, p.date_of_start, p.date_of_end, " +
             "pr.id, pr.brand_id, pr.name_model, pr.price, pr.quantity, pr.quantity_sold, pr.is_promo_active," +
-            "pr.promotion_price, pr.discount, b.name as brand_name, c.name as categories_name,  i.id as image_id, i.image, " +
-            "pr.categories_id, ch.id as characteristics_id, ch.name as characteristics_name, ch.value as characteristics_value " +
+            "pr.promotion_price, pr.discount, b.name as brand_name, c.name as categories_name, c.image as categories_image, " +
+            "i.id as image_id, i.image, pr.categories_id, ch.id as characteristics_id, ch.name as characteristics_name, "  +
+            "ch.value as characteristics_value " +
         "from promotion p " +
             "left join promotion_product_item ppi on ppi.promotion_id = p.id " +
             "left join product pr on pr.id = ppi.product_id " +
@@ -51,10 +52,19 @@ public class PromotionImpl implements com.faketri.market.repository.Repository<L
     @Override
     public Promotion findByFields(Promotion entity) {
         try {
-            return null;
+            return template.queryForObject(basicSQL + " where p.banner = :banner " +
+                    "and p.title = :title " +
+                    "and p.description = :description " +
+                    "and p.date_of_start = :date_of_start " +
+                    "and p.date_of_end = :date_of_end ",
+                    Map.of("banner", entity.getBanner(),
+                            "title", entity.getTitle(),
+                            "description", entity.getDescription(),
+                            "date_of_start", entity.getDateOfStart(),
+                            "date_of_end", entity.getDateOfEnd()), new PromotionRowMapper());
         }
         catch (EmptyResultDataAccessException ex){
-            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
+            return null;
         }
     }
 
@@ -104,15 +114,26 @@ public class PromotionImpl implements com.faketri.market.repository.Repository<L
 
     @Override
     public Boolean update(Promotion entity) {
-        return null;
+        return template.update("update promotion " +
+                "set banner = :banner, " +
+                "title = :title, " +
+                "description = :description, " +
+                "date_of_start = :date_of_start, " +
+                "date_of_end = :date_of_end " +
+                "where id = :id",
+                Map.of("id", entity.getId(),
+                        "banner", entity.getBanner(),
+                        "title", entity.getTitle(),
+                        "description", entity.getDescription(),
+                        "date_of_start", entity.getDateOfStart(),
+                        "date_of_end", entity.getDateOfEnd())) > 0;
     }
 
     @Override
     public Boolean delete(Promotion entity) {
-        return null;
+        return template.update("delete from promotion where id = :id",
+                    Map.of("id", entity.getId())) > 0;
     }
-
-
 
     @Override
     public int countAll() {

@@ -43,7 +43,7 @@ public class BrandImpl implements BrandRepository {
                     Map.of("name", entity.getName()),
                     (rs, numRow) -> new Brand(rs.getLong(1), rs.getString(2)));
         }catch (EmptyResultDataAccessException ex){
-            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
+            return null;
         }
     }
 

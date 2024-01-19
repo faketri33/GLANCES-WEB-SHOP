@@ -3,7 +3,7 @@
     <header>
         <div class="container">
             <div class="nav">
-                <div class="nav__item logo">
+                <div class="nav__item logo" style="text-align: center;">
                     <span class="logo__name">GLANCES</span>
                 </div>
                 <div class="nav__item search__bar">

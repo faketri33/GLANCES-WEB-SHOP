@@ -5,9 +5,10 @@ CREATE TABLE "product" (
   "categories_id" bigint not null,
   "price" bigint NOT NULL, 
   "quantity" int not null,
+  "quantity_sold" int not null,
   "is_promo_active" bit not null,
   "promotion_price" bigint,
-  discount int not null default 0
+  "discount" int not null default 0
 );
 
 CREATE TABLE "brand" (
@@ -28,7 +29,8 @@ CREATE TABLE "characteristics" (
 
 CREATE TABLE "categories" (
   "id" bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  "name" varchar NOT NULL
+  "name" varchar NOT NULL,
+  "image" bytea not null
 );
 
 CREATE TABLE "rating" (
@@ -43,7 +45,7 @@ CREATE TABLE "user" (
   "id" bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   "email" varchar NOT NULL unique,
   "login" varchar NOT NULL unique,
-  "password" varchar(3000)
+  "password" varchar(3000) NOT NULL
 );
 
 CREATE TABLE "order" (
@@ -56,7 +58,7 @@ CREATE TABLE "order" (
 );
 
 CREATE TABLE "product_image" (
-  "product_id" bigint PRIMARY KEY,
+  "product_id" bigint,
   "image_id" bigint
 );
 
@@ -66,7 +68,7 @@ CREATE TABLE "product_characteristics" (
 );
 
 CREATE TABLE "product_order" (
-  "order_id" bigint PRIMARY KEY,
+  "order_id" bigint,
   "product_id" bigint
 );
 
@@ -79,7 +81,7 @@ create table promotion(
         id bigint primary key GENERATED ALWAYS AS IDENTITY,
         banner bytea not null, 
         title varchar not null,
-        discription varchar not null,
+        description varchar not null,
         date_of_start timestamp without time zone NOT NULL,
         date_of_end timestamp without time zone NOT NULL
 );
@@ -106,10 +108,6 @@ ALTER TABLE "product_image" ADD FOREIGN KEY ("image_id") REFERENCES "image" ("id
 ALTER TABLE "rating" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
 
 ALTER TABLE "rating" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
-
-ALTER TABLE "product_categories" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
-
-ALTER TABLE "product_categories" ADD FOREIGN KEY ("categories_id") REFERENCES "categories" ("id");
 
 ALTER TABLE "product_characteristics" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
 

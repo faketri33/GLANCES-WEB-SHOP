@@ -38,7 +38,7 @@ public class ImageImpl implements Repository<Long, Image> {
                     (rs, numRow) -> rs.next() ?
                             new Image(rs.getLong("id"), rs.getBytes("image")) : null);
         }catch (EmptyResultDataAccessException ex){
-            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
+            return null;
         }
     }
 
@@ -75,8 +75,6 @@ public class ImageImpl implements Repository<Long, Image> {
         return template.update("delete from image where id = :id",
                 Map.of("id", entity.getId())) > 0;
     }
-
-
 
     @Override
     public int countAll() {

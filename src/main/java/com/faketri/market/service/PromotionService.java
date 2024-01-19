@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.StyledEditorKit;
 import java.util.List;
 
 @Service
@@ -29,6 +30,11 @@ public class PromotionService {
     }
 
     public Promotion save(Promotion promotion){
-        return promotionImpl.save(promotion);
+        Promotion ifSavedPromotion = promotionImpl.findByFields(promotion);
+        return ifSavedPromotion == null ? promotionImpl.save(promotion) : ifSavedPromotion;
+    }
+
+    public Boolean update(Promotion promotion){
+        return promotionImpl.update(promotion);
     }
 }

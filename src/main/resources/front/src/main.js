@@ -4,12 +4,14 @@ import App from './App.vue'
 import router from './router'
 import product from './store/product'
 import promotion from '@/store/promotion'
+import categories from './store/categories';
 
 createApp(App).use(
     new Vuex.Store({
         modules:{
             promotion,
             product,
+            categories,
         }
     })
 ).use(router).mount('#app')

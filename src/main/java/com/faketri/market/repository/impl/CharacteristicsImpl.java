@@ -46,7 +46,7 @@ public class CharacteristicsImpl implements Repository<Long, Characteristics> {
                                     rs.getString("value"))
             );
         }catch (EmptyResultDataAccessException ex){
-            throw new ResourceNotFoundException(this.getClass().getName() + " not found entity");
+            return null;
         }
     }
 
