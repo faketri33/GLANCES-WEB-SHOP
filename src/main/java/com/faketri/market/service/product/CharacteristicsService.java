@@ -1,4 +1,4 @@
-package com.faketri.market.service;
+package com.faketri.market.service.product;
 
 import com.faketri.market.domain.product.Characteristics;
 import com.faketri.market.repository.impl.CharacteristicsImpl;

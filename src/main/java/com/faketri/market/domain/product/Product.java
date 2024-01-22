@@ -48,4 +48,21 @@ public class Product {
         this.quantity = quantity;
         this.quantitySold = quantitySold;
     }
+
+    public void updatePriceDiscount(char operation){
+        switch (operation){
+            case '+':
+                promoPrice = 0L;
+                break;
+            case '-':
+                promoPrice = price - ((price * discount) / 100);
+                break;
+        }
+    }
+
+    public void setIsPromoActive(boolean isActive){
+        isPromoActive = isActive;
+        if(isPromoActive) updatePriceDiscount('-');
+        else updatePriceDiscount('+');
+    }
 }

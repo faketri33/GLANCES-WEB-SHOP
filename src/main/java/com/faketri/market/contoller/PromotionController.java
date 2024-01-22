@@ -1,7 +1,7 @@
 package com.faketri.market.contoller;
 
 import com.faketri.market.domain.promo.Promotion;
-import com.faketri.market.service.PromotionService;
+import com.faketri.market.service.promo.PromotionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

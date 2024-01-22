@@ -1,91 +1,141 @@
 
 <template>
-   
-    <button v-for="product in products" v-bind:key="product.id">
-        <div class="product-card">
-            <img v-bind:src="'data:image/jpeg;base64,' + product.image[0].photo" alt=""/>
-            <div class="product-title"><h1>{{product.brand.name +' '+ product.nameModel }} </h1></div>
-            <div class="product-price"> <h1>{{product.price + '₽'}} </h1></div>
-            <div class="in-availability"><span>В наличии</span></div>
-            <button class="btn-buy" v-if="product.quantity > 0" > В корзину</button>
-        </div>
-    </button>
-
+    <div style="display: flex ;">
+        <button class="card" v-for="product in products" v-bind:key="product.id"
+            style="background-color: transparent; border: none;">
+            <div class="image">
+                <img :src="'data:image/jpeg;base64,' + product.image[0].photo" alt="Смартфон Apple iPhone 14 128GB">
+                <span v-if="product.isPromoActive" class="discount">-{{ product.discount }} %</span>
+            </div>
+            <div class="info">
+                <h3>{{ product.brand.name + ' ' + product.nameModel }}</h3>
+                <p v-if="product.isPromoActive" class="price">
+                    <span class="new"> {{ product.promoPrice }} ₽</span>
+                    <span class="old"> {{ product.price }} ₽</span>
+                </p>
+                <p v-else class="price"> <span> {{ product.price }} </span> </p>
+                <div style="display: flex; justify-content: space-between;">
+                    <p class="stock">В наличии</p>
+                    <button class="favorite">
+                        <img :src="product.liked ? '/Vector.svg' : '/red.svg'" alt="">
+                    </button>
+                </div>
+            </div>
+            <button class="add">В корзину</button>
+        </button>
+    </div>
 </template>
 
 <script>
-    export default{
-        props:{
-            products:{
-                type: Array,
-                require: true
-            }
+export default {
+    props: {
+        products: {
+            type: Array,
+            require: true
+        }
+    },
+    methods:{
+        favoriteClick(liked){
+            this.liked = !liked;
+            console.log(this.liked);
+        }
+    },
+    data(){
+        return{
         }
     }
+}
 </script>
 
 <style scoped>
-    *{
-        font-family: 'Courier New', Courier, monospace;   
-    }
-    button{
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-    }
-    button,
-    button:active,
-    button:focus  {
-        border:none;
-    }
-    .btn-buy {
-        margin: 0 auto;
-        background-color:#091D9E;
-        border-radius:8px;
-        border:1px solid #272f8f;
-        cursor:pointer;
-        color:#ffffff;
-        font-size:14px;
-        font-weight:bold;
-        padding:16px 31px;
-        text-decoration:none;
-    }
-    .btn-buy:hover {
-        background-color:#0040ff;
-    }
-    .btn-buy:active {
-        position:relative;
-        top:1px;
-    }
-    .product-card{
-        width: 180px;
-        height: 530px;
-        margin: 10px;
-        text-align: left;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 20px;
-    }
-    img{
-        width: 180px;
-        height: 220px;
-    }
-    .product-title{
-        color: #0C0C0C;
-        /* h1/20 regular 32 */
-        font-size: 20px;
-        font-style: normal;
-    }
-    h1{
-        margin: 0;
-    }
-    .in-availability{
-        color: #169B00;
-        /* h3/14 light auto */
-        font-size: 14px;
-        font-style: normal;
-        font-weight: 300;
-        line-height: normal;
-    }
+.card {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 220px;
+    border: 1px solid #ccc;
+    gap: 20px;
+}
+.like{
+    color: color;
+}
+
+.image {
+    position: relative;
+    width: 200px;
+}
+
+.image img {
+    width: 170px;
+    height: 220px;
+
+}
+
+.discount {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #EBBA1A;
+    padding: 5px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.info h3 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.price {
+    display: flex;
+    align-items: center;
+}
+
+.price .new {
+    font-size: 24px;
+    font-weight: bold;
+    color: green;
+    margin-right: 10px;
+}
+
+.price .old {
+    font-size: 18px;
+    text-decoration: line-through;
+    color: red;
+}
+
+.stock {
+    color: blue;
+}
+
+.favorite {
+    border: none;
+    -webkit-border-radius: 5;
+    -moz-border-radius: 5;
+    border-radius: 5px;
+    -webkit-box-shadow: 1px 1px 18px #666666;
+    -moz-box-shadow: 1px 1px 18px #666666;
+    box-shadow: 1px 1px 18px #666666;
+    font-family: Arial;
+    padding: 8px 12px;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.add {
+    background: blue;
+    width: 100%;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
 </style>

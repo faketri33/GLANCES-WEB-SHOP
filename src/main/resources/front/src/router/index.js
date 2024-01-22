@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import PromoView from '../views/PromoView.vue'
 import MainPages from '../views/MainPages.vue'
 import AboutView from '../views/AboutView.vue'
+import AuthView from '@/views/AuthView.vue'
 
 const routes = [
   {
@@ -23,6 +24,10 @@ const routes = [
   {
     path: '/home',
     component: HomeView
+  },
+  {
+    path: '/auth',
+    component: AuthView
   }
 ]
 

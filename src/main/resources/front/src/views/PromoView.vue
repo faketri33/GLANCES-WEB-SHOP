@@ -12,6 +12,7 @@
         },
         computed: {
             getPromotion(){
+                console.log(this.$store.getters['promotion/getPromotion']);
                 return this.$store.getters['promotion/getPromotion'];
             }
         }

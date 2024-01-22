@@ -1,7 +1,7 @@
 package com.faketri.market.contoller;
 
 import com.faketri.market.domain.product.Categories;
-import com.faketri.market.service.CategoriesService;
+import com.faketri.market.service.product.CategoriesService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

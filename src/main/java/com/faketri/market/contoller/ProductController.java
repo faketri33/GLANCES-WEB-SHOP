@@ -2,7 +2,7 @@ package com.faketri.market.contoller;
 
 
 import com.faketri.market.domain.product.Product;
-import com.faketri.market.service.ProductService;
+import com.faketri.market.service.product.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

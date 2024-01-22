@@ -47,7 +47,8 @@ public class ProductImpl implements com.faketri.market.repository.Repository<Lon
     @Override
     public Product findByFields(Product entity) {
         try{
-            return template.queryForObject(basicSelectSQl + " where p.brand_id = :brand_id and " +
+            return template.queryForObject(basicSelectSQl +
+                    " where p.brand_id = :brand_id and " +
                     "p.name_model = :name_model and " +
                     "p.price = :price and " +
                     "p.categories_id = :categories_id and " +
@@ -222,7 +223,8 @@ public class ProductImpl implements com.faketri.market.repository.Repository<Lon
     }
     private MapSqlParameterSource getMapSqlParameterSource(Product product) {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource(
-                Map.of("brand_id", product.getBrand().getId(),
+                Map.of(
+                        "brand_id", product.getBrand().getId(),
                         "name_model", product.getNameModel(),
                         "price", product.getPrice(),
                         "quantity", product.getQuantity(),
@@ -231,6 +233,7 @@ public class ProductImpl implements com.faketri.market.repository.Repository<Lon
                         "discount", product.getDiscount(),
                         "categories_id", product.getCategories().getId())
         );
+        if(product.getId() != null) sqlParameterSource.addValue("id", product.getId());
         sqlParameterSource.addValue("is_promo_active", product.getIsPromoActive());
         return sqlParameterSource;
     }
