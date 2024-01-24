@@ -1,32 +1,35 @@
 package com.faketri.market.contoller;
 
-import com.faketri.market.payload.request.UserDto;
+import com.faketri.market.payload.request.SignInRequest;
+import com.faketri.market.payload.request.SignUpRequest;
+import com.faketri.market.payload.response.JwtAuthenticationResponse;
 import com.faketri.market.service.user.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.GsonBuilderUtils;
+import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.*;
 
 @RestController("/api/auth")
 @CrossOrigin("http://localhost:8081")
 @RequestMapping("/api/auth")
-@Tag(name = "auth", description = "signIn/signUp")
+@Tag(name = "auth", description = "signIn || signUp")
 public class AuthController {
-    // TODO : authentication controller (LOG IN, SING IN, LOG OUT)
     @Autowired
     private AuthService authService;
 
     @RequestMapping(path = "/register",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public void register(@RequestBody UserDto userDto){
-        authService.registration(userDto);
+    public JwtAuthenticationResponse register(@RequestBody @Valid SignUpRequest signUpRequest){
+        return authService.signUp(signUpRequest);
     }
-    @RequestMapping(path = "/login",
-            method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public void login(@RequestBody UserDto userDto){
-        //UserDetails user = userDetailsServer.loadUserByUsername(userDto.getLogin());
+    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    public ResponseEntity<?> login(@RequestBody @Valid SignInRequest signInRequest){
+        return ResponseEntity.ok(authService.signIn(signInRequest));
 
     }
 }

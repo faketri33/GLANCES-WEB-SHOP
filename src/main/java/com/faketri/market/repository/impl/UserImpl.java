@@ -8,6 +8,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -26,7 +27,7 @@ public class UserImpl implements Repository<Long, User> {
 
     @Override
     public Optional<User> findById(Long id){
-        return Optional.ofNullable(template.queryForObject("select * from user where id = :id",
+        return Optional.ofNullable(template.queryForObject("select * from \"user\" where id = :id",
                 Map.of("id", id),
                 User.class));
     }
@@ -42,18 +43,19 @@ public class UserImpl implements Repository<Long, User> {
     }
 
     public Optional<User> findByLogin(String Login){
-        return Optional.ofNullable(template.queryForObject("select * from user where login = :login",
+        return Optional.ofNullable(template.queryForObject(
+                "select id, email, login, password from \"user\" where login = :login",
                 Map.of("login", Login),
-                User.class));
+                new BeanPropertyRowMapper<>(User.class)));
     }
     @Override
     public List<User> findAll() {
-        return template.queryForList("select * from user", Map.of(), User.class);
+        return template.queryForList("select id, email, login, password from \"user\"", Map.of(), User.class);
     }
     @Override
     public Page<User> findAll(Pageable pageable) {
         return new PageImpl<>(
-                template.queryForList("select * from user " +
+                template.queryForList("select id, email, login, password from user " +
                     "LIMIT " + pageable.getPageSize() + " " +
                     "OFFSET " + pageable.getOffset(),
                     Map.of(),
@@ -91,7 +93,7 @@ public class UserImpl implements Repository<Long, User> {
 
     @Override
     public int countAll() {
-        return template.query("select count(*) from user",
+        return template.query("select count(*) from \"user\"",
                 (rs, rowNum) -> rs.getInt(1)).get(0);
     }
 }

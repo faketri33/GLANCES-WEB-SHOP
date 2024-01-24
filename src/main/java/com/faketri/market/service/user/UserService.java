@@ -4,17 +4,21 @@ import com.faketri.market.domain.users.User;
 import com.faketri.market.domain.users.ERole;
 import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.impl.UserImpl;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-
     @Autowired
     private UserImpl userImpl;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+    public User findByLogin(String login){
+        return userImpl.findByLogin(login).orElseThrow( () ->
+                new ResourceNotFoundException("User with login not found " + login));
+    }
 
     public User findById(Long id){
         return userImpl.findById(id).orElseThrow(
@@ -22,10 +26,13 @@ public class UserService {
         );
     }
 
+    public User getCurrentUser() {
+        // Получение имени пользователя из контекста Spring Security
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return findByLogin(username);
+    }
+
     public User save(User user){
-        user.getRole().add(ERole.STANDART);
-        System.out.println(user.getLogin() + " password " + user.getPassword());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userImpl.save(user);
     }
 }
