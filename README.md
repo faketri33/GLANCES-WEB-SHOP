@@ -5,6 +5,7 @@ Technology stack -
 <ul>
   <li>Java 17</li>
   <li>Spring boot (Spring Web, JDBC Template, Spring Security)</li>
+  <li>JWT</li>
   <li>PostgreSQL</li>
   <li>Docker</li>
   <li>Git</li>
