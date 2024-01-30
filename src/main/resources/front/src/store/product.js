@@ -1,5 +1,5 @@
 
-import axios from 'axios'
+import axios from '../axiosConfig'
 
 export default {
   namespaced: true,
@@ -12,13 +12,22 @@ export default {
     },
   },
   actions: {
+    fetchProductsByCategories({ commit }, inputDate) {
+      axios.get('http://localhost:8080/api/categories/' + inputDate.id + '?number=' + inputDate.pageNumber + '&size=' + inputDate.pageSize)
+        .then(response => {
+          commit('setProducts', response.data);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
     fetchProducts({ commit }) {
       axios.get('http://localhost:8080/api/product/')
         .then(response => {
-           commit('setProducts', response.data);
+          commit('setProducts', response.data);
         })
         .catch(error => {
-            console.error(error);
+          console.error(error);
         });
     },
   },

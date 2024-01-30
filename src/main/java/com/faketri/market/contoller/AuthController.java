@@ -9,8 +9,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.GsonBuilderUtils;
-import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.*;
 
 @RestController("/api/auth")
@@ -29,6 +27,7 @@ public class AuthController {
     }
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> login(@RequestBody @Valid SignInRequest signInRequest){
+        System.out.println(signInRequest);
         return ResponseEntity.ok(authService.signIn(signInRequest));
 
     }

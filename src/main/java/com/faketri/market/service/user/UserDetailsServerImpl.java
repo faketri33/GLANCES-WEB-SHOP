@@ -20,9 +20,7 @@ public class UserDetailsServerImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return generateUserDetails(
-                    userService.findByLogin(username)
-            );
+        return generateUserDetails(userService.findByLogin(username));
     }
 
     public UserDetails generateUserDetails(User user){

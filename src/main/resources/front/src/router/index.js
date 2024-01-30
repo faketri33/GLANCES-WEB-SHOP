@@ -4,6 +4,7 @@ import PromoView from '../views/PromoView.vue'
 import MainPages from '../views/MainPages.vue'
 import AboutView from '../views/AboutView.vue'
 import AuthView from '@/views/AuthView.vue'
+import CatalogView from '@/views/CatalogView.vue'
 
 const routes = [
   {
@@ -28,6 +29,10 @@ const routes = [
   {
     path: '/auth',
     component: AuthView
+  },
+  {
+    path: '/catalog/:id',
+    component: CatalogView
   }
 ]
 

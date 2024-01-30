@@ -16,8 +16,10 @@ public class UserService {
     private UserImpl userImpl;
 
     public User findByLogin(String login){
-        return userImpl.findByLogin(login).orElseThrow( () ->
+        var user = userImpl.findByLogin(login).orElseThrow( () ->
                 new ResourceNotFoundException("User with login not found " + login));
+        System.out.println(user);
+        return user;
     }
 
     public User findById(Long id){

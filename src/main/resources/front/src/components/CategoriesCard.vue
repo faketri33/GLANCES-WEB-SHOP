@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="'categories/'+ categorie.id" v-for="categorie in categories" :key="categorie.id">
+    <router-link :to="'/catalog/'+ categorie.id" v-for="categorie in categories" :key="categorie.id">
         <div class="product-card">
             <div class="image-container">
                 <img v-bind:src="'data:image/jpeg;base64,'+ categorie.image" :alt="categorie.name">

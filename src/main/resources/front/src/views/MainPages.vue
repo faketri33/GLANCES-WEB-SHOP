@@ -8,8 +8,8 @@
                 <CategoriesCard v-bind:categories="getCategories"/>
             </div>
             <h2>Акции</h2>
-            <div class="product">
-                <ProductCard v-bind:products="getProduct"/>
+            <div class="product" style="align-items: center; display: flex;">
+                <ProductCard v-for="product in getProduct" :key="product.id" v-bind:product="product"/>
             </div>
         </div>
     </section>

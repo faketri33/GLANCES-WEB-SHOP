@@ -35,8 +35,5 @@ public class Rating {
         this.product = product;
         this.user = user;
     }
-    private void onCreate(){
-        publishedOn = LocalDateTime.now();
-    }
 
 }

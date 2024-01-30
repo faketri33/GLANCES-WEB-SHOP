@@ -5,6 +5,7 @@ import router from './router'
 import product from './store/product'
 import promotion from '@/store/promotion'
 import categories from './store/categories';
+import user from './store/user';
 
 createApp(App).use(
     new Vuex.Store({
@@ -12,6 +13,7 @@ createApp(App).use(
             promotion,
             product,
             categories,
+            user,
         }
     })
 ).use(router).mount('#app')

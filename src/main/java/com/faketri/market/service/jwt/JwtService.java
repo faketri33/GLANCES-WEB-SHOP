@@ -17,12 +17,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class JwtService {
+public class JwtService{
     @Value("${token.signing.key}")
     private String jwtSigningKey;
 
     /**
-     * Извлечение имени пользователя из токена
+     * Extract user login from token
      *
      * @param token токен
      * @return имя пользователя
@@ -32,10 +32,10 @@ public class JwtService {
     }
 
     /**
-     * Генерация токена
+     * Generate token by user fields
      *
-     * @param userDetails данные пользователя
-     * @return токен
+     * @param userDetails data of user
+     * @return token
      */
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
@@ -49,11 +49,10 @@ public class JwtService {
     }
 
     /**
-     * Проверка токена на валидность
-     *
-     * @param token       токен
-     * @param userDetails данные пользователя
-     * @return true, если токен валиден
+     * Checking the validity of the token
+     * @param token       token
+     * @param userDetails data of user
+     * @return true, if token is valid
      */
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String userName = extractUserName(token);
@@ -61,12 +60,12 @@ public class JwtService {
     }
 
     /**
-     * Извлечение данных из токена
+     * Extract data from the token
      *
-     * @param token           токен
-     * @param claimsResolvers функция извлечения данных
-     * @param <T>             тип данных
-     * @return данные
+     * @param token           token
+     * @param claimsResolvers function extract data
+     * @param <T>             data type
+     * @return extracted data
      */
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
@@ -74,11 +73,11 @@ public class JwtService {
     }
 
     /**
-     * Генерация токена
+     * Generate token
      *
-     * @param extraClaims дополнительные данные
-     * @param userDetails данные пользователя
-     * @return токен
+     * @param extraClaims additional data
+     * @param userDetails data of the user
+     * @return token
      */
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
@@ -88,7 +87,7 @@ public class JwtService {
     }
 
     /**
-     * Проверка токена на просроченность
+     * Checking the expired of the token
      *
      * @param token токен
      * @return true, если токен просрочен
@@ -98,20 +97,18 @@ public class JwtService {
     }
 
     /**
-     * Извлечение даты истечения токена
-     *
-     * @param token токен
-     * @return дата истечения
+     * Extract data about expiration
+     * @param token token
+     * @return date of expiration
      */
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
     /**
-     * Извлечение всех данных из токена
-     *
-     * @param token токен
-     * @return данные
+     * Extract data from token
+     * @param token token
+     * @return data from token
      */
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
@@ -122,9 +119,8 @@ public class JwtService {
     }
 
     /**
-     * Получение ключа для подписи токена
-     *
-     * @return ключ
+     * Get keys for token signatures
+     * @return key
      */
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSigningKey);

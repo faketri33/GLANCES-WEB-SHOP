@@ -44,7 +44,9 @@ public class UserImpl implements Repository<Long, User> {
 
     public Optional<User> findByLogin(String Login){
         return Optional.ofNullable(template.queryForObject(
-                "select id, email, login, password from \"user\" where login = :login",
+                "select id, email, login, password, role from \"user\" " +
+                    "left join user_role on user_role.user_id = \"user\".id " +
+                    "where login = :login",
                 Map.of("login", Login),
                 new BeanPropertyRowMapper<>(User.class)));
     }
@@ -72,12 +74,17 @@ public class UserImpl implements Repository<Long, User> {
         template.update(
                 "insert into \"user\"(email, login, password) values(:email, :login, :password)",
                 new MapSqlParameterSource(Map.of(
-                        "email", user.getEmail(),
                         "login", user.getLogin(),
+                        "email", user.getEmail(),
                         "password", user.getPassword()
                 )
         ), keyHolder, new String[] {"id"});
         user.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
+        if (user.getId() != null)
+            user.getRole().forEach(role ->
+                    template.update("insert into user_role(user_id, role) values(:id, :role);",
+                            Map.of("id", user.getId(), "role", role.name()))
+            );
         return user;
     }
 
