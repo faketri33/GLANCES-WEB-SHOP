@@ -12,13 +12,14 @@ import java.util.List;
 
 @Service
 public class ImageService {
+
     @Autowired
     private ImageImpl imageImpl;
 
     public Image findById(Long id) {
-        return imageImpl.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Image with id - " + id + " not found")
-        );
+        return imageImpl.findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Image with id - " + id + " not found"));
     }
 
     public List<Image> findAll() {

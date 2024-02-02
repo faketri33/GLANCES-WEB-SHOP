@@ -14,13 +14,14 @@ import java.util.List;
 @RequestMapping("/api/categories")
 @Tag(name = "categories", description = "Operation with categories")
 public class CategoriesController {
+
     @Autowired
     private CategoriesService categoriesService;
 
-    @RequestMapping(path = "/",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<Categories> getAll(){
+    @RequestMapping(path = "/", method = RequestMethod.GET,
+                    produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<Categories> getAll() {
         return categoriesService.findAll();
     }
+
 }

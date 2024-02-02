@@ -2,13 +2,13 @@ package com.faketri.market.domain.order;
 
 import com.faketri.market.domain.product.Product;
 import com.faketri.market.domain.users.User;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,10 +19,11 @@ import java.util.List;
 @NoArgsConstructor
 @Table(schema = "public", name = "order")
 public class Order {
+
     @Id
-    private long id;
+    private long          id;
     @Column
-    private User user;
+    private User          user;
     @MappedCollection
     private List<Product> products = new ArrayList<>();
     @Column
@@ -30,11 +31,12 @@ public class Order {
     @Column
     private LocalDateTime dateOfRelease;
     @Column
-    private double price;
+    private double        price;
     @Column
-    private EStatusOrder statusOrder;
+    private EStatusOrder  statusOrder;
 
-    private void onCreate(){
+    private void onCreate() {
         dateOfCreate = LocalDateTime.now();
     }
+
 }

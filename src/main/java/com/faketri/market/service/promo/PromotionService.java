@@ -14,43 +14,49 @@ import java.util.List;
 
 @Service
 public class PromotionService {
+
     @Autowired
-    private PromotionImpl promotionImpl;
+    private PromotionImpl  promotionImpl;
     @Autowired
     private ProductService productService;
 
-    public Promotion findById(Long id){
-        return promotionImpl.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("Promotion with id - " + id + " not found"));
+    public Promotion findById(Long id) {
+        return promotionImpl.findById(id)
+                            .orElseThrow(() -> new ResourceNotFoundException(
+                                    "Promotion with id - " + id + " not found"));
     }
 
-    public List<Promotion> findAll(){
+    public List<Promotion> findAll() {
         return promotionImpl.findAll();
     }
 
-    public Page<Promotion> findAll(Pageable pageable){
+    public Page<Promotion> findAll(Pageable pageable) {
         return promotionImpl.findAll(pageable);
     }
 
-    public void isPromotionActive(Promotion promotion){
+    public void isPromotionActive(Promotion promotion) {
         LocalDateTime currentDate = LocalDateTime.now();
-        boolean isInInterval = currentDate.isAfter(promotion.getDateOfStart()) &&
-                               currentDate.isBefore(promotion.getDateOfEnd());
-        if(isInInterval) promotion.getPromotionItems().forEach(item -> item.setIsPromoActive(true));
-        else promotion.getPromotionItems().forEach(item -> item.setIsPromoActive(false));
+        boolean isInInterval =
+                currentDate.isAfter(promotion.getDateOfStart()) && currentDate.isBefore(
+                        promotion.getDateOfEnd());
+        if (isInInterval) promotion.getPromotionItems()
+                                   .forEach(item -> item.setIsPromoActive(true));
+        else promotion.getPromotionItems()
+                      .forEach(item -> item.setIsPromoActive(false));
         productService.update(promotion.getPromotionItems());
     }
 
-    public Promotion save(Promotion promotion){
+    public Promotion save(Promotion promotion) {
         Promotion ifSavedPromotion = promotionImpl.findByFields(promotion);
-        if( ifSavedPromotion == null){
+        if (ifSavedPromotion == null) {
             isPromotionActive(promotion);
             return promotionImpl.save(promotion);
         }
         return ifSavedPromotion;
     }
 
-    public Boolean update(Promotion promotion){
+    public Boolean update(Promotion promotion) {
         return promotionImpl.update(promotion);
     }
+
 }

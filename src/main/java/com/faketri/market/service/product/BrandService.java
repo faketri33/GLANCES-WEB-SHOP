@@ -8,17 +8,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BrandService {
+
     @Autowired
     private BrandImpl brandImpl;
 
-    public Brand findById(Long id){
-        return brandImpl.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Brand with id - " + id + " not found" )
-        );
+    public Brand findById(Long id) {
+        return brandImpl.findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Brand with id - " + id + " not found"));
     }
 
-    public Brand save(Brand brand){
+    public Brand save(Brand brand) {
         Brand entity = brandImpl.findByFields(brand);
         return entity == null ? brandImpl.save(brand) : entity;
     }
+
 }

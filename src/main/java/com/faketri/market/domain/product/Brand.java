@@ -11,7 +11,9 @@ import org.springframework.data.relational.core.mapping.Table;
 @NoArgsConstructor
 @Table(schema = "public", name = "brand")
 public class Brand {
+
     @Id
-    private Long id;
+    private Long   id;
     private String name;
+
 }

@@ -3,8 +3,7 @@ package com.faketri.market.repository.impl;
 import com.faketri.market.domain.product.Brand;
 import com.faketri.market.payload.response.exception.ResourceNotFoundException;
 import com.faketri.market.repository.BrandRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -22,63 +21,95 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+@Log4j2
 @Repository
 public class BrandImpl implements BrandRepository {
+
     @Autowired
     private NamedParameterJdbcTemplate template;
 
     @Override
     public Optional<Brand> findById(Long id) {
-        return Optional.ofNullable(
-                template.queryForObject("select * from brand where id = :id",
-                Map.of("id", id),
+        try {
+            return Optional.ofNullable(template.queryForObject(
+                    "select * from brand where id = :id",
+                    Map.of("id", id),
                     (rs, numRow) -> new Brand(rs.getLong(1), rs.getString(2))
             ));
+        } catch (EmptyResultDataAccessException ex) {
+            log.error("Brand with id " + id + " not found");
+            throw new ResourceNotFoundException("Brand with id " + id + " not found");
+        }
     }
 
     @Override
     public Brand findByFields(Brand entity) {
         try {
-            return template.queryForObject("select * from brand b where b.name = :name",
+            return template.queryForObject(
+                    "select * from brand b where b.name = :name",
                     Map.of("name", entity.getName()),
-                    (rs, numRow) -> new Brand(rs.getLong(1), rs.getString(2)));
-        }catch (EmptyResultDataAccessException ex){
+                    (rs, numRow) -> new Brand(rs.getLong(1), rs.getString(2))
+            );
+        } catch (EmptyResultDataAccessException ex) {
             return null;
         }
     }
 
     @Override
     public List<Brand> findAll() {
-        return template.query("select * from brand", Map.of(), new BeanPropertyRowMapper<>(Brand.class));
+        return template.query("select * from brand",
+                              Map.of(),
+                              new BeanPropertyRowMapper<>(Brand.class)
+        );
     }
+
     @Override
     public Page<Brand> findAll(Pageable pageable) {
         return new PageImpl<>(template.queryForList("select * from brand",
-                Map.of(),
-                Brand.class), pageable, countAll());
+                                                    Map.of(),
+                                                    Brand.class
+        ),
+                              pageable,
+                              countAll()
+        );
     }
+
     @Override
     public Brand save(Brand entity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         template.update("insert into brand(name) values(:name)",
-            new MapSqlParameterSource(Map.of("name", entity.getName())), keyHolder, new String[] {"id"});
+                        new MapSqlParameterSource(Map.of("name",
+                                                         entity.getName()
+                        )),
+                        keyHolder,
+                        new String[]{ "id" }
+        );
         entity.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
         return entity;
     }
+
     @Override
     public Boolean update(Brand entity) {
-        return template.update("update brand set brand.name = :name where brand.id = :id",
-                Map.of("id", entity.getId(),
-                        "name", entity.getName())) > 0;
+        return template.update(
+                "update brand set brand.name = :name where brand.id = :id",
+                Map.of("id", entity.getId(), "name", entity.getName())
+        ) > 0;
     }
+
     @Override
     public Boolean delete(Brand entity) {
-        return template.update("delete from brand where brand.id = :id", Map.of("id", entity.getId())) > 0;
+        return template.update("delete from brand where brand.id = :id",
+                               Map.of("id", entity.getId())
+        ) > 0;
     }
 
 
     @Override
     public int countAll() {
-        return template.query("select count(*) from brand", Map.of(), (rs, numRow) -> rs.getInt(1)).get(0);
+        return template.query("select count(*) from brand",
+                              Map.of(),
+                              (rs, numRow) -> rs.getInt(1)
+        ).get(0);
     }
+
 }

@@ -9,14 +9,16 @@ import java.util.List;
 
 @Service
 public class RatingService {
+
     @Autowired
     private RatingImpl ratingImpl;
 
-    public List<Rating> findByIdProduct(Long id){
+    public List<Rating> findByIdProduct(Long id) {
         return ratingImpl.findByIdProduct(id);
     }
 
     public Rating save(Rating rating) {
         return ratingImpl.save(rating);
     }
+
 }

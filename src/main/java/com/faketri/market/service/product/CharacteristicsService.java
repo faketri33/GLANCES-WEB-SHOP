@@ -11,8 +11,12 @@ public class CharacteristicsService {
     @Autowired
     private CharacteristicsImpl characteristicsImpl;
 
-    public Characteristics save(Characteristics characteristics){
-        Characteristics entity = characteristicsImpl.findByFields(characteristics);
-        return entity == null ? characteristicsImpl.save(characteristics) : entity;
+    public Characteristics save(Characteristics characteristics) {
+        Characteristics entity =
+                characteristicsImpl.findByFields(characteristics);
+        return entity == null
+                ? characteristicsImpl.save(characteristics)
+                : entity;
     }
+
 }

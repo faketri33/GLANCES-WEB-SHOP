@@ -14,20 +14,19 @@ import java.util.List;
 @RequestMapping("/api/promotion")
 @Tag(name = "Promotion", description = "Operation with promotion")
 public class PromotionController {
+
     @Autowired
     private PromotionService promotionService;
 
-    @RequestMapping(path = "/",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<Promotion> getAll(){
+    @RequestMapping(path = "/", method = RequestMethod.GET,
+                    produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<Promotion> getAll() {
         return promotionService.findAll();
     }
 
-    @RequestMapping(path = "/{id}",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Promotion findById(@PathVariable("id") Long id){
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET,
+                    produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody Promotion findById(@PathVariable("id") Long id) {
         return promotionService.findById(id);
     }
 
