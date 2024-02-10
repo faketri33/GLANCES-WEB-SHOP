@@ -1,44 +1,61 @@
 package com.faketri.market.domain.product;
 
 import com.faketri.market.domain.image.Image;
-import com.faketri.market.domain.order.Rating;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.MappedCollection;
-import org.springframework.data.relational.core.mapping.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.type.SqlTypes;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(schema = "public", name = "product")
+@Getter
+@Setter
+@ToString
+@Entity
 public class Product {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    @JdbcTypeCode(SqlTypes.BIGINT)
     private Long                 id;
+    @ManyToOne
     private Brand                brand;
+    @Column
     private String               nameModel;
+    @ManyToOne
     private Categories           categories;
-    @MappedCollection
+    @OneToMany
+    @ToString.Exclude
     private Set<Image>           image           = new HashSet<>();
-    @MappedCollection
-    private Set<Rating>          rating          = new HashSet<>();
-    @MappedCollection
+    @ManyToMany
+    @ToString.Exclude
     private Set<Characteristics> characteristics = new HashSet<>();
+    @Column
     private Long                 price;
-    private Boolean              isPromoActive   = false;
+    @Column
     private Long                 promoPrice;
-    private Integer              discount        = 0;
+    @Column
+    private Boolean              isPromoItem;
+    @Column
+    private Short                discount;
+    @Min(0)
+    @Column(nullable = false)
     private int                  quantity;
+    @Column
     private int                  quantitySold    = 0;
 
+    public Product() {
+    }
+
     public Product(Long id, Brand brand, String nameModel,
-                   Categories categories, Long price, Boolean isPromoActive,
-                   Long promoPrice, Integer discount, int quantity,
+                   Categories categories, Long price, int quantity,
                    int quantitySold
     ) {
         this.id = id;
@@ -46,28 +63,34 @@ public class Product {
         this.nameModel = nameModel;
         this.categories = categories;
         this.price = price;
-        this.isPromoActive = isPromoActive;
-        this.promoPrice = promoPrice;
-        this.discount = discount;
         this.quantity = quantity;
         this.quantitySold = quantitySold;
     }
 
-    public void updatePriceDiscount(char operation) {
-        switch (operation) {
-            case '+':
-                promoPrice = 0L;
-                break;
-            case '-':
-                promoPrice = price - ( ( price * discount ) / 100 );
-                break;
-        }
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy
+                ? ( (HibernateProxy) o ).getHibernateLazyInitializer()
+                                        .getPersistentClass()
+                : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy
+                ? ( (HibernateProxy) this ).getHibernateLazyInitializer()
+                                           .getPersistentClass()
+                : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Product product = (Product) o;
+        return getId() != null && Objects.equals(getId(), product.getId());
     }
 
-    public void setIsPromoActive(boolean isActive) {
-        isPromoActive = isActive;
-        if (isPromoActive) updatePriceDiscount('-');
-        else updatePriceDiscount('+');
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy
+                ? ( (HibernateProxy) this ).getHibernateLazyInitializer()
+                                           .getPersistentClass()
+                                           .hashCode()
+                : getClass().hashCode();
     }
 
 }

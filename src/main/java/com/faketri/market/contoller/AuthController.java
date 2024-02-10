@@ -24,8 +24,10 @@ public class AuthController {
     @RequestMapping(path = "/register", method = RequestMethod.POST,
                     produces = MediaType.APPLICATION_JSON_VALUE)
     public JwtAuthenticationResponse register(
-            @RequestBody @Valid SignUpRequest signUpRequest
+            @Valid @RequestBody SignUpRequest signUpRequest
     ) {
+        System.out.println(signUpRequest);
+
         return authService.signUp(signUpRequest);
     }
 

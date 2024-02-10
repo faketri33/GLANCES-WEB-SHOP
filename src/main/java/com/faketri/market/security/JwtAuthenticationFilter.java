@@ -2,8 +2,6 @@ package com.faketri.market.security;
 
 import com.faketri.market.service.jwt.JwtService;
 import com.faketri.market.service.user.UserDetailsServerImpl;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
@@ -45,30 +42,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        try {
-            var jwt = authHeader.substring(BEARER_PREFIX.length());
-            var username = jwtService.extractUserName(jwt);
-            if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext()
-                                                                         .getAuthentication() == null) {
-                UserDetails userDetails =
-                        userDetailsServer.loadUserByUsername(username);
-                if (jwtService.isTokenValid(jwt, userDetails)) {
-                    SecurityContext context =
-                            SecurityContextHolder.createEmptyContext();
-                    var authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
+        var jwt = authHeader.substring(BEARER_PREFIX.length());
+        var username = jwtService.extractUserName(jwt);
+        if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext()
+                                                                     .getAuthentication() == null) {
+            UserDetails userDetails =
+                    userDetailsServer.loadUserByUsername(username);
+            if (jwtService.isTokenValid(jwt, userDetails)) {
+                SecurityContext context =
+                        SecurityContextHolder.createEmptyContext();
+                var authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
 
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(
-                            request));
-                    context.setAuthentication(authToken);
-                    SecurityContextHolder.setContext(context);
-                }
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(
+                        request));
+                context.setAuthentication(authToken);
+                SecurityContextHolder.setContext(context);
             }
-        } catch (ExpiredJwtException | SignatureException ex) {
-            throw new AccessDeniedException(ex.getMessage());
         }
         filterChain.doFilter(request, response);
     }

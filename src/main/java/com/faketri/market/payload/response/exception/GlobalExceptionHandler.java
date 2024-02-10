@@ -1,16 +1,15 @@
 package com.faketri.market.payload.response.exception;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
-import java.util.Properties;
+import java.util.Objects;
 
 /**
  * Intercepting and handling Runtime errors
@@ -18,17 +17,6 @@ import java.util.Properties;
 @ControllerAdvice
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-    @Bean
-    public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
-        SimpleMappingExceptionResolver resolver =
-                new SimpleMappingExceptionResolver();
-        Properties mappings = new Properties();
-        mappings.setProperty("JwtValidException", "token is doesn't valid");
-        resolver.setOrder(-1);
-        resolver.setExceptionMappings(mappings);
-        return resolver;
-    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<AppError> handleException(ResourceNotFoundException e
@@ -75,5 +63,16 @@ public class GlobalExceptionHandler {
                 HttpStatus.UNAUTHORIZED
         );
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<AppError> handleException(
+            MethodArgumentNotValidException e
+    ) {
+        return new ResponseEntity<>(new AppError(
+                e.getStatusCode().value(),
+                Objects.requireNonNull(e.getDetailMessageArguments())[1].toString()
+        ), e.getStatusCode());
+    }
+    
 
 }

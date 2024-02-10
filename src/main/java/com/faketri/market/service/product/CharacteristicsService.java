@@ -1,22 +1,35 @@
 package com.faketri.market.service.product;
 
 import com.faketri.market.domain.product.Characteristics;
-import com.faketri.market.repository.impl.CharacteristicsImpl;
+import com.faketri.market.repository.CharacteristicsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CharacteristicsService {
 
     @Autowired
-    private CharacteristicsImpl characteristicsImpl;
+    private CharacteristicsRepository characteristicsImpl;
+
+    public List<Characteristics> findAll() {
+        return characteristicsImpl.findAll();
+    }
+
+    public List<Characteristics> findCharacteristicsByProductCategory(
+            Long categoryId
+    ) {
+        return characteristicsImpl.findDistinctByProducts_Categories_Id(
+                categoryId);
+    }
 
     public Characteristics save(Characteristics characteristics) {
-        Characteristics entity =
-                characteristicsImpl.findByFields(characteristics);
-        return entity == null
-                ? characteristicsImpl.save(characteristics)
-                : entity;
+        var exists =
+                characteristicsImpl.findByNameAndValue(characteristics.getName(),
+                                                       characteristics.getValue()
+                );
+        return exists.orElseGet(() -> characteristicsImpl.save(characteristics));
     }
 
 }

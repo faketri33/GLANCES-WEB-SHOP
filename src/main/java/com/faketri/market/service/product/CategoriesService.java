@@ -2,7 +2,7 @@ package com.faketri.market.service.product;
 
 import com.faketri.market.domain.product.Categories;
 import com.faketri.market.payload.response.exception.ResourceNotFoundException;
-import com.faketri.market.repository.impl.CategoriesImpl;
+import com.faketri.market.repository.CategoriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +14,7 @@ import java.util.List;
 public class CategoriesService {
 
     @Autowired
-    private CategoriesImpl categoriesImpl;
+    private CategoriesRepository categoriesImpl;
 
     public Categories findById(Long id) {
         return categoriesImpl.findById(id)
@@ -28,16 +28,15 @@ public class CategoriesService {
     ) {return categoriesImpl.findAll(pageable);}
 
     public Categories save(Categories categories) {
-        Categories entity = categoriesImpl.findByFields(categories);
-        return entity == null ? categoriesImpl.save(categories) : entity;
+        return categoriesImpl.save(categories);
     }
 
-    public Boolean update(Categories categories) {
+    /*public Boolean update(Categories categories) {
         return categoriesImpl.update(categories);
-    }
+    }*/
 
-    public Boolean delete(Categories categories) {
-        return categoriesImpl.delete(categories);
+    public void delete(Categories categories) {
+        categoriesImpl.delete(categories);
     }
 
 }

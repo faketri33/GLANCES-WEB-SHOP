@@ -3,10 +3,12 @@ package com.faketri.market.service.product;
 import com.faketri.market.domain.product.Characteristics;
 import com.faketri.market.domain.product.Product;
 import com.faketri.market.payload.response.exception.ResourceNotFoundException;
-import com.faketri.market.repository.impl.ProductImpl;
+import com.faketri.market.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -16,7 +18,7 @@ import java.util.List;
 public class ProductService {
 
     @Autowired
-    private ProductImpl productImpl;
+    private ProductRepository productImpl;
 
     public List<Product> findAll() {
         return productImpl.findAll();
@@ -32,47 +34,59 @@ public class ProductService {
                                   "Product with id " + id + " not found"));
     }
 
-    public List<Product> findByCategories(Long categoriesId) {
-        return productImpl.findByCategories(categoriesId);
-    }
-
-    public List<Product> findByCharacteristics(Characteristics characteristics
-    ) {
-        return productImpl.findByCharacteristics(characteristics);
-    }
 
     public Page<Product> findByCategories(Long categoriesId, Pageable pageable
     ) {
-        return productImpl.findByCategories(categoriesId, pageable);
+        return productImpl.findByCategories_Id(categoriesId, pageable);
     }
 
     public Page<Product> findByCharacteristics(Characteristics characteristics,
                                                Pageable pageable
     ) {
-        return productImpl.findByCharacteristics(characteristics, pageable);
+        return productImpl.findByCharacteristics_Id(characteristics.getId(),
+                                                    pageable
+        );
+    }
+
+    public Page<Product> findByCharacteristics(Long categoriesId,
+                                               List<Long> characteristics,
+                                               Pageable pageable
+    ) {
+        return null;
     }
 
     public Page<Product> findTopSelling(Pageable pageable) {
-        return productImpl.findTopSelling(pageable);
+        return productImpl.findAll(PageRequest.of(pageable.getPageNumber(),
+                                                  pageable.getPageSize(),
+                                                  Sort.by("quantitySold")
+                                                      .ascending()
+        ));
     }
 
     public Product save(Product product) {
-        Product ifSavedProduct = productImpl.findByFields(product);
-        return ifSavedProduct == null
-                ? productImpl.save(product)
-                : ifSavedProduct;
+        return productImpl.save(product);
     }
 
-    public Boolean update(Product product) {
-        return productImpl.update(product);
+    public int update(Product product) {
+        return productImpl.update(product.getNameModel(),
+                                  product.getPrice(),
+                                  product.getQuantitySold(),
+                                  product.getQuantity(),
+                                  product.getId()
+        );
     }
 
     public void update(Collection<Product> products) {
-        products.forEach(productImpl::update);
+        products.forEach(product -> productImpl.update(product.getNameModel(),
+                                                       product.getPrice(),
+                                                       product.getQuantitySold(),
+                                                       product.getQuantity(),
+                                                       product.getId()
+        ));
     }
 
-    public Boolean delete(Product product) {
-        return productImpl.delete(product);
+    public void delete(Product product) {
+        productImpl.delete(product);
     }
 
 }

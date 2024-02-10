@@ -1,29 +1,33 @@
 package com.faketri.market.domain.image;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(schema = "public", name = "image")
+@Getter
+@Setter
+@ToString
+@Entity
 public class Image {
 
     @Id
-    private Long   id;
-    @Column()
-    private byte[] photo;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    @JdbcTypeCode(SqlTypes.BIGINT)
+    private Long id;
 
-    public Image(File file) throws IOException {
-        this.photo = Files.readAllBytes(file.toPath());
+    @Column
+    private String image;
+
+    public Image() {
+    }
+
+    public Image(Long id, String image) {
+        this.id = id;
+        this.image = image;
     }
 
 }

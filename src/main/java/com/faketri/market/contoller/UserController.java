@@ -1,6 +1,6 @@
 package com.faketri.market.contoller;
 
-import com.faketri.market.domain.users.User;
+import com.faketri.market.domain.users.Users;
 import com.faketri.market.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,7 +17,7 @@ public class UserController {
 
     @RequestMapping(path = "/", method = RequestMethod.GET,
                     produces = MediaType.APPLICATION_JSON_VALUE)
-    public User found() {
+    public Users found() {
         return userService.findByLogin("faketri");
     }
 

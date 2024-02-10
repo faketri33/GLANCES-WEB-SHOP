@@ -2,7 +2,7 @@ package com.faketri.market.service.product;
 
 import com.faketri.market.domain.image.Image;
 import com.faketri.market.payload.response.exception.ResourceNotFoundException;
-import com.faketri.market.repository.impl.ImageImpl;
+import com.faketri.market.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +14,7 @@ import java.util.List;
 public class ImageService {
 
     @Autowired
-    private ImageImpl imageImpl;
+    private ImageRepository imageImpl;
 
     public Image findById(Long id) {
         return imageImpl.findById(id)
@@ -31,16 +31,15 @@ public class ImageService {
     }
 
     public Image save(Image entity) {
-        Image image = imageImpl.findByFields(entity);
-        return image == null ? imageImpl.save(entity) : image;
+        return imageImpl.save(entity);
     }
 
     public Boolean update(Image entity) {
-        return imageImpl.update(entity);
+        return null;
     }
 
-    public Boolean delete(Image entity) {
-        return imageImpl.delete(entity);
+    public void delete(Image entity) {
+        imageImpl.delete(entity);
     }
 
 }

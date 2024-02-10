@@ -1,7 +1,7 @@
 package com.faketri.market.service.user;
 
 import com.faketri.market.domain.users.ERole;
-import com.faketri.market.domain.users.User;
+import com.faketri.market.domain.users.Users;
 import com.faketri.market.payload.request.SignInRequest;
 import com.faketri.market.payload.request.SignUpRequest;
 import com.faketri.market.payload.response.JwtAuthenticationResponse;
@@ -38,19 +38,21 @@ public class AuthService {
      */
     public JwtAuthenticationResponse signUp(SignUpRequest signUpRequest) {
 
-        User user = new User();
+        Users users = new Users();
 
-        user.setLogin(signUpRequest.getLogin());
-        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-        user.setEmail(signUpRequest.getEmail());
-        user.getRole().add(ERole.STANDART);
+        users.setLogin(signUpRequest.getLogin());
+        users.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        users.setEmail(signUpRequest.getEmail());
+        users.getRole().add(ERole.CUSTOMER);
 
-        user = userDetailsServer.getUserService().save(user);
+        System.out.println(users);
+
+        users = userDetailsServer.getUserService().save(users);
 
         var jwt =
                 jwtService.generateToken(userDetailsServer.generateUserDetails(
-                        user));
-        log.info(String.format("user register with name %s", user.getLogin()));
+                        users));
+        log.info(String.format("user register with name %s", users.getLogin()));
         return new JwtAuthenticationResponse(jwt);
     }
 

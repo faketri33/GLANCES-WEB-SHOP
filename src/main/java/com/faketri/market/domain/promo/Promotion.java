@@ -1,40 +1,53 @@
 package com.faketri.market.domain.promo;
 
+import com.faketri.market.domain.image.Image;
 import com.faketri.market.domain.product.Product;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.MappedCollection;
-import org.springframework.data.relational.core.mapping.Table;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(schema = "public", name = "promotion")
+@Getter
+@Setter
+@ToString
+@Entity
 public class Promotion {
 
     @Id
-    private Long          id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    @JdbcTypeCode(SqlTypes.BIGINT)
+    private Long id;
+
+    @OneToOne
+    private Image banner;
+
     @Column
-    private byte[]        banner;
+    private String title;
+
     @Column
-    private String        title;
-    @Column
-    private String        description;
+    private String description;
+
     @Column
     private LocalDateTime dateOfStart;
+
     @Column
     private LocalDateTime dateOfEnd;
-    @MappedCollection
-    private Set<Product>  promotionItems = new HashSet<>();
 
-    public Promotion(Long id, byte[] banner, String title, String description,
+    @OneToMany()
+    @ToString.Exclude
+    private List<Product> promotionProductItems = new ArrayList<>();
+
+    public Promotion() {
+    }
+
+    public Promotion(Long id, Image banner, String title, String description,
                      LocalDateTime dateOfStart, LocalDateTime dateOfEnd
     ) {
         this.id = id;

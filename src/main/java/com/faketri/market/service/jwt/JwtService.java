@@ -1,6 +1,6 @@
 package com.faketri.market.service.jwt;
 
-import com.faketri.market.domain.users.User;
+import com.faketri.market.domain.users.Users;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -42,11 +42,11 @@ public class JwtService {
      */
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        if (userDetails instanceof User customUserDetails) {
-            claims.put("id", customUserDetails.getId());
-            claims.put("login", customUserDetails.getLogin());
-            claims.put("email", customUserDetails.getEmail());
-            claims.put("role", customUserDetails.getRole());
+        if (userDetails instanceof Users customUsersDetails) {
+            claims.put("id", customUsersDetails.getId());
+            claims.put("login", customUsersDetails.getLogin());
+            claims.put("email", customUsersDetails.getEmail());
+            claims.put("role", customUsersDetails.getRole());
         }
         return generateToken(claims, userDetails);
     }

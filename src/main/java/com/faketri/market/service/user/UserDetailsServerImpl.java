@@ -1,6 +1,6 @@
 package com.faketri.market.service.user;
 
-import com.faketri.market.domain.users.User;
+import com.faketri.market.domain.users.Users;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,14 +23,14 @@ public class UserDetailsServerImpl implements UserDetailsService {
         return generateUserDetails(userService.findByLogin(username));
     }
 
-    public UserDetails generateUserDetails(User user) {
+    public UserDetails generateUserDetails(Users users) {
         return new org.springframework.security.core.userdetails.User(
-                user.getLogin(),
-                user.getPassword(),
-                user.getRole()
-                    .stream()
-                    .map(x -> new SimpleGrantedAuthority(x.name()))
-                    .toList()
+                users.getLogin(),
+                users.getPassword(),
+                users.getRole()
+                     .stream()
+                     .map(x -> new SimpleGrantedAuthority(x.name()))
+                     .toList()
         );
     }
 

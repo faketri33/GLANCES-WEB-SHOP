@@ -60,7 +60,27 @@ public class ProductController {
                                                               page_size
                                                )
         );
+
     }
+
+/*    @RequestMapping(path = "/categories/{categoriesId}/filter",
+                    method = RequestMethod.GET,
+                    produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody Page<Product> getByCategories1(
+            @PathVariable(value = "categoriesId") Long categoriesId,
+            @RequestParam List<Characteristics> characteristics,
+            @RequestParam(name = "number", required = true,
+                          defaultValue = "1") Integer page_number,
+            @RequestParam(name = "size", required = true,
+                          defaultValue = "20") Integer page_size
+    ) {
+        return productService.findByCharacteristics(categoriesId,
+                                                    characteristics,
+                                                    PageRequest.of(page_number,
+                                                                   page_size
+                                                    )
+        );
+    }*/
 
     /**
      * REST service endpoint - '/product?number=1&size=20'
@@ -78,6 +98,7 @@ public class ProductController {
             @RequestParam(name = "size", required = true,
                           defaultValue = "20") Integer page_size
     ) {
+        System.out.println("HI");
         return productService.findAll(PageRequest.of(page_number, page_size));
     }
 

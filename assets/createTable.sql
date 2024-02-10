@@ -41,7 +41,7 @@ CREATE TABLE "rating" (
   "grate" varchar NOT NULL
 );
 
-CREATE TABLE "user" (
+CREATE TABLE "users" (
   "id" bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   "email" varchar NOT NULL unique,
   "login" varchar NOT NULL unique,
@@ -82,7 +82,7 @@ create table product_image(
         image_id bigint
 );
 
-CREATE TABLE "order" (
+CREATE TABLE "orders" (
   "id" bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   "user_id" bigint NOT NULL,
   "date_of_create" timestamp without time zone NOT NULL,
@@ -96,7 +96,7 @@ alter table product add foreign key ("categories_id") references categories("id"
 alter table promotion_product_item add foreign key (promotion_id) references promotion(id);
 alter table promotion_product_item add foreign key (product_id) references product(id);
 
-ALTER TABLE "user_favorite_product" ADD FOREIGN KEY ("id_user") REFERENCES "user" ("id");
+ALTER TABLE "user_favorite_product" ADD FOREIGN KEY ("id_user") REFERENCES "users" ("id");
 ALTER TABLE "user_favorite_product" ADD FOREIGN KEY ("id_product") REFERENCES "product" ("id");
 
 ALTER TABLE "product" ADD FOREIGN KEY ("brand_id") REFERENCES "brand" ("id");
@@ -107,14 +107,14 @@ ALTER TABLE product_image ADD FOREIGN KEY ("image_id") REFERENCES "image" ("id")
 
 ALTER TABLE "rating" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
 
-ALTER TABLE "rating" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "rating" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
 ALTER TABLE "product_characteristics" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
 
 ALTER TABLE "product_characteristics" ADD FOREIGN KEY ("characteristics_id") REFERENCES "characteristics" ("id");
 
-ALTER TABLE "product_order" ADD FOREIGN KEY ("order_id") REFERENCES "order" ("id");
+ALTER TABLE "product_order" ADD FOREIGN KEY ("order_id") REFERENCES "orders" ("id");
 
 ALTER TABLE "product_order" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
 
-ALTER TABLE "order" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "orders" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
