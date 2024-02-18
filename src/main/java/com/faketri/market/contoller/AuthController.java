@@ -26,8 +26,6 @@ public class AuthController {
     public JwtAuthenticationResponse register(
             @Valid @RequestBody SignUpRequest signUpRequest
     ) {
-        System.out.println(signUpRequest);
-
         return authService.signUp(signUpRequest);
     }
 
@@ -35,8 +33,6 @@ public class AuthController {
     public ResponseEntity<?> login(
             @RequestBody @Valid SignInRequest signInRequest
     ) {
-        System.out.println(signInRequest);
-
         try {
             return ResponseEntity.ok(authService.signIn(signInRequest));
         } catch (Exception e) {

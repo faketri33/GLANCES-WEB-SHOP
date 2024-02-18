@@ -31,18 +31,18 @@ public class Product {
     private String               nameModel;
     @ManyToOne
     private Categories           categories;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @ToString.Exclude
     private Set<Image>           image           = new HashSet<>();
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @ToString.Exclude
     private Set<Characteristics> characteristics = new HashSet<>();
     @Column
     private Long                 price;
     @Column
-    private Long                 promoPrice;
+    private Long                 promoPrice      = 0L;
     @Column
-    private Boolean              isPromoItem;
+    private Boolean              isPromoItem     = false;
     @Column
     private Short                discount;
     @Min(0)

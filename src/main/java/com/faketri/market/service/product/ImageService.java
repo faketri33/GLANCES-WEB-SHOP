@@ -31,7 +31,8 @@ public class ImageService {
     }
 
     public Image save(Image entity) {
-        return imageImpl.save(entity);
+        return imageImpl.findFirstByPath(entity.getPath())
+                        .orElse(imageImpl.save(entity));
     }
 
     public Boolean update(Image entity) {

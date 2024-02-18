@@ -51,6 +51,9 @@ public class SecurityConfiguration {
                            "/api/**"
                    ).permitAll().requestMatchers(
                            HttpMethod.POST,
+                           "/api/product/categories/{categoriesId}/filter"
+                   ).permitAll().requestMatchers(
+                           HttpMethod.POST,
                            "/api/auth/**"
                    ).permitAll().anyRequest().authenticated())
                    .sessionManagement(manager -> manager.sessionCreationPolicy(

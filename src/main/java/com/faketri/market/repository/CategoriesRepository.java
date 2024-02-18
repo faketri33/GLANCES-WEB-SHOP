@@ -19,4 +19,8 @@ public interface CategoriesRepository extends JpaRepository<Categories, Long> {
     @Override
     List<Categories> findAll();
 
+    boolean existsByName(String name);
+
+    Optional<Categories> findByName(String name);
+
 }

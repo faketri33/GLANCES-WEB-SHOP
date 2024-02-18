@@ -28,7 +28,8 @@ public class CategoriesService {
     ) {return categoriesImpl.findAll(pageable);}
 
     public Categories save(Categories categories) {
-        return categoriesImpl.save(categories);
+        return categoriesImpl.findByName(categories.getName())
+                             .orElse(categoriesImpl.save(categories));
     }
 
     /*public Boolean update(Categories categories) {

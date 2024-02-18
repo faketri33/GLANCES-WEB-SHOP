@@ -1,10 +1,5 @@
 package com.faketri.market;
 
-import com.faketri.market.domain.image.Image;
-import com.faketri.market.domain.product.Brand;
-import com.faketri.market.domain.product.Categories;
-import com.faketri.market.domain.product.Characteristics;
-import com.faketri.market.domain.product.Product;
 import com.faketri.market.service.product.*;
 import com.faketri.market.service.promo.PromotionService;
 import com.faketri.market.service.user.UserService;
@@ -14,9 +9,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootApplication
 public class MarketApplication {
@@ -41,7 +33,7 @@ public class MarketApplication {
                                                ImageService imageService
     ) {
         return args -> {
-            Categories categories = categoriesService.save(new Categories(null,
+            /*Categories categories = categoriesService.save(new Categories(null,
                                                                           "Холодильники",
                                                                           imageService.save(
                                                                                   new Image(
@@ -72,10 +64,10 @@ public class MarketApplication {
                                           0
             );
 
-            product.getImage()
-                   .addAll(List.of(imageService.save(new Image(null,
-                                                               "images/hol.png"
-                   )), imageService.save(new Image(null, "images/hol1.png"))));
+            product.getImage().addAll(List.of(
+                    imageService.save(new Image(null, "images/hol.png")),
+                    imageService.save(new Image(null, "images/hol1.png"))
+            ));
 
             product.getCharacteristics().addAll(List.of(
                     characteristicsService.save(new Characteristics(null,
@@ -93,24 +85,15 @@ public class MarketApplication {
             ));
 
             products.add(new Product(null,
-                                     brandService.findById(1L),
+                                     brandService.save(new Brand(null,
+                                                                 "Samsung"
+                                     )),
                                      "S24",
                                      smartphone,
                                      184000L,
                                      100,
                                      20
             ));
-            products.get(0)
-                    .getImage()
-                    .add(imageService.save(new Image(null,
-                                                     "images/samsung-galaxy-s23.png"
-                    )));
-            products.get(0)
-                    .getCharacteristics()
-                    .add(characteristicsService.save(new Characteristics(null,
-                                                                         "Диагональ экрана",
-                                                                         "6.7'"
-                    )));
             products.add(new Product(null,
                                      brandService.save(new Brand(null,
                                                                  "Apple"
@@ -122,20 +105,40 @@ public class MarketApplication {
                                      1240
             ));
 
+            products.get(0)
+                    .getImage()
+                    .add(imageService.save(new Image(null,
+                                                     "images/samsung-galaxy-s23.png"
+                    )));
+            products.get(0).getCharacteristics().addAll(List.of(
+                    characteristicsService.save(new Characteristics(null,
+                                                                    "Диагональ экрана",
+                                                                    "6.7\""
+                    )),
+                    characteristicsService.save(new Characteristics(null,
+                                                                    "Аккумулятор",
+                                                                    "5500 мА*ч"
+                    ))
+            ));
+
             products.get(1)
                     .getImage()
                     .add(imageService.save(new Image(null,
                                                      "images/iphone-14.png"
                     )));
-            products.get(1)
-                    .getCharacteristics()
-                    .add(characteristicsService.save(new Characteristics(null,
-                                                                         "Диагональ экрана",
-                                                                         "6.7'"
-                    )));
+            products.get(1).getCharacteristics().addAll(List.of(
+                    characteristicsService.save(new Characteristics(null,
+                                                                    "Диагональ экрана",
+                                                                    "6.1"
+                    )),
+                    characteristicsService.save(new Characteristics(null,
+                                                                    "Аккумулятор",
+                                                                    "3279 мА*ч"
+                    ))
+            ));
 
             productService.save(product);
-            products.forEach(productService::save);
+            products.forEach(productService::save);*/
         };
     }
 

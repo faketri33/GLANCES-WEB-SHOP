@@ -27,5 +27,6 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
     @Override
     void deleteById(Long aLong);
 
+    Optional<Brand> findByName(String name);
 
 }

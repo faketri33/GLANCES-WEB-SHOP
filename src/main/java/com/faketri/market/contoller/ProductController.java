@@ -1,6 +1,7 @@
 package com.faketri.market.contoller;
 
 
+import com.faketri.market.domain.product.Characteristics;
 import com.faketri.market.domain.product.Product;
 import com.faketri.market.service.product.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,18 +24,16 @@ public class ProductController {
         this.productService = productService;
     }
 
+    /**
+     * REST get all product
+     *
+     * @return Collection of product
+     */
     @RequestMapping(path = "/", method = RequestMethod.GET,
                     produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<Product> getAll() {
         return productService.findAll();
     }
-
-/*    @RequestMapping(path = "/categories/{categoriesId}",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<Product> getByCategories(@PathVariable(value = "categoriesId") Long categoriesId){
-        return productService.findByCategories(categoriesId);
-    }*/
 
     /**
      * REST service endpoint - '/categories/{categoriesId}?number=1&size=20'
@@ -42,8 +41,9 @@ public class ProductController {
      * @param categoriesId id categories,
      * @param page_number  number of page product
      * @param page_size    count item on page
+     * @param filter       filter param
      *
-     * @return Page products in categories
+     * @return Page products in categories. Else product in categories with filter
      */
     @RequestMapping(path = "/categories/{categoriesId}",
                     method = RequestMethod.GET,
@@ -53,34 +53,34 @@ public class ProductController {
             @RequestParam(name = "number", required = true,
                           defaultValue = "1") Integer page_number,
             @RequestParam(name = "size", required = true,
-                          defaultValue = "20") Integer page_size
+                          defaultValue = "20") Integer page_size,
+            @RequestBody(required = false) List<Characteristics> filter
     ) {
         return productService.findByCategories(categoriesId,
                                                PageRequest.of(page_number,
                                                               page_size
                                                )
         );
-
     }
 
-/*    @RequestMapping(path = "/categories/{categoriesId}/filter",
-                    method = RequestMethod.GET,
+    @RequestMapping(path = "/categories/{categoriesId}/filter",
+                    method = RequestMethod.POST,
                     produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Page<Product> getByCategories1(
+    public @ResponseBody Page<Product> getByFilter(
             @PathVariable(value = "categoriesId") Long categoriesId,
-            @RequestParam List<Characteristics> characteristics,
             @RequestParam(name = "number", required = true,
                           defaultValue = "1") Integer page_number,
             @RequestParam(name = "size", required = true,
-                          defaultValue = "20") Integer page_size
+                          defaultValue = "20") Integer page_size,
+            @RequestBody List<Characteristics> filter
     ) {
-        return productService.findByCharacteristics(categoriesId,
-                                                    characteristics,
-                                                    PageRequest.of(page_number,
-                                                                   page_size
-                                                    )
+        System.out.println("HELLO");
+        System.out.println(filter);
+        return productService.findByCategoriesFilteredCharacteristics(PageRequest.of(page_number, page_size),
+                                                                      categoriesId,
+                                                                      filter
         );
-    }*/
+    }
 
     /**
      * REST service endpoint - '/product?number=1&size=20'
@@ -98,7 +98,6 @@ public class ProductController {
             @RequestParam(name = "size", required = true,
                           defaultValue = "20") Integer page_size
     ) {
-        System.out.println("HI");
         return productService.findAll(PageRequest.of(page_number, page_size));
     }
 

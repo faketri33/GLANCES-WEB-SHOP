@@ -25,11 +25,11 @@ public class CharacteristicsService {
     }
 
     public Characteristics save(Characteristics characteristics) {
-        var exists =
-                characteristicsImpl.findByNameAndValue(characteristics.getName(),
-                                                       characteristics.getValue()
-                );
-        return exists.orElseGet(() -> characteristicsImpl.save(characteristics));
+        return characteristicsImpl.findByNameAndValue(characteristics.getName(),
+                                                      characteristics.getValue()
+                                  )
+                                  .orElse(characteristicsImpl.save(
+                                          characteristics));
     }
 
 }

@@ -20,14 +20,14 @@ public class Image {
     private Long id;
 
     @Column
-    private String image;
+    private String path;
 
     public Image() {
     }
 
-    public Image(Long id, String image) {
+    public Image(Long id, String path) {
         this.id = id;
-        this.image = image;
+        this.path = path;
     }
 
 }

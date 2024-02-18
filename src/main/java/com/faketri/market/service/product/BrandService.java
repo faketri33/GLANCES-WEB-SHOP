@@ -19,7 +19,8 @@ public class BrandService {
     }
 
     public Brand save(Brand brand) {
-        return brandImpl.save(brand);
+        return brandImpl.findByName(brand.getName())
+                        .orElse(brandImpl.save(brand));
     }
 
 }

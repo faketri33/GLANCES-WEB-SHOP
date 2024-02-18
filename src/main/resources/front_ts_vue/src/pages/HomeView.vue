@@ -1,6 +1,6 @@
 <template>
   <main>
-    <PromoSlider />
+    <!--    <PromoSlider />
     <h2 style="">Категории</h2>
     <div class="categories row">
       <CategoriesCard
@@ -9,12 +9,12 @@
         :key="categories.id"
         v-bind:categories="categories"
       />
-    </div>
+    </div>-->
     <h2>Акции</h2>
     <div v-if="!productStore.isRequestLoading" class="product row">
       <ProductCard
         class="col-xxl-2 col-xl-3 col-lg-3 col-md-4 col-sm-6 mt-2 d-flex justify-content-center"
-        v-for="product in loadProduct(0).content"
+        v-for="product in loadByFilter().content"
         :key="product.id"
         v-bind:product="product"
         v-bind:isSmallWidth="true"
@@ -39,15 +39,18 @@ import { PageableType } from "@/shared/pageable/pageableType";
     };
   },
   created() {
-    this.productStore.loadProduct();
+    this.productStore.loadProductByFilter();
   },
   components: {
     ProductCard,
     HelloWorld,
   },
   methods: {
-    loadProduct(pageNumber: number): PageableType<Product[]> {
+    loadProduct(pageNumber: number): PageableType<Product> {
       return this.productStore.getProducts(pageNumber);
+    },
+    loadByFilter(): PageableType<Product> {
+      return this.productStore.getFiltered(0);
     },
   },
 })

@@ -18,10 +18,17 @@ WHERE p.id in (
 ); 
 
 
+delete  from categories;
+delete from brand;
+delete from image;
+delete from product;
+delete from product_image;
+delete from product_characteristics;
+delete from characteristics;
 
+select * from characteristics
 select * from product_characteristics;
-
-select * from product 
+ 
 
 select * from characteristics p where p.categories_id = 2
 

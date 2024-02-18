@@ -1,5 +1,6 @@
 package com.faketri.market.domain.product;
 
+import com.faketri.market.payload.request.CharacteristicsRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -40,6 +41,11 @@ public class Characteristics {
         this.id = id;
         this.name = name;
         this.value = value;
+    }
+
+    public Characteristics(CharacteristicsRequest characteristicsRequest) {
+        name = characteristicsRequest.getName();
+        value = characteristicsRequest.getValue();
     }
 
     @Override

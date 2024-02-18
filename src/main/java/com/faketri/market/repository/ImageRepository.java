@@ -15,13 +15,15 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
     @Transactional
     @Modifying
-    @Query("update Image i set i.image = ?1 where i.id = ?2")
-    int updateImageById(String image, Long id);
+    @Query("update Image i set i.path = ?1 where i.id = ?2")
+    int updateImageById(String path, Long id);
 
     @Override
     Optional<Image> findById(Long aLong);
 
     @Override
     void deleteById(Long aLong);
+
+    Optional<Image> findFirstByPath(String path);
 
 }

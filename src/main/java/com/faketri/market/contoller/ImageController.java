@@ -27,7 +27,7 @@ public class ImageController {
                               HttpServletResponse response
     ) throws IOException {
         InputStream in = new ClassPathResource(imageService.findById(id)
-                                                           .getImage()).getInputStream();
+                                                           .getPath()).getInputStream();
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         IOUtils.copy(in, response.getOutputStream());
     }
