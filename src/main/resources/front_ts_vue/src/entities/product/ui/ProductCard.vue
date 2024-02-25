@@ -42,11 +42,11 @@
       <div class="stock d-flex justify-content-between align-items-center">
         <p class="in-stock text-primary m-0">В наличии</p>
         <button
-          @click="likes = !likes"
+          @click="mutateLikes = !mutateLikes"
           class="btn btn-outline-light shadow mb-2"
           title="Добавить в избраное"
         >
-          <img :src="likes ? '/red.svg' : '/Vector.svg'" alt="" />
+          <img :src="mutateLikes ? '/red.svg' : '/Vector.svg'" alt="" />
         </button>
       </div>
       <button class="btn btn-primary w-100">В корзину</button>
@@ -79,11 +79,11 @@
         <div class="stock d-flex align-items-center col">
           <p class="in-stock text-primary m-0">В наличии</p>
           <button
-            @click="updateLikesValue(!likes)"
+            @click="mutateLikes = !mutateLikes"
             class="btn btn-outline-light shadow mb-2 ms-5"
             title="Добавить в избраное"
           >
-            <img :src="likes ? '/red.svg' : '/Vector.svg'" alt="" />
+            <img :src="mutateLikes ? '/red.svg' : '/Vector.svg'" alt="" />
           </button>
         </div>
       </div>
@@ -101,30 +101,24 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { Product } from "@/entities/product/model/Product";
-import { Options, Vue } from "vue-class-component";
-@Options({
-  name: "ProductCard",
+
+export default {
   props: {
     product: Product,
     likes: Boolean,
     isSmallWidth: Boolean,
+  },
+  data() {
+    return {
+      mutateLikes: this.likes,
+    };
   },
   computed: {
     getFullName() {
       return this.product.brand.name + " " + this.product.nameModel;
     },
   },
-  methods: {
-    updateLikesValue(value: boolean) {
-      this.likes = value;
-    },
-  },
-})
-export default class ProductCard extends Vue {
-  product!: Product;
-  likes!: false;
-  isSmallWidth!: false;
-}
+};
 </script>

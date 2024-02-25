@@ -23,18 +23,29 @@
         <div
           class="tab__bar col-xl-3 col-md-5 col-lg-4 col-xs-9 col-sm-9 mt-2 row"
         >
-          <div class="tab__bar__item col flex text-center">
-            <img src="../app/assets/catalog.svg" alt="" />
-            <p class="mt-1">Каталог</p>
-          </div>
-          <div class="tab__bar__item col flex text-center">
-            <img src="../app/assets/basket.svg" alt="" />
-            <p class="mt-1">Корзина</p>
-          </div>
-          <div class="tab__bar__item col flex text-center">
-            <img src="../app/assets/profil.svg" alt="" />
-            <p class="mt-1">Профиль</p>
-          </div>
+          <router-link
+            class="tab__bar__item col flex text-center text-decoration-none"
+            to="/catalog"
+          >
+            <img src="../app/assets/img/catalog.svg" alt="" />
+            <p class="mt-1 text-black">Каталог</p>
+          </router-link>
+
+          <router-link
+            class="tab__bar__item col flex text-center text-decoration-none"
+            to="/basket/"
+          >
+            <img src="../app/assets/img/basket.svg" alt="" />
+            <p class="mt-1 text-black">Корзина</p>
+          </router-link>
+
+          <router-link
+            class="tab__bar__item col flex text-center text-decoration-none"
+            to="/profile/"
+          >
+            <img src="../app/assets/img/profil.svg" alt="" />
+            <p class="mt-1 text-black">Профиль</p>
+          </router-link>
         </div>
       </nav>
     </div>
@@ -55,8 +66,13 @@ export default class TheHeader extends Vue {}
   margin-top: 15px;
 }
 
+@font-face {
+  font-family: "Disket Mono";
+  src: url("../../src/app/assets/font/Disket-Mono-Regular.ttf");
+}
+
 .logo__name {
-  font-family: Disket Mono, sans-serif;
+  font-family: "Disket Mono", sans-serif;
   font-size: 28px;
   font-style: normal;
   font-weight: 400;

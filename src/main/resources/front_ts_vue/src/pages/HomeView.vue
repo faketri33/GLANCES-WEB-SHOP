@@ -1,20 +1,19 @@
 <template>
-  <main>
-    <!--    <PromoSlider />
+  <main class="container">
     <h2 style="">Категории</h2>
-    <div class="categories row">
+    <div v-if="categoriesStore.getCategories" class="categories row">
       <CategoriesCard
         class="col"
-        v-for="categories in getCategories"
+        v-for="categories in categoriesStore.getCategories"
         :key="categories.id"
         v-bind:categories="categories"
       />
-    </div>-->
+    </div>
     <h2>Акции</h2>
-    <div v-if="!productStore.isRequestLoading" class="product row">
+    <div v-if="productStore.getProducts(pages)" class="product row">
       <ProductCard
         class="col-xxl-2 col-xl-3 col-lg-3 col-md-4 col-sm-6 mt-2 d-flex justify-content-center"
-        v-for="product in loadByFilter().content"
+        v-for="product in productStore.getProducts(pages).content"
         :key="product.id"
         v-bind:product="product"
         v-bind:isSmallWidth="true"
@@ -24,35 +23,20 @@
   </main>
 </template>
 
-<script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import HelloWorld from "@/widgets/HelloWorld.vue";
-import ProductCard from "@/entities/product/ui/ProductCard.vue"; // @ is an alias to /src
+<script setup lang="ts">
 import { storeModule } from "@/entities/product/api";
-import { Product } from "@/entities/product/model/Product";
-import { PageableType } from "@/shared/pageable/pageableType";
+import { storeModuleCategories } from "@/entities/categories/api";
+import { onMounted } from "vue";
+import ProductCard from "@/entities/product/ui/ProductCard.vue";
+import CategoriesCard from "@/entities/categories/ui/CategoriesCard.vue";
 
-@Options({
-  data() {
-    return {
-      productStore: storeModule(),
-    };
-  },
-  created() {
-    this.productStore.loadProductByFilter();
-  },
-  components: {
-    ProductCard,
-    HelloWorld,
-  },
-  methods: {
-    loadProduct(pageNumber: number): PageableType<Product> {
-      return this.productStore.getProducts(pageNumber);
-    },
-    loadByFilter(): PageableType<Product> {
-      return this.productStore.getFiltered(0);
-    },
-  },
-})
-export default class HomeView extends Vue {}
+const pages = 0;
+
+const productStore = storeModule();
+const categoriesStore = storeModuleCategories();
+
+onMounted(async () => {
+  await productStore.loadProduct(pages, 20);
+  await categoriesStore.loadCategories();
+});
 </script>

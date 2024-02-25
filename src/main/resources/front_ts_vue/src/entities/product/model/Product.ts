@@ -1,7 +1,7 @@
 import Brand from "@/entities/product/model/Brand";
-import Categories from "@/entities/product/model/Categories";
+import Categories from "@/entities/categories/model/Categories";
 import Image from "@/entities/image/model/Image";
-import Characteristics from "@/entities/product/model/Characteristics";
+import Characteristics from "@/entities/characteristics/model/Characteristics";
 
 export class Product {
   private _id: number;

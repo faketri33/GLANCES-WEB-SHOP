@@ -1,8 +1,9 @@
 package com.faketri.market;
 
-import com.faketri.market.service.product.*;
-import com.faketri.market.service.promo.PromotionService;
-import com.faketri.market.service.user.UserService;
+import com.faketri.market.infastructure.product.gateway.*;
+import com.faketri.market.infastructure.promotion.gateway.PromotionService;
+import com.faketri.market.infastructure.user.gateway.UserService;
+import com.faketri.market.infastructure.image.gateway.ImageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -10,11 +11,24 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+/**
+ * The type Market application.
+ *
+ * @author Dmitriy Faketri
+ */
 @SpringBootApplication
 public class MarketApplication {
 
+    /**
+     * The Log.
+     */
     static final Logger log = LoggerFactory.getLogger(MarketApplication.class);
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         log.info("Before Starting application");
         SpringApplication.run(MarketApplication.class, args);
@@ -22,6 +36,20 @@ public class MarketApplication {
         log.info("Starting my application with {} args.", args.length);
     }
 
+    /**
+     * Command line runner command line runner.
+     *
+     * @param productService         the product service
+     * @param promotionService       the promotion service
+     * @param categoriesService      the categories service
+     * @param ratingService          the rating service
+     * @param userService            the user service
+     * @param brandService           the brand service
+     * @param characteristicsService the characteristics service
+     * @param imageService           the image service
+     *
+     * @return the command line runner
+     */
     @Bean
     public CommandLineRunner commandLineRunner(ProductService productService,
                                                PromotionService promotionService,
