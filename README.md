@@ -17,7 +17,7 @@ Technology stack -
   DataBase Diagram
 </h2>
 
-<img src="https://github.com/faketri/OnlineMarket/blob/master/assets/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%20%D0%BE%D1%82%202023-12-28%2015-03-56.png">
+<img src="https://github.com/faketri/OnlineMarket/blob/master/assets/DbDiagrams.svg">
 
 # Controller 
 
