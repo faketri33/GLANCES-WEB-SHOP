@@ -44,7 +44,7 @@ public class Users {
     @Column
     private String city;
 
-    @ElementCollection(targetClass = ERole.class)
+    @ElementCollection(targetClass = ERole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role",
                      joinColumns = @JoinColumn(name = "users_id"))
     private Set<ERole> role = new HashSet<>();

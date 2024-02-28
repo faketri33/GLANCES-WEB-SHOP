@@ -1,9 +1,9 @@
 package com.faketri.market.infastructure.product.gateway.filter;
 
-import com.faketri.market.entity.product.model.Brand;
-import com.faketri.market.entity.product.model.Categories;
-import com.faketri.market.entity.product.model.Characteristics;
 import com.faketri.market.entity.product.model.Product;
+import com.faketri.market.entity.product.model.child.Brand;
+import com.faketri.market.entity.product.model.child.Categories;
+import com.faketri.market.entity.product.model.child.Characteristics;
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ProductSpecification {
+public final class ProductSpecification {
 
     public Specification<Product> hasCharacteristics(
             Characteristics characteristics
@@ -33,7 +33,7 @@ public class ProductSpecification {
     ) {
         return characteristics.stream()
                               .map(this::hasCharacteristics)
-                              .reduce(Specification::and)
+                              .reduce(Specification::allOf)
                               .orElseThrow(RuntimeException::new);
     }
 
@@ -52,13 +52,13 @@ public class ProductSpecification {
         return (root, query, criteriaBuilder) -> {
             Join<Brand, Product> brandProductJoin = root.join("brand");
 
-            return criteriaBuilder.or(criteriaBuilder.like(root.get("nameModel"),
-                                                           name
-                                      ),
-                                      criteriaBuilder.like(
-                                              brandProductJoin.get("brand_name"),
-                                              brandName
-                                      )
+            return criteriaBuilder.and(criteriaBuilder.like(root.get("nameModel"),
+                                                            name
+                                       ),
+                                       criteriaBuilder.like(
+                                               brandProductJoin.get("brand_name"),
+                                               brandName
+                                       )
             );
         };
     }

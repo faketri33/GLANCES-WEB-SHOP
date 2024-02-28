@@ -1,6 +1,6 @@
 package com.faketri.market.infastructure.config.web;
 
-import com.faketri.market.infastructure.config.web.Authentication.JwtAuthenticationFilter;
+import com.faketri.market.infastructure.config.web.authentication.JwtAuthenticationFilter;
 import com.faketri.market.infastructure.user.gateway.UserDetailsServerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -65,7 +65,7 @@ public class SecurityConfiguration {
                            "/api/**"
                    ).permitAll().requestMatchers(
                            HttpMethod.POST,
-                           "/api/product/categories/{categoriesId}/filter"
+                           "/api/product/categories/*"
                    ).permitAll().requestMatchers(
                            HttpMethod.POST,
                            "/api/auth/**"

@@ -4,9 +4,7 @@ import com.faketri.market.entity.user.model.Users;
 import com.faketri.market.infastructure.user.gateway.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * The type User controller.
@@ -14,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Dmitriy Faketri
  */
 @RestController
-@RequestMapping(path = "/api/user")
+@CrossOrigin({ "http://localhost:8081", "http://192.168.1.106:8081/" })
+@RequestMapping(path = "/api/user", method = RequestMethod.GET)
 public class UserController {
 
     @Autowired
@@ -25,10 +24,14 @@ public class UserController {
      *
      * @return the users
      */
-    @RequestMapping(path = "/", method = RequestMethod.GET,
-                    produces = MediaType.APPLICATION_JSON_VALUE)
-    public Users found() {
-        return userService.findByLogin("faketri");
+    @RequestMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Users findByLogin(@RequestParam String login) {
+        return userService.findByLogin(login);
+    }
+
+    @RequestMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Users findById(@RequestParam Long id) {
+        return userService.findById(id);
     }
 
 }

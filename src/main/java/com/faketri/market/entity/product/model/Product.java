@@ -1,6 +1,9 @@
 package com.faketri.market.entity.product.model;
 
 import com.faketri.market.entity.image.model.Image;
+import com.faketri.market.entity.product.model.child.Brand;
+import com.faketri.market.entity.product.model.child.Categories;
+import com.faketri.market.entity.product.model.child.Characteristics;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;

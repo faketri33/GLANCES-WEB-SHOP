@@ -1,5 +1,5 @@
 <template>
-  <TheHeader></TheHeader>
+  <TheHeader v-bind:isLogin="userStore.isLogin" />
   <router-view />
 </template>
 
@@ -12,11 +12,9 @@
 }
 </style>
 
-<script lang="ts">
+<script setup lang="ts">
 import TheHeader from "@/widgets/TheHeader.vue";
+import { userStoreModule } from "@/entities/user/api/index.js";
 
-export default {
-  name: "App",
-  components: { TheHeader },
-};
+const userStore = userStoreModule();
 </script>

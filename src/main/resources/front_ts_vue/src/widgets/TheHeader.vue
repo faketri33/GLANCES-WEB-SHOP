@@ -25,7 +25,7 @@
         >
           <router-link
             class="tab__bar__item col flex text-center text-decoration-none"
-            to="/catalog"
+            to="/categories/"
           >
             <img src="../app/assets/img/catalog.svg" alt="" />
             <p class="mt-1 text-black">Каталог</p>
@@ -41,10 +41,10 @@
 
           <router-link
             class="tab__bar__item col flex text-center text-decoration-none"
-            to="/profile/"
+            :to="isLogin ? '/profile/' : '/auth/'"
           >
             <img src="../app/assets/img/profil.svg" alt="" />
-            <p class="mt-1 text-black">Профиль</p>
+            <p class="mt-1 text-black" v-text="isLogin ? 'Профиль' : 'Войти'" />
           </router-link>
         </div>
       </nav>
@@ -57,6 +57,9 @@ import { Options, Vue } from "vue-class-component";
 
 @Options({
   name: "TheHeader",
+  props: {
+    isLogin: Boolean,
+  },
 })
 export default class TheHeader extends Vue {}
 </script>

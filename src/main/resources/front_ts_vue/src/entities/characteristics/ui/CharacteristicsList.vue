@@ -9,10 +9,11 @@
           <li v-for="subItem in item.values" :key="subItem">
             <input
               type="checkbox"
-              v-model="selectedValues"
-              :value="subItem.id"
+              :id="subItem.id"
+              :value="subItem.value"
+              @click="addToSelected($event, subItem.id)"
             />
-            <label class="ms-2">{{ subItem.value }}</label>
+            <label :for="subItem.id" class="ms-2">{{ subItem.value }}</label>
           </li>
         </ul>
       </div>
@@ -36,6 +37,7 @@ export default {
   },
   computed: {
     getCharacteristics() {
+      console.log(this.characteristics);
       return this.characteristics.reduce((acc, obj) => {
         const key = obj.name;
         if (!acc[key]) {
@@ -47,8 +49,23 @@ export default {
     },
   },
   methods: {
+    addToSelected(e, id) {
+      if (e.target.checked) {
+        this.selectedValues.push(
+          this.characteristics.find((element) => element.id === id)
+        );
+      } else {
+        const index = this.selectedValues.findIndex(
+          (element) => element.id === id
+        );
+        console.log("INDEX", index);
+        if (index > -1) {
+          this.selectedValues.splice(index, 1);
+        }
+      }
+    },
     getSelectedValues() {
-      this.filtered = this.selectedValues.length > 0;
+      this.$emit("useFiltered", this.selectedValues);
     },
   },
 };

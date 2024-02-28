@@ -2,6 +2,8 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "@/pages/HomeView.vue";
 import CatalogView from "@/pages/CatalogView.vue";
 import ProductView from "@/pages/ProductView.vue";
+import CategoriesSelected from "@/pages/CategoriesSelected.vue";
+import AuthenticationPages from "@/pages/AuthenticationPages.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -13,6 +15,16 @@ const routes: Array<RouteRecordRaw> = [
     path: "/catalog/:id",
     name: "catalog",
     component: CatalogView,
+  },
+  {
+    path: "/categories",
+    name: "categoriesSelected",
+    component: CategoriesSelected,
+  },
+  {
+    path: "/auth",
+    name: "Authentication",
+    component: AuthenticationPages,
   },
   {
     path: "/product/:id",

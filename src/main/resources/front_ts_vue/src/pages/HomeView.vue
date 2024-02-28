@@ -1,19 +1,19 @@
 <template>
   <main class="container">
     <h2 style="">Категории</h2>
-    <div v-if="categoriesStore.getCategories" class="categories row">
+    <div v-if="!dataLoading" class="categories row">
       <CategoriesCard
         class="col"
-        v-for="categories in categoriesStore.getCategories"
+        v-for="categories in categoriesData"
         :key="categories.id"
         v-bind:categories="categories"
       />
     </div>
     <h2>Акции</h2>
-    <div v-if="productStore.getProducts(pages)" class="product row">
+    <div v-if="!dataLoading" class="product row">
       <ProductCard
         class="col-xxl-2 col-xl-3 col-lg-3 col-md-4 col-sm-6 mt-2 d-flex justify-content-center"
-        v-for="product in productStore.getProducts(pages).content"
+        v-for="product in productData.content"
         :key="product.id"
         v-bind:product="product"
         v-bind:isSmallWidth="true"
@@ -24,19 +24,24 @@
 </template>
 
 <script setup lang="ts">
-import { storeModule } from "@/entities/product/api";
-import { storeModuleCategories } from "@/entities/categories/api";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import ProductCard from "@/entities/product/ui/ProductCard.vue";
 import CategoriesCard from "@/entities/categories/ui/CategoriesCard.vue";
+import { ProductActions } from "@/entities/product/api/model/Actions";
+import { CategoriesAction } from "@/entities/categories/api/model/actions";
+import { Product } from "@/entities/product/model/Product";
+import { PageableType } from "@/shared/pageable/pageableType";
+import Categories from "@/entities/categories/model/Categories";
 
-const pages = 0;
-
-const productStore = storeModule();
-const categoriesStore = storeModuleCategories();
+const dataLoading = ref(true);
+const productData = ref<PageableType<Product>>();
+const categoriesData = ref<Categories[]>();
 
 onMounted(async () => {
-  await productStore.loadProduct(pages, 20);
-  await categoriesStore.loadCategories();
+  productData.value = await ProductActions.loadProduct(0, 20);
+  categoriesData.value = await CategoriesAction.loadCategories();
+  dataLoading.value = false;
+  console.log("hello");
+  return { productData, categoriesData };
 });
 </script>

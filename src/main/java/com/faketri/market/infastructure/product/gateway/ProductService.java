@@ -1,11 +1,11 @@
 package com.faketri.market.infastructure.product.gateway;
 
-import com.faketri.market.entity.product.model.Characteristics;
+import com.faketri.market.entity.product.gateway.repo.ProductRepository;
 import com.faketri.market.entity.product.model.Product;
-import com.faketri.market.infastructure.product.gateway.filter.ProductSpecification;
-import com.faketri.market.infastructure.config.exception.ResourceNotFoundException;
-import com.faketri.market.entity.product.gateway.ProductRepository;
+import com.faketri.market.entity.product.model.child.Characteristics;
 import com.faketri.market.entity.promotion.gateway.PromotionRepository;
+import com.faketri.market.infastructure.config.exception.ResourceNotFoundException;
+import com.faketri.market.infastructure.product.gateway.filter.ProductSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -85,7 +85,7 @@ public class ProductService {
     }
 
     /**
-     * Find top selling page.
+     * Find top-selling page.
      *
      * @param pageable the pageable
      *

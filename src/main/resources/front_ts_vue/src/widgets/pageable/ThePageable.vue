@@ -3,10 +3,10 @@
     <div class="left-slide-bar col">
       <CharacteristicsList v-bind:characteristics="characteristics" />
     </div>
-    <div v-if="pages" class="content col">
+    <div class="content col">
       <div class="list">
         <ProductCard
-          v-for="product in this.pages.content"
+          v-for="product in pages.content"
           v-bind:product="product"
           v-bind:likes="false"
           :key="product.id"

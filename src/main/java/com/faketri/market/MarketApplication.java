@@ -1,9 +1,13 @@
 package com.faketri.market;
 
-import com.faketri.market.infastructure.product.gateway.*;
-import com.faketri.market.infastructure.promotion.gateway.PromotionService;
-import com.faketri.market.infastructure.user.gateway.UserService;
 import com.faketri.market.infastructure.image.gateway.ImageService;
+import com.faketri.market.infastructure.product.gateway.ProductService;
+import com.faketri.market.infastructure.product.gateway.child.BrandService;
+import com.faketri.market.infastructure.product.gateway.child.CategoriesService;
+import com.faketri.market.infastructure.product.gateway.child.CharacteristicsService;
+import com.faketri.market.infastructure.promotion.gateway.PromotionService;
+import com.faketri.market.infastructure.rating.gateway.RatingService;
+import com.faketri.market.infastructure.user.gateway.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;

@@ -4,12 +4,15 @@ import com.faketri.market.entity.user.exception.PasswordNotValidException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -117,6 +120,20 @@ public class GlobalExceptionHandler {
                 e.getStatusCode().value(),
                 Objects.requireNonNull(e.getDetailMessageArguments())[1].toString()
         ), e.getStatusCode());
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<AppError> handleException(
+            HttpMessageNotReadableException e
+    ) throws IOException {
+        e.printStackTrace();
+        System.out.println(e.toString());
+        return new ResponseEntity<>(new AppError(
+                403,
+                Objects.requireNonNull(e.getHttpInputMessage()
+                                        .getBody()
+                                        .toString())
+        ), HttpStatusCode.valueOf(403));
     }
 
 
