@@ -1,12 +1,10 @@
 import Categories from "@/entities/categories/model/Categories";
-import { axiosInstance } from "@/shared/client/AxiosClient";
+import { $axios } from "@/shared/client/AxiosClient";
 
 export const CategoriesAction = {
   loadCategories(): Promise<Categories[]> {
     return new Promise((resolve) =>
-      axiosInstance
-        .get("/categories/", {})
-        .then((response) => resolve(response.data))
+      $axios.get("/categories/", {}).then((response) => resolve(response.data))
     );
   },
 };

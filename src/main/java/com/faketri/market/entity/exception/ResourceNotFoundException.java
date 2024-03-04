@@ -1,4 +1,4 @@
-package com.faketri.market.infastructure.config.exception;
+package com.faketri.market.entity.exception;
 
 /**
  * The type Resource not found exception.

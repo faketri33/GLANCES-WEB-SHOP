@@ -1,8 +1,6 @@
 <template>
   <div class="root">
-    <p>ТИПО МЕНЮ</p>
-    <p>ТИПО ФИЛЬТРАЦИЯ</p>
-    <div>
+    <div id="filterMenu">
       <div v-for="item in getCharacteristics" :key="item.value">
         <h3>{{ item.name }}</h3>
         <ul style="list-style-type: none">

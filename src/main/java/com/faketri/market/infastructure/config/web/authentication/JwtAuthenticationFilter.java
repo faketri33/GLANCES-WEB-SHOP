@@ -1,12 +1,14 @@
 package com.faketri.market.infastructure.config.web.authentication;
 
-import com.faketri.market.infastructure.user.gateway.UserDetailsServerImpl;
+import com.faketri.market.usecase.auth.JwtServiceImpl;
+import com.faketri.market.usecase.user.UserDetailsServerImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -25,6 +27,7 @@ import java.io.IOException;
  * @author Dmitriy Faketri
  */
 @Component
+@Log4j2
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -36,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * The constant HEADER_NAME.
      */
     public static final String                HEADER_NAME   = "Authorization";
-    private final       JwtService            jwtService;
+    private final       JwtServiceImpl        jwtService;
     private final       UserDetailsServerImpl userDetailsServer;
 
     @Override
@@ -59,6 +62,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserDetails userDetails =
                     userDetailsServer.loadUserByUsername(username);
             if (jwtService.isTokenValid(jwt, userDetails)) {
+
+                log.info("User with login - " + username + " authorization");
                 SecurityContext context =
                         SecurityContextHolder.createEmptyContext();
                 var authToken = new UsernamePasswordAuthenticationToken(

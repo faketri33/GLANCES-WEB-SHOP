@@ -4,6 +4,7 @@ import CatalogView from "@/pages/CatalogView.vue";
 import ProductView from "@/pages/ProductView.vue";
 import CategoriesSelected from "@/pages/CategoriesSelected.vue";
 import AuthenticationPages from "@/pages/AuthenticationPages.vue";
+import UserPage from "@/pages/UserPages.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -30,6 +31,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/product/:id",
     name: "product",
     component: ProductView,
+  },
+  {
+    path: "/profile/",
+    name: "profile",
+    component: UserPage,
   },
 ];
 

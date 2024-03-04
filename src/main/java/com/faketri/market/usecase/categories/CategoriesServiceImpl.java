@@ -1,8 +1,9 @@
-package com.faketri.market.infastructure.product.gateway.child;
+package com.faketri.market.usecase.categories;
 
+import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.product.gateway.repo.child.CategoriesRepository;
 import com.faketri.market.entity.product.model.child.Categories;
-import com.faketri.market.infastructure.config.exception.ResourceNotFoundException;
+import com.faketri.market.infastructure.categories.gateway.CategoriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,7 @@ import java.util.List;
  * @author Dmitriy Faketri
  */
 @Service
-public class CategoriesService {
+public class CategoriesServiceImpl implements CategoriesService {
 
     @Autowired
     private CategoriesRepository categoriesImpl;

@@ -1,5 +1,6 @@
 package com.faketri.market.entity.user.model;
 
+import com.faketri.market.entity.image.model.Image;
 import com.faketri.market.entity.order.model.Orders;
 import com.faketri.market.entity.product.model.Product;
 import jakarta.persistence.*;
@@ -35,11 +36,24 @@ public class Users {
     @Column
     private String email;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Image profileImage =
+            new Image(null, "images/user/profile/default_profile_image.png");
+
+    @Column
+    private String name;
+
+    @Column
+    private String surname;
+
     @Column
     private String login;
 
     @Column
     private String password;
+
+    @Column
+    private LocalDateTime dateOfBirthday;
 
     @Column
     private String city;

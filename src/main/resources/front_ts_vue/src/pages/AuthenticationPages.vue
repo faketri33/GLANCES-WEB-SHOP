@@ -3,6 +3,12 @@
     <div class="wrapper w-75 m-0 m-auto border border-primary rounded mt-5">
       <form class="form d-flex flex-column gap-3" @submit.prevent="auth">
         <h2 v-text="isSingIn ? 'Регистарция' : 'Авторизация'"></h2>
+        <p
+          v-if="userStore.errorMessage?.statusCode === 404"
+          class="border rounded border-warning"
+        >
+          {{ userStore.errorMessage?.message }}
+        </p>
         <label for="first"> Логин </label>
         <input
           class="input-group-text shadow"
@@ -13,6 +19,12 @@
           v-model="user.login"
           required
         />
+        <p
+          class="border rounded text-center border-warning"
+          v-if="userStore.errorMessage?.message?.hasOwnProperty('login')"
+        >
+          {{ userStore.errorMessage.message["login"] }}
+        </p>
 
         <label v-show="isSingIn" for="email"> Почта </label>
         <input
@@ -24,6 +36,12 @@
           placeholder="Введите почту"
           v-model="user.email"
         />
+        <p
+          class="border rounded text-center border-warning"
+          v-if="userStore.errorMessage?.message?.hasOwnProperty('email')"
+        >
+          {{ userStore.errorMessage.message["email"] }}
+        </p>
 
         <label for="password"> Пароль </label>
         <input
@@ -35,11 +53,27 @@
           v-model="user.password"
           required
         />
-
+        <p
+          class="border rounded text-center border-warning"
+          v-if="userStore.errorMessage?.message?.hasOwnProperty('password')"
+        >
+          {{ userStore.errorMessage.message["password"] }}
+        </p>
         <div class="wrap">
-          <button class="btn btn-outline-primary">Submit</button>
+          <button
+            class="btn btn-outline-primary"
+            v-text="isSingIn ? 'Регистарция' : 'Авторизация'"
+          ></button>
         </div>
+
+        <p
+          class="border rounded text-center border-success"
+          v-if="userStore.isLogin"
+        >
+          Вы успешно авторизованы
+        </p>
       </form>
+
       <button
         class="btn-form-action btn link text-decoration-underline"
         style="color: #260dc1"
@@ -51,11 +85,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { userStoreModule } from "@/entities/user/api/index.js";
 import User from "@/entities/user/model/User";
+import { ErrorResponse } from "@/entities/user/api/model/actions";
 
-const user = new User(0, "", "", "");
+const user = new User(0, "", "", "", "");
 
 const isSingIn = ref(true);
 const userStore = userStoreModule();
@@ -63,9 +98,9 @@ const userStore = userStoreModule();
 const auth = () => {
   if (!isSingIn.value) userStore.signIn(user);
   else userStore.signUp(user);
-  console.log(user);
-  console.log(!isSingIn.value);
 };
+
+onMounted(() => (userStore.errorMessage = new ErrorResponse()));
 </script>
 
 <style scoped>

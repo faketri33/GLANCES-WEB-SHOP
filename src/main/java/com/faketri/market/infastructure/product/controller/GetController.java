@@ -4,6 +4,7 @@ import com.faketri.market.entity.product.model.Product;
 import com.faketri.market.infastructure.product.gateway.ProductService;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import java.util.List;
  * @author Dmitriy Faketri
  */
 @RestController()
+@Log4j2
 @CrossOrigin({ "http://localhost:8081", "http://192.168.1.106:8081/" })
 @RequestMapping(value = "/api/product", method = RequestMethod.GET)
 @Tag(name = "Product", description = "Operation with product")
@@ -59,7 +61,6 @@ public class GetController {
             @RequestParam(name = "size", required = true,
                           defaultValue = "20") Integer page_size
     ) {
-        System.out.println("i'am here filters" + categoriesId);
         return productService.findByCategories(categoriesId,
                                                PageRequest.of(page_number,
                                                               page_size

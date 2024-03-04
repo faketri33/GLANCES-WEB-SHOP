@@ -1,4 +1,4 @@
-package com.faketri.market.infastructure.product.dto;
+package com.faketri.market.infastructure.characteristics.dto;
 
 /**
  * The type Characteristics request.

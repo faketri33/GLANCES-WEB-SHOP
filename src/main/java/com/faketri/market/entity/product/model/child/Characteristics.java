@@ -1,7 +1,7 @@
 package com.faketri.market.entity.product.model.child;
 
 import com.faketri.market.entity.product.model.Product;
-import com.faketri.market.infastructure.product.dto.CharacteristicsRequest;
+import com.faketri.market.infastructure.characteristics.dto.CharacteristicsRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;

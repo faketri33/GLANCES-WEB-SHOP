@@ -1,19 +1,24 @@
 package com.faketri.market.infastructure.config.exception;
 
+import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.user.exception.PasswordNotValidException;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Intercepting and handling Runtime errors
@@ -48,12 +53,14 @@ public class GlobalExceptionHandler {
      * @return the response entity
      */
     @ExceptionHandler(PasswordNotValidException.class)
-    public ResponseEntity<AppError> handleException(PasswordNotValidException e
+    public ResponseEntity<AppErrorArray> handleException(
+            PasswordNotValidException e
     ) {
-        return new ResponseEntity<>(
-                new AppError(HttpStatus.UNAUTHORIZED.value(), e.getMessage()),
-                HttpStatus.UNAUTHORIZED
-        );
+        return new ResponseEntity<>(new AppErrorArray(HttpStatus.UNAUTHORIZED.value(),
+                                                      Map.of("password",
+                                                             e.getMessage()
+                                                      )
+        ), HttpStatus.UNAUTHORIZED);
     }
 
     /**
@@ -76,7 +83,7 @@ public class GlobalExceptionHandler {
     /**
      * Handle exception response entity.
      *
-     * @param e the e
+     * @param e the
      *
      * @return the response entity
      */
@@ -97,8 +104,8 @@ public class GlobalExceptionHandler {
      *
      * @return the response entity
      */
-    @ExceptionHandler(JwtValidException.class)
-    public ResponseEntity<AppError> handleException(JwtValidException e) {
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<AppError> handleException(ExpiredJwtException e) {
         return new ResponseEntity<>(
                 new AppError(HttpStatus.UNAUTHORIZED.value(), e.getMessage()),
                 HttpStatus.UNAUTHORIZED
@@ -113,12 +120,16 @@ public class GlobalExceptionHandler {
      * @return the response entity
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<AppError> handleException(
+    public ResponseEntity<AppErrorArray> handleException(
             MethodArgumentNotValidException e
     ) {
-        return new ResponseEntity<>(new AppError(
-                e.getStatusCode().value(),
-                Objects.requireNonNull(e.getDetailMessageArguments())[1].toString()
+        return new ResponseEntity<>(new AppErrorArray(e.getStatusCode().value(),
+                                                      e.getFieldErrors()
+                                                       .stream()
+                                                       .collect(Collectors.toMap(
+                                                               FieldError::getField,
+                                                               FieldError::getDefaultMessage
+                                                       ))
         ), e.getStatusCode());
     }
 
@@ -126,13 +137,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<AppError> handleException(
             HttpMessageNotReadableException e
     ) throws IOException {
-        e.printStackTrace();
-        System.out.println(e.toString());
-        return new ResponseEntity<>(new AppError(
-                403,
-                Objects.requireNonNull(e.getHttpInputMessage()
-                                        .getBody()
-                                        .toString())
+        return new ResponseEntity<>(new AppError(403,
+                                                 Objects.requireNonNull(e.getHttpInputMessage()
+                                                                         .getBody()
+                                                                         .toString())
         ), HttpStatusCode.valueOf(403));
     }
 

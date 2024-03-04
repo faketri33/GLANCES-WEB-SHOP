@@ -1,31 +1,34 @@
 <template>
-  <div class="container-xl root">
-    <div class="wrapper row">
-      <div class="left-slide-bar col-2 col-sm-3">
-        <CharacteristicsList
-          v-if="characteristics"
-          v-bind:characteristics="characteristics"
-          v-on:useFiltered="useFiltered"
-        />
-      </div>
-      <div class="content col" v-if="pages[currentPages]">
-        <div class="list" style="min-height: 80vh">
-          <ProductCard
-            v-for="product in pages[currentPages].content"
-            v-bind:product="product"
-            v-bind:likes="false"
-            :key="product.id"
-          ></ProductCard>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <div id="filterMenu">
+          <!-- Фильтры товаров -->
+          <h4>Фильтр</h4>
+          <CharacteristicsList
+            v-if="characteristics"
+            v-bind:characteristics="characteristics"
+            v-on:useFiltered="useFiltered"
+          />
         </div>
-        <div class="align-content-center">
-          <button
-            class="btn btn-dark"
-            v-for="index in pages[currentPages].totalPages"
-            :key="index"
-            @click="currentPages = index - 1"
-          >
-            {{ index }}
-          </button>
+      </div>
+      <div class="col-lg-9" v-if="pages[currentPages]">
+        <ProductCard
+          v-for="product in pages[currentPages].content"
+          v-bind:product="product"
+          v-bind:likes="false"
+          :key="product.id"
+        ></ProductCard>
+        <div class="row">
+          <div class="col-12">
+            <nav aria-label="Page navigation">
+              <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <!-- Add more page numbers here -->
+              </ul>
+            </nav>
+          </div>
         </div>
       </div>
     </div>
@@ -76,6 +79,14 @@ const loadPages = async (): Promise<PageableType<Product>> => {
         categoriesId
       );
 };
+
+document.addEventListener("DOMContentLoaded", function () {
+  const filterMenuBtn = document.getElementById("filterMenuBtn");
+  const filterMenu = document.getElementById("filterMenu");
+  filterMenuBtn?.addEventListener("click", function () {
+    filterMenu?.classList.toggle("show");
+  });
+});
 
 onMounted(async () => {
   const res = await loadPages();

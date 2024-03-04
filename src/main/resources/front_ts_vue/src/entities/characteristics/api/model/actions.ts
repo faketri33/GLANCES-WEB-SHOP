@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/shared/client/AxiosClient";
+import { $axios } from "@/shared/client/AxiosClient";
 import Characteristics from "@/entities/characteristics/model/Characteristics";
 
 export const CharacteristicsAction = {
@@ -6,7 +6,7 @@ export const CharacteristicsAction = {
     categoriesId: number
   ): Promise<Characteristics[]> {
     return new Promise<Characteristics[]>((resolve) =>
-      axiosInstance
+      $axios
         .get("/characteristics/product/" + categoriesId)
         .then((data) => resolve(data.data))
         .catch((err) => new Error(err.message))

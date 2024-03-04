@@ -1,6 +1,7 @@
-package com.faketri.market.infastructure.user.gateway;
+package com.faketri.market.usecase.user;
 
 import com.faketri.market.entity.user.model.Users;
+import com.faketri.market.infastructure.user.gateway.UserService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

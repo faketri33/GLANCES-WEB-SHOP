@@ -1,6 +1,7 @@
-package com.faketri.market.infastructure.config.web.authentication;
+package com.faketri.market.usecase.auth;
 
 import com.faketri.market.entity.user.model.Users;
+import com.faketri.market.infastructure.config.web.authentication.gateway.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -22,7 +23,7 @@ import java.util.function.Function;
  * @author Dmitriy Faketri
  */
 @Service
-public class JwtService {
+public class JwtServiceImpl implements JwtService {
 
     @Value("${token.signing.key}")
     private String jwtSigningKey;

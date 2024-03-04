@@ -1,7 +1,7 @@
-package com.faketri.market.infastructure.product.controller.child;
+package com.faketri.market.infastructure.characteristics.controller;
 
 import com.faketri.market.entity.product.model.child.Characteristics;
-import com.faketri.market.infastructure.product.gateway.child.CharacteristicsService;
+import com.faketri.market.infastructure.characteristics.gateway.CharacteristicsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

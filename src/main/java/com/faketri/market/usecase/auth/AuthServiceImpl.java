@@ -1,14 +1,18 @@
-package com.faketri.market.infastructure.config.web.authentication;
+package com.faketri.market.usecase.auth;
 
+import com.faketri.market.entity.user.exception.PasswordNotValidException;
 import com.faketri.market.entity.user.model.ERole;
 import com.faketri.market.entity.user.model.Users;
 import com.faketri.market.infastructure.config.web.authentication.dto.JwtAuthenticationResponse;
+import com.faketri.market.infastructure.config.web.authentication.gateway.AuthService;
 import com.faketri.market.infastructure.user.dto.SignInRequest;
 import com.faketri.market.infastructure.user.dto.SignUpRequest;
-import com.faketri.market.infastructure.user.gateway.UserDetailsServerImpl;
+import com.faketri.market.infastructure.user.dto.UserResponse;
+import com.faketri.market.usecase.user.UserDetailsServerImpl;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,14 +24,14 @@ import org.springframework.stereotype.Service;
  */
 @Log4j2
 @Service
-public class AuthService {
+public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private UserDetailsServerImpl userDetailsServer;
     @Autowired
     private PasswordEncoder       passwordEncoder;
     @Autowired
-    private JwtService            jwtService;
+    private JwtServiceImpl        jwtService;
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -47,15 +51,13 @@ public class AuthService {
         users.setEmail(signUpRequest.getEmail());
         users.getRole().add(ERole.CUSTOMER);
 
-        System.out.println(users);
-
         users = userDetailsServer.getUserService().save(users);
 
         var jwt =
                 jwtService.generateToken(userDetailsServer.generateUserDetails(
                         users));
-        log.info(String.format("user register with name %s", users.getLogin()));
-        return new JwtAuthenticationResponse(jwt);
+        log.info("user register with login " + users.getLogin());
+        return new JwtAuthenticationResponse(UserResponse.mapUser(users), jwt);
     }
 
     /**
@@ -66,23 +68,24 @@ public class AuthService {
      * @return JwtAuthenticationResponse jwt authentication response
      */
     public JwtAuthenticationResponse signIn(SignInRequest signInRequest) {
-        /*try {*/
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequest.getLogin(),
-                                                                                   signInRequest.getPassword()
-        ));
-        /*}catch (BadCredentialsException e){
-            log.error(String.format("User not sign in with login %s , error - %s", user.getUsername(), e.getMessage()));
-            throw new PasswordNotValidException("Not correct data for login");
-        }*/
-        var user =
-                userDetailsServer.loadUserByUsername(signInRequest.getLogin());
-        System.out.println(user);
 
-        var jwt = jwtService.generateToken(user);
-        log.info(String.format("User sign in with login %s",
-                               user.getUsername()
-        ));
-        return new JwtAuthenticationResponse(jwt);
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequest.getLogin(),
+                                                                                       signInRequest.getPassword()
+            ));
+        } catch (BadCredentialsException ex) {
+            log.error("Not valid password from user with login " + signInRequest.getLogin());
+            throw new PasswordNotValidException("Неверный пароль");
+        }
+
+        var user = userDetailsServer.getUserService()
+                                    .findByLogin(signInRequest.getLogin());
+
+        var jwt =
+                jwtService.generateToken(userDetailsServer.generateUserDetails(
+                        user));
+        log.info(String.format("User sign in with login %s", user.getLogin()));
+        return new JwtAuthenticationResponse(UserResponse.mapUser(user), jwt);
     }
 
 }

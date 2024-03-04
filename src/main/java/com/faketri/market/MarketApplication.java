@@ -1,13 +1,13 @@
 package com.faketri.market;
 
-import com.faketri.market.infastructure.image.gateway.ImageService;
-import com.faketri.market.infastructure.product.gateway.ProductService;
-import com.faketri.market.infastructure.product.gateway.child.BrandService;
-import com.faketri.market.infastructure.product.gateway.child.CategoriesService;
-import com.faketri.market.infastructure.product.gateway.child.CharacteristicsService;
-import com.faketri.market.infastructure.promotion.gateway.PromotionService;
-import com.faketri.market.infastructure.rating.gateway.RatingService;
-import com.faketri.market.infastructure.user.gateway.UserService;
+import com.faketri.market.usecase.brand.BrandService;
+import com.faketri.market.usecase.categories.CategoriesService;
+import com.faketri.market.usecase.characteristics.CharacteristicsService;
+import com.faketri.market.usecase.image.ImageService;
+import com.faketri.market.usecase.product.ProductServiceImpl;
+import com.faketri.market.usecase.promotion.PromotionService;
+import com.faketri.market.usecase.rating.RatingService;
+import com.faketri.market.usecase.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -55,14 +55,13 @@ public class MarketApplication {
      * @return the command line runner
      */
     @Bean
-    public CommandLineRunner commandLineRunner(ProductService productService,
-                                               PromotionService promotionService,
-                                               CategoriesService categoriesService,
-                                               RatingService ratingService,
-                                               UserService userService,
-                                               BrandService brandService,
-                                               CharacteristicsService characteristicsService,
-                                               ImageService imageService
+    public CommandLineRunner commandLineRunner(
+            ProductServiceImpl productService,
+            PromotionService promotionService,
+            CategoriesService categoriesService, RatingService ratingService,
+            UserService userService, BrandService brandService,
+            CharacteristicsService characteristicsService,
+            ImageService imageService
     ) {
         return args -> {
             /*Categories categories = categoriesService.save(new Categories(null,

@@ -1,7 +1,7 @@
 package com.faketri.market.infastructure.config.web;
 
 import com.faketri.market.infastructure.config.web.authentication.JwtAuthenticationFilter;
-import com.faketri.market.infastructure.user.gateway.UserDetailsServerImpl;
+import com.faketri.market.usecase.user.UserDetailsServerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -61,15 +61,22 @@ public class SecurityConfiguration {
                        return corsConfiguration;
                    }))
                    .authorizeHttpRequests((requests) -> requests.requestMatchers(
-                           HttpMethod.GET,
-                           "/api/**"
-                   ).permitAll().requestMatchers(
-                           HttpMethod.POST,
-                           "/api/product/categories/*"
-                   ).permitAll().requestMatchers(
-                           HttpMethod.POST,
-                           "/api/auth/**"
-                   ).permitAll().anyRequest().authenticated())
+                                                                        HttpMethod.GET,
+                                                                        "/api/**"
+                                                                )
+                                                                .permitAll()
+                                                                .requestMatchers(
+                                                                        HttpMethod.POST,
+                                                                        "/api/product/categories/*"
+                                                                )
+                                                                .permitAll()
+                                                                .requestMatchers(
+                                                                        HttpMethod.POST,
+                                                                        "/api/auth/**"
+                                                                )
+                                                                .permitAll()
+                                                                .anyRequest()
+                                                                .authenticated())
                    .sessionManagement(manager -> manager.sessionCreationPolicy(
                            STATELESS))
                    .authenticationProvider(daoAuthenticationProvider())

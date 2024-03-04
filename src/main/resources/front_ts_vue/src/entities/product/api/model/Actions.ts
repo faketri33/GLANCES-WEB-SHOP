@@ -1,4 +1,4 @@
-import { axiosInstance, headers } from "@/shared/client/AxiosClient";
+import { $axios } from "@/shared/client/AxiosClient";
 import { Product } from "@/entities/product/model/Product";
 import { PageableType } from "@/shared/pageable/pageableType";
 import Characteristics from "@/entities/characteristics/model/Characteristics";
@@ -9,13 +9,11 @@ export const ProductActions = {
     pageSize: number
   ): Promise<PageableType<Product>> {
     return new Promise<PageableType<Product>>((resolve) =>
-      axiosInstance
+      $axios
         .get("/product/product", {
-          headers: headers,
           params: { number: pageNumber, size: pageSize },
         })
         .then((data) => resolve(data.data))
-        .catch((err) => new Error(err.message))
     );
   },
 
@@ -27,16 +25,14 @@ export const ProductActions = {
   ): Promise<PageableType<Product>> {
     return new Promise<PageableType<Product>>((resolve) =>
       !filter
-        ? axiosInstance
+        ? $axios
             .get("/product/categories/" + categoriesId, {
-              headers: headers,
               params: { number: pageNumber, size: pageSize },
             })
             .then((data) => resolve(data.data))
             .catch((err) => new Error(err.message))
-        : axiosInstance
+        : $axios
             .post("/product/categories/" + categoriesId, filter, {
-              headers: headers,
               params: { number: pageNumber, size: pageSize },
             })
             .then((data) => resolve(data.data))
@@ -49,9 +45,8 @@ export const ProductActions = {
     pageSize: number
   ): Promise<PageableType<Product>> {
     return new Promise<PageableType<Product>>((resolve) =>
-      axiosInstance
+      $axios
         .get("/product/promotion/", {
-          headers: headers,
           params: { number: pageNumber, size: pageSize },
         })
         .then((data) => resolve(data.data))
@@ -65,20 +60,25 @@ export const ProductActions = {
     filter: Characteristics[]
   ): Promise<PageableType<Product>> {
     return new Promise<PageableType<Product>>((resolve) =>
-      axiosInstance
+      $axios
         .post("/product/categories/2/filter", filter, {
-          headers: headers,
           params: { number: pageNumber, size: pageSize },
         })
-        .then((data) => resolve(data.data))
+        .then((data) => {
+          $axios.defaults.headers.common["Authorization"] = data.data.token;
+          resolve(data.data);
+        })
     );
   },
 
   loadProductById(id: number): Promise<Product> {
     return new Promise<Product>((resolve) =>
-      axiosInstance
-        .get("/product/" + id, { headers: headers })
-        .then((data) => resolve(data.data))
+      $axios
+        .get("/product/" + id)
+        .then((data) => {
+          $axios.defaults.headers.common["Authorization"] = data.data.token;
+          resolve(data.data);
+        })
         .catch((err) => new Error(err.message))
     );
   },

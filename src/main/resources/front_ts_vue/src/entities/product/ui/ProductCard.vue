@@ -1,59 +1,5 @@
 <template>
   <div class="wrapper">
-    <div
-      v-show="isSmallWidth"
-      class="card p-4"
-      style="max-width: 16rem; gap: 24px"
-    >
-      <router-link
-        :to="'/product/' + product.id"
-        class="text-decoration-none text-center"
-        style="color: black; gap: 24px"
-      >
-        <img
-          :src="'http://localhost:8080/api/image/' + product.image[0].id"
-          class="card-img-top"
-          :alt="getFullName"
-          style="max-height: 206px; max-width: 174px"
-        />
-        <div class="card-body p-0">
-          <h5 class="card-title">
-            {{ getFullName }}
-          </h5>
-          <div class="d-flex justify-content-between">
-            <p class="card-price" v-if="product.isPromoActive">
-              <strong>{{ product.promoPrice }}</strong
-              >руб.
-            </p>
-            <p
-              class="card-price"
-              :style="
-                product.isPromoActive
-                  ? 'text-decoration:line-through; color: grey;'
-                  : 'text-decoration: none;'
-              "
-            >
-              <strong>{{ product.price }}</strong
-              >руб.
-            </p>
-          </div>
-        </div>
-      </router-link>
-      <div class="stock d-flex justify-content-between align-items-center">
-        <p class="in-stock text-primary m-0">В наличии</p>
-        <button
-          @click="mutateLikes = !mutateLikes"
-          class="btn btn-outline-light shadow mb-2"
-          title="Добавить в избраное"
-        >
-          <img :src="mutateLikes ? '/red.svg' : '/Vector.svg'" alt="" />
-        </button>
-      </div>
-      <button class="btn btn-primary w-100">В корзину</button>
-    </div>
-    <!-- 
-    TO FULL SIZE
-  -->
     <div v-show="!isSmallWidth" class="row p-2 m-3 border rounded-1">
       <div class="img col-md-4 col-lg-4 text-center">
         <img

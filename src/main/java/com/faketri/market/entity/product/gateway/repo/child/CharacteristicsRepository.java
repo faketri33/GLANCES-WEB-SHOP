@@ -48,6 +48,7 @@ public interface CharacteristicsRepository
      *
      * @return the list
      */
+    @Query("select distinct c from Characteristics c inner join c.products products where products.categories.id = ?1")
     List<Characteristics> findDistinctByProducts_Categories_Id(Long id);
 
     /**
