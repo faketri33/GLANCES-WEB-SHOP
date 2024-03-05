@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
  *
  * @author Dmitriy Faketri
  */
+@Service
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productImpl;
@@ -49,7 +51,6 @@ public class ProductServiceImpl implements ProductService {
      * Find all page.
      *
      * @param pageable the pageable
-     *
      * @return the page
      */
     public Page<Product> findAll(Pageable pageable) {
@@ -60,13 +61,12 @@ public class ProductServiceImpl implements ProductService {
      * Find by id product.
      *
      * @param id the id
-     *
      * @return the product
      */
     public Product findById(Long id) {
         return productImpl.findById(id)
-                          .orElseThrow(() -> new ResourceNotFoundException(
-                                  "Product with id " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Product with id " + id + " not found"));
     }
 
 
@@ -75,7 +75,6 @@ public class ProductServiceImpl implements ProductService {
      *
      * @param categoriesId the categories id
      * @param pageable     the pageable
-     *
      * @return the page
      */
     public Page<Product> findByCategories(Long categoriesId, Pageable pageable
@@ -88,12 +87,11 @@ public class ProductServiceImpl implements ProductService {
      * Find promotion product page.
      *
      * @param pageable the pageable
-     *
      * @return the page
      */
     public Page<Product> findPromotionProduct(Pageable pageable) {
         return productImpl.findAll(productSpecification.isPromoItem(),
-                                   pageable
+                pageable
         );
     }
 
@@ -101,14 +99,13 @@ public class ProductServiceImpl implements ProductService {
      * Find top-selling page.
      *
      * @param pageable the pageable
-     *
      * @return the page
      */
     public Page<Product> findTopSelling(Pageable pageable) {
         return productImpl.findAll(PageRequest.of(pageable.getPageNumber(),
-                                                  pageable.getPageSize(),
-                                                  Sort.by("quantitySold")
-                                                      .ascending()
+                pageable.getPageSize(),
+                Sort.by("quantitySold")
+                        .ascending()
         ));
     }
 
@@ -118,7 +115,6 @@ public class ProductServiceImpl implements ProductService {
      * @param pageable        the pageable
      * @param categoriesId    the categories id
      * @param characteristics the characteristics
-     *
      * @return the page
      */
     public Page<Product> findByCategoriesFilteredCharacteristics(
@@ -126,10 +122,10 @@ public class ProductServiceImpl implements ProductService {
             List<Characteristics> characteristics
     ) {
         return productImpl.findAll(productSpecification.hasCategories(
-                                                               categoriesId)
-                                                       .and(productSpecification.hasCharacteristics(
-                                                               characteristics)),
-                                   pageable
+                                categoriesId)
+                        .and(productSpecification.hasCharacteristics(
+                                characteristics)),
+                pageable
         );
     }
 
@@ -137,7 +133,6 @@ public class ProductServiceImpl implements ProductService {
      * Save product.
      *
      * @param product the product
-     *
      * @return the product
      */
     public Product save(Product product) {
@@ -148,15 +143,14 @@ public class ProductServiceImpl implements ProductService {
      * Update int.
      *
      * @param product the product
-     *
      * @return the int
      */
     public int update(Product product) {
         return productImpl.update(product.getNameModel(),
-                                  product.getPrice(),
-                                  product.getQuantitySold(),
-                                  product.getQuantity(),
-                                  product.getId()
+                product.getPrice(),
+                product.getQuantitySold(),
+                product.getQuantity(),
+                product.getId()
         );
     }
 
@@ -167,10 +161,10 @@ public class ProductServiceImpl implements ProductService {
      */
     public void update(List<Product> products) {
         products.forEach(product -> productImpl.update(product.getNameModel(),
-                                                       product.getPrice(),
-                                                       product.getQuantitySold(),
-                                                       product.getQuantity(),
-                                                       product.getId()
+                product.getPrice(),
+                product.getQuantitySold(),
+                product.getQuantity(),
+                product.getId()
         ));
     }
 

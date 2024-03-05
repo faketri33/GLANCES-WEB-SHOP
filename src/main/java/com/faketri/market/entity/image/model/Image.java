@@ -27,18 +27,9 @@ public class Image {
     @Column
     private String path;
 
-    /**
-     * Instantiates a new Image.
-     */
     public Image() {
     }
 
-    /**
-     * Instantiates a new Image.
-     *
-     * @param id   the id
-     * @param path the path
-     */
     public Image(Long id, String path) {
         this.id = id;
         this.path = path;

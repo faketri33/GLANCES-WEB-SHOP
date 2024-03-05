@@ -31,9 +31,8 @@ public class JwtServiceImpl implements JwtService {
     /**
      * Extract user login from token
      *
-     * @param token токен
-     *
-     * @return имя пользователя
+     * @param token token
+     * @return user name
      */
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -43,7 +42,6 @@ public class JwtServiceImpl implements JwtService {
      * Generate token by user fields
      *
      * @param userDetails data of user
-     *
      * @return token string
      */
     public String generateToken(UserDetails userDetails) {
@@ -62,12 +60,11 @@ public class JwtServiceImpl implements JwtService {
      *
      * @param token       token
      * @param userDetails data of user
-     *
      * @return true, if token is valid
      */
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String userName = extractUserName(token);
-        return ( userName.equals(userDetails.getUsername()) ) && !isTokenExpired(
+        return (userName.equals(userDetails.getUsername())) && !isTokenExpired(
                 token);
     }
 
@@ -77,7 +74,6 @@ public class JwtServiceImpl implements JwtService {
      * @param token           token
      * @param claimsResolvers function extract data
      * @param <T>             data type
-     *
      * @return extracted data
      */
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers
@@ -91,26 +87,24 @@ public class JwtServiceImpl implements JwtService {
      *
      * @param extraClaims additional data
      * @param userDetails data of the user
-     *
      * @return token
      */
     private String generateToken(Map<String, Object> extraClaims,
                                  UserDetails userDetails
     ) {
         return Jwts.builder()
-                   .setClaims(extraClaims)
-                   .setSubject(userDetails.getUsername())
-                   .setIssuedAt(new Date(System.currentTimeMillis()))
-                   .setExpiration(new Date(System.currentTimeMillis() + 100000 * 60 * 24))
-                   .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                   .compact();
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 100000 * 60 * 24))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     /**
      * Checking the expired of the token
      *
      * @param token токен
-     *
      * @return true, если токен просрочен
      */
     private boolean isTokenExpired(String token) {
@@ -121,7 +115,6 @@ public class JwtServiceImpl implements JwtService {
      * Extract data about expiration
      *
      * @param token token
-     *
      * @return date of expiration
      */
     private Date extractExpiration(String token) {
@@ -132,15 +125,14 @@ public class JwtServiceImpl implements JwtService {
      * Extract data from token
      *
      * @param token token
-     *
      * @return data from token
      */
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                   .setSigningKey(getSigningKey())
-                   .build()
-                   .parseClaimsJws(token)
-                   .getBody();
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     /**

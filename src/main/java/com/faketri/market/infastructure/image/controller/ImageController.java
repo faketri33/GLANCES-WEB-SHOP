@@ -4,7 +4,6 @@ import com.faketri.market.infastructure.image.gateway.ImageService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,28 +18,30 @@ import java.io.InputStream;
  * @author Dmitriy Faketri
  */
 @RestController
-@CrossOrigin({ "http://localhost:8081", "http://192.168.1.106:8081/" })
-@RequestMapping("/api/image")
+@CrossOrigin({"http://localhost:8081", "http://192.168.1.106:8081/"})
+@RequestMapping(path = "/api/image", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Characteristics", description = "")
 public class ImageController {
 
-    @Autowired
-    private ImageService imageService;
+    private final ImageService imageService;
+
+    public ImageController(ImageService imageService) {
+        this.imageService = imageService;
+    }
 
     /**
      * Gets image get id.
      *
      * @param id       the id
      * @param response the response
-     *
      * @throws IOException the io exception
      */
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    @RequestMapping("/{id}")
     public void getImageGetId(@PathVariable Long id,
                               HttpServletResponse response
     ) throws IOException {
         InputStream in = new ClassPathResource(imageService.findById(id)
-                                                           .getPath()).getInputStream();
+                .getPath()).getInputStream();
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         IOUtils.copy(in, response.getOutputStream());
     }

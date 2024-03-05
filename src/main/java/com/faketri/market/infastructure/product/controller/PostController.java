@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
  */
 @RestController()
 @Log4j2
-@CrossOrigin({ "http://localhost:8081", "http://192.168.1.106:8081/" })
-@RequestMapping(value = "/api/product", method = RequestMethod.POST)
+@CrossOrigin({"http://localhost:8081", "http://192.168.1.106:8081/"})
+@RequestMapping(value = "/api/product", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Product", description = "Operation with product")
 public class PostController {
 
@@ -42,31 +42,28 @@ public class PostController {
      * Gets by filter.
      *
      * @param categoriesId the categories id
-     * @param page_number  the page number
-     * @param page_size    the page size
+     * @param pageNumber   the page number
+     * @param pageSize     the page size
      * @param filter       the filter
-     *
      * @return the by filter
      */
-    @RequestMapping(path = "/categories/{categoriesId}",
-                    method = RequestMethod.POST,
-                    produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Page<Product> getByFilter(
+    @RequestMapping("/categories/{categoriesId}")
+    public Page<Product> getByFilter(
             @PathVariable(value = "categoriesId") Long categoriesId,
             @RequestParam(name = "number", required = true,
-                          defaultValue = "1") Integer page_number,
+                    defaultValue = "1") Integer pageNumber,
             @RequestParam(name = "size", required = true,
-                          defaultValue = "20") Integer page_size,
+                    defaultValue = "20") Integer pageSize,
             @RequestBody() List<Characteristics> filter
     ) {
         log.info("Get product with filer, filter : " + filter.stream()
-                                                             .map((item) -> item.getName() + ": " + item.getValue())
-                                                             .collect(Collectors.joining(
-                                                                     ", ")));
+                .map(item -> item.getName() + ": " + item.getValue())
+                .collect(Collectors.joining(
+                        ", ")));
 
-        return productService.findByCategoriesFilteredCharacteristics(PageRequest.of(page_number, page_size),
-                                                                      categoriesId,
-                                                                      filter
+        return productService.findByCategoriesFilteredCharacteristics(PageRequest.of(pageNumber, pageSize),
+                categoriesId,
+                filter
         );
     }
 
@@ -76,8 +73,7 @@ public class PostController {
      *
      * @param product Object Product
      */
-    @RequestMapping(path = "/save", method = RequestMethod.POST,
-                    produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping("/save")
     public void save(@RequestBody Product product) {
         productService.save(product);
     }
@@ -88,8 +84,7 @@ public class PostController {
      *
      * @param product Object Product
      */
-    @RequestMapping(path = "/update", method = RequestMethod.POST,
-                    produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping("/update")
     public void update(@RequestBody Product product) {
         productService.update(product);
     }
@@ -100,8 +95,7 @@ public class PostController {
      *
      * @param product Object Product
      */
-    @RequestMapping(path = "/delete", method = RequestMethod.POST,
-                    produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping("/delete")
     public void delete(@RequestBody Product product) {
         productService.delete(product);
     }

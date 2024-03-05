@@ -10,9 +10,7 @@ public interface ProductSpecification {
 
     Specification<Product> hasCharacteristics(Characteristics characteristics);
 
-    Specification<Product> hasCharacteristics(
-            List<Characteristics> characteristics
-    );
+    Specification<Product> hasCharacteristics(List<Characteristics> characteristics);
 
     Specification<Product> hasCategories(Long categoriesId);
 

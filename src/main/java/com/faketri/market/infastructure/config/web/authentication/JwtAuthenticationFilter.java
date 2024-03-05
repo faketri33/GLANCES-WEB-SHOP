@@ -1,6 +1,6 @@
 package com.faketri.market.infastructure.config.web.authentication;
 
-import com.faketri.market.usecase.auth.JwtServiceImpl;
+import com.faketri.market.infastructure.config.web.authentication.gateway.JwtService;
 import com.faketri.market.usecase.user.UserDetailsServerImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -30,17 +30,11 @@ import java.io.IOException;
 @Log4j2
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-    /**
-     * The constant BEARER_PREFIX.
-     */
-    public static final String                BEARER_PREFIX = "Bearer ";
-    /**
-     * The constant HEADER_NAME.
-     */
-    public static final String                HEADER_NAME   = "Authorization";
-    private final       JwtServiceImpl        jwtService;
-    private final       UserDetailsServerImpl userDetailsServer;
+    
+    public static final String BEARER_PREFIX = "Bearer ";
+    public static final String HEADER_NAME = "Authorization";
+    private final JwtService jwtService;
+    private final UserDetailsServerImpl userDetailsServer;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -50,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         var authHeader = request.getHeader(HEADER_NAME);
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader,
-                                                                       BEARER_PREFIX
+                BEARER_PREFIX
         )) {
             filterChain.doFilter(request, response);
             return;
@@ -58,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         var jwt = authHeader.substring(BEARER_PREFIX.length());
         var username = jwtService.extractUserName(jwt);
         if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext()
-                                                                     .getAuthentication() == null) {
+                .getAuthentication() == null) {
             UserDetails userDetails =
                     userDetailsServer.loadUserByUsername(username);
             if (jwtService.isTokenValid(jwt, userDetails)) {

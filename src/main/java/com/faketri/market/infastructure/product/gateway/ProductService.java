@@ -15,8 +15,7 @@ public interface ProductService {
 
     Product findById(Long id);
 
-    Page<Product> findByCategories(Long categoriesId, Pageable pageable
-    );
+    Page<Product> findByCategories(Long categoriesId, Pageable pageable);
 
     Page<Product> findPromotionProduct(Pageable pageable);
 

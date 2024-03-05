@@ -1,13 +1,13 @@
 package com.faketri.market;
 
-import com.faketri.market.usecase.brand.BrandService;
-import com.faketri.market.usecase.categories.CategoriesService;
-import com.faketri.market.usecase.characteristics.CharacteristicsService;
-import com.faketri.market.usecase.image.ImageService;
+import com.faketri.market.infastructure.brand.gateway.BrandService;
+import com.faketri.market.infastructure.categories.gateway.CategoriesService;
+import com.faketri.market.infastructure.characteristics.gateway.CharacteristicsService;
+import com.faketri.market.infastructure.image.gateway.ImageService;
+import com.faketri.market.infastructure.promotion.gateway.PromotionService;
+import com.faketri.market.infastructure.rating.gateway.RatingService;
+import com.faketri.market.infastructure.user.gateway.UserService;
 import com.faketri.market.usecase.product.ProductServiceImpl;
-import com.faketri.market.usecase.promotion.PromotionService;
-import com.faketri.market.usecase.rating.RatingService;
-import com.faketri.market.usecase.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -51,7 +51,6 @@ public class MarketApplication {
      * @param brandService           the brand service
      * @param characteristicsService the characteristics service
      * @param imageService           the image service
-     *
      * @return the command line runner
      */
     @Bean

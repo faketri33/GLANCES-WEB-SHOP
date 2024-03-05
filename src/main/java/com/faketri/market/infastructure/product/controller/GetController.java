@@ -2,7 +2,6 @@ package com.faketri.market.infastructure.product.controller;
 
 import com.faketri.market.entity.product.model.Product;
 import com.faketri.market.infastructure.product.gateway.ProductService;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -19,8 +18,8 @@ import java.util.List;
  */
 @RestController()
 @Log4j2
-@CrossOrigin({ "http://localhost:8081", "http://192.168.1.106:8081/" })
-@RequestMapping(value = "/api/product", method = RequestMethod.GET)
+@CrossOrigin({"http://localhost:8081", "http://192.168.1.106:8081/"})
+@RequestMapping(value = "/api/product", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Product", description = "Operation with product")
 public class GetController {
 
@@ -35,10 +34,8 @@ public class GetController {
      *
      * @return Collection of product
      */
-    @ApiResponses()
-    @RequestMapping(path = "/", method = RequestMethod.GET,
-                    produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<Product> getAll() {
+    @RequestMapping("/")
+    public List<Product> getAll() {
         return productService.findAll();
     }
 
@@ -46,78 +43,65 @@ public class GetController {
      * REST service endpoint - '/categories/{categoriesId}?number=1&size=20'
      *
      * @param categoriesId id categories,
-     * @param page_number  number of page product
-     * @param page_size    count item on page
-     *
+     * @param pageNumber   number of page product
+     * @param pageSize     count item on page
      * @return Page products in categories
      */
-    @RequestMapping(path = "/categories/{categoriesId}",
-                    method = RequestMethod.GET,
-                    produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Page<Product> getByCategories(
+    @RequestMapping("/categories/{categoriesId}")
+    public Page<Product> getByCategories(
             @PathVariable(value = "categoriesId") Long categoriesId,
             @RequestParam(name = "number", required = true,
-                          defaultValue = "1") Integer page_number,
+                    defaultValue = "1") Integer pageNumber,
             @RequestParam(name = "size", required = true,
-                          defaultValue = "20") Integer page_size
+                    defaultValue = "20") Integer pageSize
     ) {
         return productService.findByCategories(categoriesId,
-                                               PageRequest.of(page_number,
-                                                              page_size
-                                               )
+                PageRequest.of(pageNumber, pageSize)
         );
     }
 
     /**
      * Gets promotion product.
      *
-     * @param page_number the page number
-     * @param page_size   the page size
-     *
+     * @param pageNumber the page number
+     * @param pageSize   the page size
      * @return the promotion product
      */
-    @RequestMapping(path = "/promotion/", method = RequestMethod.GET,
-                    produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Page<Product> getPromotionProduct(
+    @RequestMapping("/promotion/")
+    public Page<Product> getPromotionProduct(
             @RequestParam(name = "number", required = true,
-                          defaultValue = "1") Integer page_number,
+                    defaultValue = "1") Integer pageNumber,
             @RequestParam(name = "size", required = true,
-                          defaultValue = "20") Integer page_size
+                    defaultValue = "20") Integer pageSize
     ) {
-        return productService.findPromotionProduct(PageRequest.of(page_number,
-                                                                  page_size
-        ));
+        return productService.findPromotionProduct(PageRequest.of(pageNumber, pageSize));
     }
 
     /**
      * REST service endpoint - '/product?number=1&size=20'
      *
-     * @param page_number number of page product
-     * @param page_size   count item on page
-     *
+     * @param pageNumber number of page product
+     * @param pageSize   count item on page
      * @return Page Product
      */
-    @RequestMapping(path = "/product", method = RequestMethod.GET,
-                    produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Page<Product> getAll(
+    @RequestMapping("/product")
+    public Page<Product> getAll(
             @RequestParam(name = "number", required = true,
-                          defaultValue = "1") Integer page_number,
+                    defaultValue = "1") Integer pageNumber,
             @RequestParam(name = "size", required = true,
-                          defaultValue = "20") Integer page_size
+                    defaultValue = "20") Integer pageSize
     ) {
-        return productService.findAll(PageRequest.of(page_number, page_size));
+        return productService.findAll(PageRequest.of(pageNumber, pageSize));
     }
 
     /**
      * REST service endpoint
      *
      * @param productId id product
-     *
      * @return product with productId
      */
-    @RequestMapping(path = "/{productId}", method = RequestMethod.GET,
-                    produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Product getProduct(
+    @RequestMapping("/{productId}")
+    public Product getProduct(
             @PathVariable(value = "productId") Long productId
     ) {
         return productService.findById(productId);
@@ -126,22 +110,18 @@ public class GetController {
     /**
      * REST service endpoint
      *
-     * @param page_number number of page
-     * @param page_size   count item on page
-     *
+     * @param pageNumber number of page
+     * @param pageSize   count item on page
      * @return top-selling product
      */
-    @RequestMapping(path = "/top-selling", method = RequestMethod.GET,
-                    produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Page<Product> getTopSelling(
+    @RequestMapping(path = "/top-selling")
+    public Page<Product> getTopSelling(
             @RequestParam(name = "number", required = true,
-                          defaultValue = "1") Integer page_number,
+                    defaultValue = "1") Integer pageNumber,
             @RequestParam(name = "size", required = true,
-                          defaultValue = "20") Integer page_size
+                    defaultValue = "20") Integer pageSize
     ) {
-        return productService.findTopSelling(PageRequest.of(page_number,
-                                                            page_size
-        ));
+        return productService.findTopSelling(PageRequest.of(pageNumber, pageSize));
     }
 
 }
