@@ -4,41 +4,32 @@ import com.faketri.market.entity.product.model.Product;
 import com.faketri.market.infastructure.characteristics.dto.CharacteristicsRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.type.SqlTypes;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * The type Characteristics.
  *
  * @author Dmitriy Faketri
  */
-@Getter
-@Setter
-@ToString
 @Entity
 public class Characteristics {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    @JdbcTypeCode(SqlTypes.BIGINT)
-    private Long id;
+    private UUID id;
 
     @Column
-    private String       name;
+    private String name;
     @Column
-    private String       value;
+    private String value;
     @ManyToMany(mappedBy = "characteristics", fetch = FetchType.LAZY)
     @JsonIgnore
-    @ToString.Exclude
     private Set<Product> products = new HashSet<>();
 
     /**
@@ -54,7 +45,7 @@ public class Characteristics {
      * @param name  the name
      * @param value the value
      */
-    public Characteristics(Long id, String name, String value) {
+    public Characteristics(UUID id, String name, String value) {
         this.id = id;
         this.name = name;
         this.value = value;
@@ -70,17 +61,49 @@ public class Characteristics {
         value = characteristicsRequest.getValue();
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
         Class<?> oEffectiveClass = o instanceof HibernateProxy
-                ? ( (HibernateProxy) o ).getHibernateLazyInitializer()
-                                        .getPersistentClass()
+                ? ((HibernateProxy) o).getHibernateLazyInitializer()
+                .getPersistentClass()
                 : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy
-                ? ( (HibernateProxy) this ).getHibernateLazyInitializer()
-                                           .getPersistentClass()
+                ? ((HibernateProxy) this).getHibernateLazyInitializer()
+                .getPersistentClass()
                 : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
         Characteristics that = (Characteristics) o;
@@ -90,10 +113,18 @@ public class Characteristics {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy
-                ? ( (HibernateProxy) this ).getHibernateLazyInitializer()
-                                           .getPersistentClass()
-                                           .hashCode()
+                ? ((HibernateProxy) this).getHibernateLazyInitializer()
+                .getPersistentClass()
+                .hashCode()
                 : getClass().hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "Characteristics{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

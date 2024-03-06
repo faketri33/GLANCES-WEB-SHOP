@@ -5,12 +5,12 @@ import com.faketri.market.entity.promotion.gateway.PromotionRepository;
 import com.faketri.market.entity.promotion.model.Promotion;
 import com.faketri.market.infastructure.promotion.gateway.PromotionService;
 import com.faketri.market.usecase.product.ProductServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Promotion service.
@@ -20,22 +20,24 @@ import java.util.List;
 @Service
 public class PromotionServiceImpl implements PromotionService {
 
-    @Autowired
-    private PromotionRepository promotionImpl;
-    @Autowired
-    private ProductServiceImpl  productService;
+    private final PromotionRepository promotionImpl;
+    private final ProductServiceImpl productService;
+
+    public PromotionServiceImpl(PromotionRepository promotionImpl, ProductServiceImpl productService) {
+        this.promotionImpl = promotionImpl;
+        this.productService = productService;
+    }
 
     /**
      * Find by id promotion.
      *
      * @param id the id
-     *
      * @return the promotion
      */
-    public Promotion findById(Long id) {
+    public Promotion findById(UUID id) {
         return promotionImpl.findById(id)
-                            .orElseThrow(() -> new ResourceNotFoundException(
-                                    "Promotion with id - " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Promotion with id - " + id + " not found"));
     }
 
     /**
@@ -51,7 +53,6 @@ public class PromotionServiceImpl implements PromotionService {
      * Find all page.
      *
      * @param pageable the pageable
-     *
      * @return the page
      */
     public Page<Promotion> findAll(Pageable pageable) {
@@ -70,7 +71,6 @@ public class PromotionServiceImpl implements PromotionService {
      * Save promotion.
      *
      * @param promotion the promotion
-     *
      * @return the promotion
      */
     public Promotion save(Promotion promotion) {

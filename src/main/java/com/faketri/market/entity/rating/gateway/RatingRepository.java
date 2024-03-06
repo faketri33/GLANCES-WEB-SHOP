@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 /**
  * The interface Rating repository.
  *
@@ -20,18 +22,16 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
      *
      * @param id       the id
      * @param pageable the pageable
-     *
      * @return the page
      */
-    Page<Rating> findByProduct_Id(Long id, Pageable pageable);
+    Page<Rating> findByProduct_Id(UUID id, Pageable pageable);
 
     /**
      * Count by product id long.
      *
      * @param id the id
-     *
      * @return the long
      */
-    long countByProduct_Id(Long id);
+    long countByProduct_Id(UUID id);
 
 }

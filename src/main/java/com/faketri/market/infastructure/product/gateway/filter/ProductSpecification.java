@@ -5,6 +5,7 @@ import com.faketri.market.entity.product.model.child.Characteristics;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ProductSpecification {
 
@@ -12,7 +13,7 @@ public interface ProductSpecification {
 
     Specification<Product> hasCharacteristics(List<Characteristics> characteristics);
 
-    Specification<Product> hasCategories(Long categoriesId);
+    Specification<Product> hasCategories(UUID categoriesId);
 
     Specification<Product> likeNameAndBrand(String name, String brandName);
 

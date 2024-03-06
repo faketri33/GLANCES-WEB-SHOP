@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The interface Promotion repository.
@@ -12,9 +13,8 @@ import java.util.Optional;
  * @author Dmitriy Faketri
  */
 public interface PromotionRepository extends JpaRepository<Promotion, Long> {
-
-    @Override
-    Optional<Promotion> findById(Long aLong);
+    
+    Optional<Promotion> findById(UUID aLong);
 
     @Override
     List<Promotion> findAll();

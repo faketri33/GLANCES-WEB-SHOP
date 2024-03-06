@@ -4,10 +4,12 @@ import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.user.gateway.UserRepository;
 import com.faketri.market.entity.user.model.Users;
 import com.faketri.market.infastructure.user.gateway.UserService;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 /**
  * The type User service.
@@ -15,38 +17,38 @@ import org.springframework.stereotype.Service;
  * @author Dmitriy Faketri
  */
 @Service
-@Log4j2
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userImpl;
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    private final UserRepository userImpl;
+
+    public UserServiceImpl(UserRepository userImpl) {
+        this.userImpl = userImpl;
+    }
 
     /**
      * Find by login users.
      *
      * @param login the login
-     *
      * @return the users
      */
     public Users findByLogin(String login) {
-        var user = userImpl.findByLogin(login)
-                           .orElseThrow(() -> new ResourceNotFoundException(
-                                   "Пользователь с логином " + login + " не найден"));
-        System.out.println(user);
-        return user;
+        return userImpl.findByLogin(login)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Пользователь с логином " + login + " не найден"));
     }
 
     /**
      * Find by id users.
      *
      * @param id the id
-     *
      * @return the users
      */
-    public Users findById(Long id) {
+    public Users findById(UUID id) {
         return userImpl.findById(id)
-                       .orElseThrow(() -> new ResourceNotFoundException(
-                               "User with id " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User with id " + id + " not found"));
     }
 
     /**
@@ -57,8 +59,8 @@ public class UserServiceImpl implements UserService {
     public Users getCurrentUser() {
         // Получение имени пользователя из контекста Spring Security
         var username = SecurityContextHolder.getContext()
-                                            .getAuthentication()
-                                            .getName();
+                .getAuthentication()
+                .getName();
         return findByLogin(username);
     }
 
@@ -66,11 +68,10 @@ public class UserServiceImpl implements UserService {
      * Save users.
      *
      * @param users the users
-     *
      * @return the users
      */
     public Users save(Users users) {
-        log.info("User with login - " + users.getLogin() + " saved");
+        log.info(String.format("User with login - %s saved"), users.getLogin());
         return userImpl.save(users);
     }
 

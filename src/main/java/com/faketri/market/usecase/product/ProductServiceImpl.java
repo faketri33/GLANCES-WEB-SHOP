@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Product service.
@@ -63,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
      * @param id the id
      * @return the product
      */
-    public Product findById(Long id) {
+    public Product findById(UUID id) {
         return productImpl.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Product with id " + id + " not found"));
@@ -77,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
      * @param pageable     the pageable
      * @return the page
      */
-    public Page<Product> findByCategories(Long categoriesId, Pageable pageable
+    public Page<Product> findByCategories(UUID categoriesId, Pageable pageable
     ) {
         return productImpl.findAll(productSpecification.hasCategories(
                 categoriesId), pageable);
@@ -118,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
      * @return the page
      */
     public Page<Product> findByCategoriesFilteredCharacteristics(
-            Pageable pageable, Long categoriesId,
+            Pageable pageable, UUID categoriesId,
             List<Characteristics> characteristics
     ) {
         return productImpl.findAll(productSpecification.hasCategories(
@@ -143,15 +144,9 @@ public class ProductServiceImpl implements ProductService {
      * Update int.
      *
      * @param product the product
-     * @return the int
      */
-    public int update(Product product) {
-        return productImpl.update(product.getNameModel(),
-                product.getPrice(),
-                product.getQuantitySold(),
-                product.getQuantity(),
-                product.getId()
-        );
+    public void update(Product product) {
+        productImpl.save(product);
     }
 
     /**
@@ -160,12 +155,7 @@ public class ProductServiceImpl implements ProductService {
      * @param products the products
      */
     public void update(List<Product> products) {
-        products.forEach(product -> productImpl.update(product.getNameModel(),
-                product.getPrice(),
-                product.getQuantitySold(),
-                product.getQuantity(),
-                product.getId()
-        ));
+        products.forEach(productImpl::save);
     }
 
     /**

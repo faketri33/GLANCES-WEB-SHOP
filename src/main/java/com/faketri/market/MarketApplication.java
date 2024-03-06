@@ -1,5 +1,10 @@
 package com.faketri.market;
 
+import com.faketri.market.entity.image.model.Image;
+import com.faketri.market.entity.product.model.Product;
+import com.faketri.market.entity.product.model.child.Brand;
+import com.faketri.market.entity.product.model.child.Categories;
+import com.faketri.market.entity.product.model.child.Characteristics;
 import com.faketri.market.infastructure.brand.gateway.BrandService;
 import com.faketri.market.infastructure.categories.gateway.CategoriesService;
 import com.faketri.market.infastructure.characteristics.gateway.CharacteristicsService;
@@ -15,6 +20,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The type Market application.
  *
@@ -23,9 +32,6 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class MarketApplication {
 
-    /**
-     * The Log.
-     */
     static final Logger log = LoggerFactory.getLogger(MarketApplication.class);
 
     /**
@@ -63,35 +69,35 @@ public class MarketApplication {
             ImageService imageService
     ) {
         return args -> {
-            /*Categories categories = categoriesService.save(new Categories(null,
-                                                                          "Холодильники",
-                                                                          imageService.save(
-                                                                                  new Image(
-                                                                                          null,
-                                                                                          "images/pingvinus.png"
-                                                                                  ))
+            Categories categories = categoriesService.save(new Categories(null,
+                    "Холодильники",
+                    imageService.save(
+                            new Image(
+                                    null,
+                                    "images/pingvinus.png"
+                            ))
             ));
 
             Categories smartphone = categoriesService.save(new Categories(null,
-                                                                          "Смартфоны",
-                                                                          imageService.save(
-                                                                                  new Image(
-                                                                                          null,
-                                                                                          "images/Mask-group.png"
-                                                                                  ))
+                    "Смартфоны",
+                    imageService.save(
+                            new Image(
+                                    null,
+                                    "images/Mask-group.png"
+                            ))
             ));
 
             List<Product> products = new ArrayList<>();
 
             Product product = new Product(null,
-                                          brandService.save(new Brand(null,
-                                                                      "Samsung"
-                                          )),
-                                          "RB30A30N0WW/WT",
-                                          categories,
-                                          46999L,
-                                          10,
-                                          0
+                    brandService.save(new Brand(null,
+                            "Samsung"
+                    )),
+                    "RB30A30N0WW/WT",
+                    categories,
+                    BigDecimal.valueOf(46999),
+                    10,
+                    0
             );
 
             product.getImage().addAll(List.of(
@@ -101,74 +107,74 @@ public class MarketApplication {
 
             product.getCharacteristics().addAll(List.of(
                     characteristicsService.save(new Characteristics(null,
-                                                                    "Общий объем",
-                                                                    "332л"
+                            "Общий объем",
+                            "332л"
                     )),
                     characteristicsService.save(new Characteristics(null,
-                                                                    "Количество компрессоров",
-                                                                    "1"
+                            "Количество компрессоров",
+                            "1"
                     )),
                     characteristicsService.save(new Characteristics(null,
-                                                                    "Система размораживания морозильной камеры",
-                                                                    "No Frost"
+                            "Система размораживания морозильной камеры",
+                            "No Frost"
                     ))
             ));
 
             products.add(new Product(null,
-                                     brandService.save(new Brand(null,
-                                                                 "Samsung"
-                                     )),
-                                     "S24",
-                                     smartphone,
-                                     184000L,
-                                     100,
-                                     20
+                    brandService.save(new Brand(null,
+                            "Samsung"
+                    )),
+                    "S24",
+                    smartphone,
+                    BigDecimal.valueOf(184000),
+                    100,
+                    20
             ));
             products.add(new Product(null,
-                                     brandService.save(new Brand(null,
-                                                                 "Apple"
-                                     )),
-                                     "Pro Max 14",
-                                     smartphone,
-                                     154000L,
-                                     230,
-                                     1240
+                    brandService.save(new Brand(null,
+                            "Apple"
+                    )),
+                    "Pro Max 14",
+                    smartphone,
+                    BigDecimal.valueOf(154000),
+                    230,
+                    1240
             ));
 
             products.get(0)
                     .getImage()
                     .add(imageService.save(new Image(null,
-                                                     "images/samsung-galaxy-s23.png"
+                            "images/samsung-galaxy-s23.png"
                     )));
             products.get(0).getCharacteristics().addAll(List.of(
                     characteristicsService.save(new Characteristics(null,
-                                                                    "Диагональ экрана",
-                                                                    "6.7\""
+                            "Диагональ экрана",
+                            "6.7"
                     )),
                     characteristicsService.save(new Characteristics(null,
-                                                                    "Аккумулятор",
-                                                                    "5500 мА*ч"
+                            "Аккумулятор",
+                            "5500 мА*ч"
                     ))
             ));
 
             products.get(1)
                     .getImage()
                     .add(imageService.save(new Image(null,
-                                                     "images/iphone-14.png"
+                            "images/iphone-14.png"
                     )));
             products.get(1).getCharacteristics().addAll(List.of(
                     characteristicsService.save(new Characteristics(null,
-                                                                    "Диагональ экрана",
-                                                                    "6.1"
+                            "Диагональ экрана",
+                            "6.1"
                     )),
                     characteristicsService.save(new Characteristics(null,
-                                                                    "Аккумулятор",
-                                                                    "3279 мА*ч"
+                            "Аккумулятор",
+                            "3279 мА*ч"
                     ))
             ));
 
             productService.save(product);
-            products.forEach(productService::save);*/
+            products.forEach(productService::save);
         };
     }
 

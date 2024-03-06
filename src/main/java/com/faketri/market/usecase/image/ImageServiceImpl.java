@@ -4,12 +4,12 @@ import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.image.gateway.ImageRepository;
 import com.faketri.market.entity.image.model.Image;
 import com.faketri.market.infastructure.image.gateway.ImageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Image service.
@@ -19,20 +19,22 @@ import java.util.List;
 @Service
 public class ImageServiceImpl implements ImageService {
 
-    @Autowired
-    private ImageRepository imageImpl;
+    private final ImageRepository imageImpl;
+
+    public ImageServiceImpl(ImageRepository imageImpl) {
+        this.imageImpl = imageImpl;
+    }
 
     /**
      * Find by id image.
      *
      * @param id the id
-     *
      * @return the image
      */
-    public Image findById(Long id) {
+    public Image findById(UUID id) {
         return imageImpl.findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException(
-                                "Image with id - " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Image with id - " + id + " not found"));
     }
 
     /**
@@ -48,7 +50,6 @@ public class ImageServiceImpl implements ImageService {
      * Find all page.
      *
      * @param pageable the pageable
-     *
      * @return the page
      */
     public Page<Image> findAll(Pageable pageable) {
@@ -59,21 +60,14 @@ public class ImageServiceImpl implements ImageService {
      * Save image.
      *
      * @param entity the entity
-     *
      * @return the image
      */
     public Image save(Image entity) {
         return imageImpl.findFirstByPath(entity.getPath())
-                        .orElse(imageImpl.save(entity));
+                .orElse(imageImpl.save(entity));
     }
 
-    /**
-     * Update boolean.
-     *
-     * @param entity the entity
-     *
-     * @return the boolean
-     */
+    @Override
     public Boolean update(Image entity) {
         return null;
     }

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The interface Brand repository.
@@ -23,7 +24,6 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
      *
      * @param name the name
      * @param id   the id
-     *
      * @return the int
      */
     @Transactional
@@ -31,20 +31,17 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
     @Query("update Brand b set b.name = ?1 where b.id = ?2")
     int updateNameById(String name, Long id);
 
-    @Override
-    Optional<Brand> findById(Long aLong);
+    Optional<Brand> findById(UUID aLong);
 
     @Override
     List<Brand> findAll();
 
-    @Override
-    void deleteById(Long aLong);
+    void deleteById(UUID aLong);
 
     /**
      * Find by name optional.
      *
      * @param name the name
-     *
      * @return the optional
      */
     Optional<Brand> findByName(String name);

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The interface Categories repository.
@@ -15,11 +16,9 @@ import java.util.Optional;
 @Repository
 public interface CategoriesRepository extends JpaRepository<Categories, Long> {
 
-    @Override
-    Optional<Categories> findById(Long aLong);
+    Optional<Categories> findById(UUID aLong);
 
-    @Override
-    void deleteById(Long aLong);
+    void deleteById(UUID aLong);
 
     @Override
     List<Categories> findAll();
@@ -28,7 +27,6 @@ public interface CategoriesRepository extends JpaRepository<Categories, Long> {
      * Exists by name boolean.
      *
      * @param name the name
-     *
      * @return the boolean
      */
     boolean existsByName(String name);
@@ -37,7 +35,6 @@ public interface CategoriesRepository extends JpaRepository<Categories, Long> {
      * Find by name optional.
      *
      * @param name the name
-     *
      * @return the optional
      */
     Optional<Categories> findByName(String name);

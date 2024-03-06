@@ -9,6 +9,7 @@ import com.faketri.market.entity.user.model.Users;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * The type User response.
@@ -17,7 +18,7 @@ import java.util.Set;
  */
 public class UserResponse {
 
-    private Long id;
+    private UUID id;
 
     private String email;
 
@@ -41,7 +42,10 @@ public class UserResponse {
 
     private LocalDateTime dateOfBirthday;
 
-    public UserResponse(Long id, String email, Image profileImage, String login,
+    public UserResponse() {
+    }
+
+    public UserResponse(UUID id, String email, Image profileImage, String login,
                         String name, String surname, String city,
                         Set<ERole> role, Set<Orders> orders,
                         Set<Product> favoriteProduct,
@@ -63,25 +67,25 @@ public class UserResponse {
 
     public static UserResponse mapUser(Users user) {
         return new UserResponse(user.getId(),
-                                user.getEmail(),
-                                user.getProfileImage(),
-                                user.getLogin(),
-                                user.getName(),
-                                user.getSurname(),
-                                user.getCity(),
-                                user.getRole(),
-                                user.getOrders(),
-                                user.getFavoriteProduct(),
-                                user.getDateOfCreate(),
-                                user.getDateOfBirthday()
+                user.getEmail(),
+                user.getProfileImage(),
+                user.getLogin(),
+                user.getName(),
+                user.getSurname(),
+                user.getCity(),
+                user.getRole(),
+                user.getOrders(),
+                user.getFavoriteProduct(),
+                user.getDateOfCreate(),
+                user.getDateOfBirthday()
         );
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -181,7 +185,7 @@ public class UserResponse {
         if (object == null || getClass() != object.getClass()) return false;
         UserResponse that = (UserResponse) object;
         return Objects.equals(id, that.id) && Objects.equals(email,
-                                                             that.email
+                that.email
         ) && Objects.equals(
                 login,
                 that.login

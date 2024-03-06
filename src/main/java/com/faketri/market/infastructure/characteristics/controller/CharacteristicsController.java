@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Characteristics controller.
@@ -33,7 +34,7 @@ public class CharacteristicsController {
      */
     @RequestMapping("/product/{categoryId}")
     public List<Characteristics> findCharacteristicsByProductCategory(
-            @PathVariable(name = "categoryId") Long categoryId
+            @PathVariable(name = "categoryId") UUID categoryId
     ) {
         return characteristicsService.findCharacteristicsByProductCategory(
                 categoryId);

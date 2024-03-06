@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The interface Characteristics repository.
@@ -33,7 +34,6 @@ public interface CharacteristicsRepository
      * @param name  the name
      * @param value the value
      * @param id    the id
-     *
      * @return the int
      */
     @Transactional
@@ -45,18 +45,16 @@ public interface CharacteristicsRepository
      * Find distinct by products categories id list.
      *
      * @param id the id
-     *
      * @return the list
      */
     @Query("select distinct c from Characteristics c inner join c.products products where products.categories.id = ?1")
-    List<Characteristics> findDistinctByProducts_Categories_Id(Long id);
+    List<Characteristics> findDistinctByProducts_Categories_Id(UUID id);
 
     /**
      * Find by name and value optional.
      *
      * @param name  the name
      * @param value the value
-     *
      * @return the optional
      */
     Optional<Characteristics> findByNameAndValue(String name, String value);

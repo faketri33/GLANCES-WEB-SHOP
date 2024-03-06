@@ -1,41 +1,40 @@
-package com.faketri.market.entity.product.model.child;
+package com.faketri.market.entity.basket.model;
 
+import com.faketri.market.entity.product.model.Product;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * The type Brand.
- *
- * @author Dmitriy Faketri
- */
 @Entity
-public class Brand {
-
+@Table
+public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
+    @OneToMany
+    List<Product> products = new ArrayList<>();
     @Column
-    private String name;
+    private BigDecimal price;
 
-    /**
-     * Instantiates a new Brand.
-     */
-    public Brand() {
+    public Basket() {
     }
 
-    /**
-     * Instantiates a new Brand.
-     *
-     * @param id   the id
-     * @param name the name
-     */
-    public Brand(UUID id, String name) {
+    public Basket(UUID id, List<Product> products, BigDecimal price) {
         this.id = id;
-        this.name = name;
+        this.products = products;
+        this.price = price;
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void updatePrice() {
+        products.forEach(product -> price = price.add(product.getPrice()));
     }
 
     public UUID getId() {
@@ -46,12 +45,20 @@ public class Brand {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     @Override
@@ -67,8 +74,8 @@ public class Brand {
                 .getPersistentClass()
                 : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Brand brand = (Brand) o;
-        return getId() != null && Objects.equals(getId(), brand.getId());
+        Basket basket = (Basket) o;
+        return getId() != null && Objects.equals(getId(), basket.getId());
     }
 
     @Override
@@ -78,13 +85,5 @@ public class Brand {
                 .getPersistentClass()
                 .hashCode()
                 : getClass().hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "Brand{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
     }
 }

@@ -2,8 +2,6 @@ package com.faketri.market.usecase.user;
 
 import com.faketri.market.entity.user.model.Users;
 import com.faketri.market.infastructure.user.gateway.UserService;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,16 +14,23 @@ import org.springframework.stereotype.Service;
  *
  * @author Dmitriy Faketri
  */
-@Getter
+
 @Service
 public class UserDetailsServerImpl implements UserDetailsService {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserDetailsServerImpl(UserService userService) {
+        this.userService = userService;
+    }
+
+    public UserService getUserService() {
+        return userService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws
-                                                           UsernameNotFoundException {
+            UsernameNotFoundException {
         return generateUserDetails(userService.findByLogin(username));
     }
 
@@ -33,7 +38,6 @@ public class UserDetailsServerImpl implements UserDetailsService {
      * Generate user details user details.
      *
      * @param users the users
-     *
      * @return the user details
      */
     public UserDetails generateUserDetails(Users users) {
@@ -41,9 +45,9 @@ public class UserDetailsServerImpl implements UserDetailsService {
                 users.getLogin(),
                 users.getPassword(),
                 users.getRole()
-                     .stream()
-                     .map(x -> new SimpleGrantedAuthority(x.name()))
-                     .toList()
+                        .stream()
+                        .map(x -> new SimpleGrantedAuthority(x.name()))
+                        .toList()
         );
     }
 

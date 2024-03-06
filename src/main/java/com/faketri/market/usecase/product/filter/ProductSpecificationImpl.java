@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Component
 public class ProductSpecificationImpl implements ProductSpecification {
@@ -19,8 +19,8 @@ public class ProductSpecificationImpl implements ProductSpecification {
             Characteristics characteristics
     ) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join(
-                                                                               "characteristics").get("id"),
-                                                                       characteristics.getId()
+                        "characteristics").get("id"),
+                characteristics.getId()
         );
     }
 
@@ -28,19 +28,18 @@ public class ProductSpecificationImpl implements ProductSpecification {
             List<Characteristics> characteristics
     ) {
         return (root, query, criteriaBuilder) -> root.join("characteristics")
-                                                     .get("id")
-                                                     .in(characteristics.stream()
-                                                                        .map(Characteristics::getId)
-                                                                        .collect(
-                                                                                Collectors.toList()));
+                .get("id")
+                .in(characteristics.stream()
+                        .map(Characteristics::getId)
+                        .toList());
     }
 
-    public Specification<Product> hasCategories(Long categoriesId) {
+    public Specification<Product> hasCategories(UUID categoriesId) {
         return (root, query, criteriaBuilder) -> {
             Join<Categories, Product> productCategories =
                     root.join("categories");
             return criteriaBuilder.equal(productCategories.get("id"),
-                                         categoriesId
+                    categoriesId
             );
         };
     }
@@ -51,12 +50,12 @@ public class ProductSpecificationImpl implements ProductSpecification {
             Join<Brand, Product> brandProductJoin = root.join("brand");
 
             return criteriaBuilder.and(criteriaBuilder.like(root.get("nameModel"),
-                                                            name
-                                       ),
-                                       criteriaBuilder.like(
-                                               brandProductJoin.get("brand_name"),
-                                               brandName
-                                       )
+                            name
+                    ),
+                    criteriaBuilder.like(
+                            brandProductJoin.get("brand_name"),
+                            brandName
+                    )
             );
         };
     }

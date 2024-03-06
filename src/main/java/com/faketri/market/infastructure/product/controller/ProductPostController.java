@@ -6,13 +6,15 @@ import com.faketri.market.entity.product.model.child.Characteristics;
 import com.faketri.market.infastructure.product.gateway.ProductService;
 import com.faketri.market.usecase.product.ProductServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -21,11 +23,12 @@ import java.util.stream.Collectors;
  * @author Dmitriy Faketri
  */
 @RestController()
-@Log4j2
 @CrossOrigin({"http://localhost:8081", "http://192.168.1.106:8081/"})
 @RequestMapping(value = "/api/product", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Product", description = "Operation with product")
-public class PostController {
+public class ProductPostController {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final ProductService productService;
 
@@ -34,7 +37,7 @@ public class PostController {
      *
      * @param productService the product service
      */
-    public PostController(ProductServiceImpl productService) {
+    public ProductPostController(ProductServiceImpl productService) {
         this.productService = productService;
     }
 
@@ -49,7 +52,7 @@ public class PostController {
      */
     @RequestMapping("/categories/{categoriesId}")
     public Page<Product> getByFilter(
-            @PathVariable(value = "categoriesId") Long categoriesId,
+            @PathVariable(value = "categoriesId") UUID categoriesId,
             @RequestParam(name = "number", required = true,
                     defaultValue = "1") Integer pageNumber,
             @RequestParam(name = "size", required = true,
@@ -86,7 +89,7 @@ public class PostController {
      */
     @RequestMapping("/update")
     public void update(@RequestBody Product product) {
-        productService.update(product);
+        productService.save(product);
     }
 
     /**

@@ -7,13 +7,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The interface Product repository.
@@ -25,6 +23,8 @@ public interface ProductRepository
         extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
     Optional<Product> findOne(Specification<Product> spec);
+
+    Optional<Product> findById(UUID id);
 
     List<Product> findAll(Specification<Product> spec);
 
@@ -39,12 +39,4 @@ public interface ProductRepository
     long delete(Specification<Product> spec);
 
     void delete(Product product);
-
-    @Transactional
-    @Modifying
-    @Query("update Product p set p.nameModel = ?1, p.price = ?2, p.quantity = ?3, p.quantitySold = ?4 where p.id = ?5")
-    int update(String nameModel, Long price, int quantity, int quantitySold,
-               Long id
-    );
-
 }

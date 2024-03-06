@@ -6,16 +6,13 @@ import com.faketri.market.entity.product.model.child.Categories;
 import com.faketri.market.entity.product.model.child.Characteristics;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.type.SqlTypes;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 
 /**
@@ -23,42 +20,36 @@ import java.util.Set;
  *
  * @author Dmitriy Faketri
  */
-@Getter
-@Setter
-@ToString
 @Entity
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    @JdbcTypeCode(SqlTypes.BIGINT)
-    private Long                 id;
+    private UUID id;
     @ManyToOne
-    private Brand                brand;
+    private Brand brand;
     @Column
-    private String               nameModel;
+    private String nameModel;
     @ManyToOne
-    private Categories           categories;
+    private Categories categories;
     @OneToMany(fetch = FetchType.EAGER)
-    @ToString.Exclude
-    private Set<Image>           image           = new HashSet<>();
+    private Set<Image> image = new HashSet<>();
     @ManyToMany(fetch = FetchType.EAGER)
-    @ToString.Exclude
     private Set<Characteristics> characteristics = new HashSet<>();
     @Column
-    private Long                 price;
+    private BigDecimal price;
     @Column
-    private Long                 promoPrice      = (Long) 0L;
+    private BigDecimal promoPrice = BigDecimal.ZERO;
     @Column
-    private Boolean              isPromoItem     = (Boolean) false;
+    private Boolean isPromoItem = false;
     @Column
-    private Short                discount;
+    private Short discount;
     @Min(0)
     @Column(nullable = false)
-    private int                  quantity;
+    private int quantity;
     @Column
-    private int                  quantitySold    = 0;
+    private int quantitySold = 0;
 
     /**
      * Instantiates a new Product.
@@ -77,8 +68,8 @@ public class Product {
      * @param quantity     the quantity
      * @param quantitySold the quantity sold
      */
-    public Product(Long id, Brand brand, String nameModel,
-                   Categories categories, Long price, int quantity,
+    public Product(UUID id, Brand brand, String nameModel,
+                   Categories categories, BigDecimal price, int quantity,
                    int quantitySold
     ) {
         this.id = id;
@@ -90,17 +81,113 @@ public class Product {
         this.quantitySold = quantitySold;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
+    }
+
+    public String getNameModel() {
+        return nameModel;
+    }
+
+    public void setNameModel(String nameModel) {
+        this.nameModel = nameModel;
+    }
+
+    public Categories getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Categories categories) {
+        this.categories = categories;
+    }
+
+    public Set<Image> getImage() {
+        return image;
+    }
+
+    public void setImage(Set<Image> image) {
+        this.image = image;
+    }
+
+    public Set<Characteristics> getCharacteristics() {
+        return characteristics;
+    }
+
+    public void setCharacteristics(Set<Characteristics> characteristics) {
+        this.characteristics = characteristics;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getPromoPrice() {
+        return promoPrice;
+    }
+
+    public void setPromoPrice(BigDecimal promoPrice) {
+        this.promoPrice = promoPrice;
+    }
+
+    public Boolean getPromoItem() {
+        return isPromoItem;
+    }
+
+    public void setPromoItem(Boolean promoItem) {
+        isPromoItem = promoItem;
+    }
+
+    public Short getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Short discount) {
+        this.discount = discount;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getQuantitySold() {
+        return quantitySold;
+    }
+
+    public void setQuantitySold(int quantitySold) {
+        this.quantitySold = quantitySold;
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
         Class<?> oEffectiveClass = o instanceof HibernateProxy
-                ? ( (HibernateProxy) o ).getHibernateLazyInitializer()
-                                        .getPersistentClass()
+                ? ((HibernateProxy) o).getHibernateLazyInitializer()
+                .getPersistentClass()
                 : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy
-                ? ( (HibernateProxy) this ).getHibernateLazyInitializer()
-                                           .getPersistentClass()
+                ? ((HibernateProxy) this).getHibernateLazyInitializer()
+                .getPersistentClass()
                 : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
         Product product = (Product) o;
@@ -110,10 +197,25 @@ public class Product {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy
-                ? ( (HibernateProxy) this ).getHibernateLazyInitializer()
-                                           .getPersistentClass()
-                                           .hashCode()
+                ? ((HibernateProxy) this).getHibernateLazyInitializer()
+                .getPersistentClass()
+                .hashCode()
                 : getClass().hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", brand=" + brand +
+                ", nameModel='" + nameModel + '\'' +
+                ", categories=" + categories +
+                ", price=" + price +
+                ", promoPrice=" + promoPrice +
+                ", isPromoItem=" + isPromoItem +
+                ", discount=" + discount +
+                ", quantity=" + quantity +
+                ", quantitySold=" + quantitySold +
+                '}';
+    }
 }

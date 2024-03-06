@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Promotion controller.
@@ -42,7 +43,7 @@ public class PromotionController {
      * @return the promotion
      */
     @RequestMapping("/{id}")
-    public Promotion findById(@PathVariable("id") Long id) {
+    public Promotion findById(@PathVariable("id") UUID id) {
         return promotionService.findById(id);
     }
 

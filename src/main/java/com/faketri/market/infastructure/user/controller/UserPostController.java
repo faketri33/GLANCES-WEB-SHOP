@@ -3,7 +3,8 @@ package com.faketri.market.infastructure.user.controller;
 import com.faketri.market.entity.product.model.Product;
 import com.faketri.market.entity.user.model.Users;
 import com.faketri.market.infastructure.user.gateway.UserService;
-import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,14 +14,15 @@ import org.springframework.web.bind.annotation.*;
  * @author Dmitriy Faketri
  */
 @RestController
-@Log4j2
 @CrossOrigin({"http://localhost:8081", "http://192.168.1.106:8081/"})
 @RequestMapping(path = "/api/user", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-public class PostController {
+public class UserPostController {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final UserService userService;
 
-    public PostController(UserService userService) {
+    public UserPostController(UserService userService) {
         this.userService = userService;
     }
 

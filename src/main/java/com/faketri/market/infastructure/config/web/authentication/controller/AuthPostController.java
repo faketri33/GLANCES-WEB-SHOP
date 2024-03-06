@@ -6,21 +6,23 @@ import com.faketri.market.infastructure.user.dto.SignUpRequest;
 import com.faketri.market.infastructure.user.dto.UserResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Log4j2
 @RestController
 @CrossOrigin({"http://localhost:8081", "http://192.168.1.106:8081/"})
-@RequestMapping(value = "/api/auth", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/auth", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Auth", description = "...")
-public class Post {
+public class AuthPostController {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final AuthService authService;
 
-    public Post(AuthService authService) {
+    public AuthPostController(AuthService authService) {
         this.authService = authService;
     }
 

@@ -2,35 +2,27 @@ package com.faketri.market.entity.product.model.child;
 
 import com.faketri.market.entity.image.model.Image;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.type.SqlTypes;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The type Categories.
  *
  * @author Dmitriy Faketri
  */
-@Getter
-@Setter
-@ToString
 @Entity
 public class Categories {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    @JdbcTypeCode(SqlTypes.BIGINT)
-    private Long   id;
+    private UUID id;
     @Column
     private String name;
     @OneToOne()
-    private Image  image;
+    private Image image;
 
     /**
      * Instantiates a new Categories.
@@ -45,9 +37,33 @@ public class Categories {
      * @param name  the name
      * @param image the image
      */
-    public Categories(Long id, String name, Image image) {
+    public Categories(UUID id, String name, Image image) {
         this.id = id;
         this.name = name;
+        this.image = image;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
         this.image = image;
     }
 
@@ -56,12 +72,12 @@ public class Categories {
         if (this == o) return true;
         if (o == null) return false;
         Class<?> oEffectiveClass = o instanceof HibernateProxy
-                ? ( (HibernateProxy) o ).getHibernateLazyInitializer()
-                                        .getPersistentClass()
+                ? ((HibernateProxy) o).getHibernateLazyInitializer()
+                .getPersistentClass()
                 : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy
-                ? ( (HibernateProxy) this ).getHibernateLazyInitializer()
-                                           .getPersistentClass()
+                ? ((HibernateProxy) this).getHibernateLazyInitializer()
+                .getPersistentClass()
                 : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
         Categories that = (Categories) o;
@@ -71,10 +87,18 @@ public class Categories {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy
-                ? ( (HibernateProxy) this ).getHibernateLazyInitializer()
-                                           .getPersistentClass()
-                                           .hashCode()
+                ? ((HibernateProxy) this).getHibernateLazyInitializer()
+                .getPersistentClass()
+                .hashCode()
                 : getClass().hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "Categories{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", image=" + image +
+                '}';
+    }
 }

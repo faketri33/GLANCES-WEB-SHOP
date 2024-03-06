@@ -3,13 +3,15 @@ package com.faketri.market.infastructure.product.controller;
 import com.faketri.market.entity.product.model.Product;
 import com.faketri.market.infastructure.product.gateway.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Product controller.
@@ -17,15 +19,16 @@ import java.util.List;
  * @author Dmitriy Faketri
  */
 @RestController()
-@Log4j2
 @CrossOrigin({"http://localhost:8081", "http://192.168.1.106:8081/"})
 @RequestMapping(value = "/api/product", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Product", description = "Operation with product")
-public class GetController {
+public class ProductGetController {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final ProductService productService;
 
-    public GetController(ProductService productService) {
+    public ProductGetController(ProductService productService) {
         this.productService = productService;
     }
 
@@ -49,7 +52,7 @@ public class GetController {
      */
     @RequestMapping("/categories/{categoriesId}")
     public Page<Product> getByCategories(
-            @PathVariable(value = "categoriesId") Long categoriesId,
+            @PathVariable(value = "categoriesId") UUID categoriesId,
             @RequestParam(name = "number", required = true,
                     defaultValue = "1") Integer pageNumber,
             @RequestParam(name = "size", required = true,
@@ -102,7 +105,7 @@ public class GetController {
      */
     @RequestMapping("/{productId}")
     public Product getProduct(
-            @PathVariable(value = "productId") Long productId
+            @PathVariable(value = "productId") UUID productId
     ) {
         return productService.findById(productId);
     }

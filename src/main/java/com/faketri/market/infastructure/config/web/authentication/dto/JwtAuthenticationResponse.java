@@ -2,10 +2,6 @@ package com.faketri.market.infastructure.config.web.authentication.dto;
 
 import com.faketri.market.infastructure.user.dto.UserResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
 /**
@@ -13,10 +9,6 @@ import lombok.NoArgsConstructor;
  *
  * @author Dmitriy Faketri
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Schema(description = "Ответ c токеном доступа")
 public class JwtAuthenticationResponse {
 
@@ -24,7 +16,31 @@ public class JwtAuthenticationResponse {
     private UserResponse user;
     @Schema(description = "Токен доступа",
             example = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTYyMjUwNj...")
-    private String       token;
+    private String token;
+
+    public JwtAuthenticationResponse() {
+    }
+
+    public JwtAuthenticationResponse(UserResponse user, String token) {
+        this.user = user;
+        this.token = token;
+    }
+
+    public UserResponse getUser() {
+        return user;
+    }
+
+    public void setUser(UserResponse user) {
+        this.user = user;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     @Override
     public String toString() {
