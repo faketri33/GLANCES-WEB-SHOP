@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Dmitriy Faketri
  */
-@RestController()
+@RestController
 @CrossOrigin({"http://localhost:8081", "http://192.168.1.106:8081/"})
 @RequestMapping(value = "/api/categories", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "categories", description = "Operation with categories")

@@ -1,4 +1,4 @@
-import Categories from "@/entities/categories/model/Categories";
+import { Categories } from "@/entities/categories/model/Categories";
 import { $axios } from "@/shared/client/AxiosClient";
 
 export const CategoriesAction = {

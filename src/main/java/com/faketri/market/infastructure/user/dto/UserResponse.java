@@ -1,10 +1,10 @@
 package com.faketri.market.infastructure.user.dto;
 
+import com.faketri.market.entity.basket.model.Basket;
 import com.faketri.market.entity.image.model.Image;
 import com.faketri.market.entity.order.model.Orders;
 import com.faketri.market.entity.product.model.Product;
 import com.faketri.market.entity.user.model.ERole;
-import com.faketri.market.entity.user.model.Users;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -30,6 +30,8 @@ public class UserResponse {
 
     private String surname;
 
+    private Basket basket;
+
     private String city;
 
     private Set<ERole> role;
@@ -45,40 +47,13 @@ public class UserResponse {
     public UserResponse() {
     }
 
-    public UserResponse(UUID id, String email, Image profileImage, String login,
-                        String name, String surname, String city,
-                        Set<ERole> role, Set<Orders> orders,
-                        Set<Product> favoriteProduct,
-                        LocalDateTime dateOfCreate, LocalDateTime dateOfBirthday
-    ) {
+    public UserResponse(UUID id, String email, Image profileImage, String login, String name, String surname) {
         this.id = id;
         this.email = email;
         this.profileImage = profileImage;
         this.login = login;
         this.name = name;
         this.surname = surname;
-        this.city = city;
-        this.role = role;
-        this.orders = orders;
-        this.favoriteProduct = favoriteProduct;
-        this.dateOfCreate = dateOfCreate;
-        this.dateOfBirthday = dateOfBirthday;
-    }
-
-    public static UserResponse mapUser(Users user) {
-        return new UserResponse(user.getId(),
-                user.getEmail(),
-                user.getProfileImage(),
-                user.getLogin(),
-                user.getName(),
-                user.getSurname(),
-                user.getCity(),
-                user.getRole(),
-                user.getOrders(),
-                user.getFavoriteProduct(),
-                user.getDateOfCreate(),
-                user.getDateOfBirthday()
-        );
     }
 
     public UUID getId() {
@@ -127,6 +102,14 @@ public class UserResponse {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public Basket getBasket() {
+        return basket;
+    }
+
+    public void setBasket(Basket basket) {
+        this.basket = basket;
     }
 
     public String getCity() {

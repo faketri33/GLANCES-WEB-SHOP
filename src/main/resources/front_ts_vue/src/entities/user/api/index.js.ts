@@ -1,30 +1,23 @@
 import { defineStore } from "pinia";
-import User from "@/entities/user/model/User";
-import {
-  ErrorResponse,
-  UserActions,
-  UserResponse,
-} from "@/entities/user/api/model/actions";
-import { ref } from "vue";
+import { User } from "@/entities/user/model/User";
+import { UserActions } from "@/entities/user/api/model/actions";
 import { $axios } from "@/shared/client/AxiosClient";
 import { Product } from "@/entities/product/model/Product";
+import { RequestExceptions } from "@/shared/exceptions/RequestExceptions";
 
 export const userStoreModule = defineStore("user", {
   state: () => ({
     user: {} as User,
-    isLogin: ref(!!localStorage.getItem("token")),
-    isLoading: ref(true),
-    errorMessage: new ErrorResponse(),
+    isLogin: !localStorage.getItem("token"),
+    isLoading: true,
+    errorMessage: {} as RequestExceptions,
   }),
   getters: {
     getUser: (state) => {
       return state.user;
     },
     isLikedProduct: (state) => {
-      return (product: Product) =>
-        state.user.favoriteProduct instanceof Set
-          ? state.user.favoriteProduct.has(product)
-          : false;
+      return (product: any) => state.user.favoriteProduct.some(product);
     },
   },
   actions: {
@@ -53,12 +46,10 @@ export const userStoreModule = defineStore("user", {
     },
 
     async logout() {
-      console.log("LOGOUT");
       localStorage.clear();
       this.isLogin = false;
-      this.user = new User(0, "", "", "", "");
-      delete $axios.defaults.headers.common["Authorization"];
-      //$axios.defaults.headers.common["Authorization"] = "";
+      this.user = {} as User;
+      delete $axios.defaults.headers.common.Authorization;
     },
 
     likeProduct(product: Product) {
@@ -68,25 +59,28 @@ export const userStoreModule = defineStore("user", {
       } else alert("Вы не авторизованы");
     },
 
-    dislikeProduct: function (product: Product) {
+    dislikeProduct(product: Product) {
       if (this.isLogin) {
         const index = this.user.favoriteProduct.indexOf(product, 0);
         if (index > -1) {
           this.user.favoriteProduct.splice(index, 1);
         }
-        //UserActions.dislikeProduct(product);
+        UserActions.dislikeProduct(product);
       } else alert("Вы не авторизованы");
     },
 
-    updateUser(response: UserResponse) {
-      this.user = response.user;
+    addToBasket(product: Product) {
+      UserActions.addToBasket(product);
+    },
+
+    updateUser(response: User) {
+      console.log("USER", response);
+      this.user = response;
       this.isLogin = true;
-      this.errorMessage = new ErrorResponse();
       this.isLoading = false;
     },
 
-    updateErrorMessage(response: ErrorResponse) {
-      console.log(response);
+    updateErrorMessage(response: RequestExceptions) {
       this.errorMessage = response;
     },
   },

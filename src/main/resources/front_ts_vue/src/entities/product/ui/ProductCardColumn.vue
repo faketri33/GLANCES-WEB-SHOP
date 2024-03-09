@@ -48,7 +48,7 @@
         <img :src="mutateLikes ? '/red.svg' : '/Vector.svg'" alt="" />
       </button>
     </div>
-    <button class="btn btn-primary w-100">В корзину</button>
+    <button @click="toBasket" class="btn btn-primary w-100">В корзину</button>
   </div>
 </template>
 
@@ -75,6 +75,9 @@ export default {
     addToFavorite() {
       this.mutateLikes = !this.mutateLikes;
       this.$emit("addToFavorite", this.product, this.mutateLikes);
+    },
+    toBasket() {
+      this.$emit("toBasket", this.product);
     },
   },
 };

@@ -1,11 +1,5 @@
-export default class Characteristics {
-  id = 0;
+export type Characteristics = {
+  id: string;
   name: string;
   value: string;
-
-  constructor(name: string, value: string, id?: number) {
-    if (id) this.id = id;
-    this.name = name;
-    this.value = value;
-  }
-}
+};

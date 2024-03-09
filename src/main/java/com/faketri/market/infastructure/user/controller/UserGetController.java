@@ -1,5 +1,6 @@
 package com.faketri.market.infastructure.user.controller;
 
+import com.faketri.market.entity.user.gateway.mapper.UserMapper;
 import com.faketri.market.infastructure.user.dto.UserResponse;
 import com.faketri.market.infastructure.user.gateway.UserService;
 import org.slf4j.Logger;
@@ -35,11 +36,11 @@ public class UserGetController {
     @RequestMapping("/")
     public UserResponse findByLogin(@RequestParam String login) {
         log.info(String.format("get user with login - %s", login));
-        return UserResponse.mapUser(userService.findByLogin(login));
+        return UserMapper.toDto(userService.findByLogin(login));
     }
 
     @RequestMapping("/{id}")
     public UserResponse findById(@RequestParam UUID id) {
-        return UserResponse.mapUser(userService.findById(id));
+        return UserMapper.toDto(userService.findById(id));
     }
 }

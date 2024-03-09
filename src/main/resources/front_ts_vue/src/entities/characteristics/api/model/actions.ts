@@ -1,5 +1,5 @@
 import { $axios } from "@/shared/client/AxiosClient";
-import Characteristics from "@/entities/characteristics/model/Characteristics";
+import { Characteristics } from "@/entities/characteristics/model/Characteristics";
 
 export const CharacteristicsAction = {
   loadCharacteristicsByProductCategories(

@@ -1,13 +1,13 @@
 package com.faketri.market.usecase.auth;
 
 import com.faketri.market.entity.user.exception.PasswordNotValidException;
+import com.faketri.market.entity.user.gateway.mapper.UserMapper;
 import com.faketri.market.entity.user.model.ERole;
 import com.faketri.market.entity.user.model.Users;
 import com.faketri.market.infastructure.config.web.authentication.dto.JwtAuthenticationResponse;
 import com.faketri.market.infastructure.config.web.authentication.gateway.AuthService;
 import com.faketri.market.infastructure.user.dto.SignInRequest;
 import com.faketri.market.infastructure.user.dto.SignUpRequest;
-import com.faketri.market.infastructure.user.dto.UserResponse;
 import com.faketri.market.usecase.user.UserDetailsServerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,8 +60,8 @@ public class AuthServiceImpl implements AuthService {
         var jwt =
                 jwtService.generateToken(userDetailsServer.generateUserDetails(
                         user));
-        log.info(String.format("User sign up with login %s", user.getLogin()));
-        return new JwtAuthenticationResponse(UserResponse.mapUser(user), jwt);
+        log.info("User sign up with login " + user.getLogin());
+        return new JwtAuthenticationResponse(UserMapper.toDto(user), jwt);
     }
 
     /**
@@ -87,8 +87,8 @@ public class AuthServiceImpl implements AuthService {
         var jwt =
                 jwtService.generateToken(userDetailsServer.generateUserDetails(
                         user));
-        log.info(String.format("User sign in with login %s", user.getLogin()));
-        return new JwtAuthenticationResponse(UserResponse.mapUser(user), jwt);
+        log.info("User sign in with login " + user.getLogin());
+        return new JwtAuthenticationResponse(UserMapper.toDto(user), jwt);
     }
 
 }

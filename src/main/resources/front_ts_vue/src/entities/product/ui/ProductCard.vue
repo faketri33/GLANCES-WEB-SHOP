@@ -25,7 +25,7 @@
         <div class="stock d-flex align-items-center col">
           <p class="in-stock text-primary m-0">В наличии</p>
           <button
-            @click="mutateLikes = !mutateLikes"
+            @click="addToFavorite"
             class="btn btn-outline-light shadow mb-2 ms-5"
             title="Добавить в избраное"
           >
@@ -40,7 +40,9 @@
           <h5 class="price">
             <strong>{{ product.price }}руб.</strong>
           </h5>
-          <button class="btn btn-primary w-100">В корзину</button>
+          <button @click="toBasket" class="btn btn-primary w-100">
+            В корзину
+          </button>
         </div>
       </div>
     </div>
@@ -64,6 +66,15 @@ export default {
   computed: {
     getFullName() {
       return this.product.brand.name + " " + this.product.nameModel;
+    },
+  },
+  methods: {
+    addToFavorite() {
+      this.mutateLikes = !this.mutateLikes;
+      this.$emit("addToFavorite", this.product, this.mutateLikes);
+    },
+    toBasket() {
+      this.$emit("toBasket", this.product);
     },
   },
 };

@@ -1,7 +1,7 @@
 package com.faketri.market.usecase.user;
 
 import com.faketri.market.entity.exception.ResourceNotFoundException;
-import com.faketri.market.entity.user.gateway.UserRepository;
+import com.faketri.market.entity.user.gateway.repository.UserRepository;
 import com.faketri.market.entity.user.model.Users;
 import com.faketri.market.infastructure.user.gateway.UserService;
 import org.slf4j.Logger;
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
      * @return the users
      */
     public Users save(Users users) {
-        log.info(String.format("User with login - %s saved"), users.getLogin());
+        log.info("User with login - " + users.getLogin() + "  saved");
         return userImpl.save(users);
     }
 

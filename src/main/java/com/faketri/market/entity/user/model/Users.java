@@ -47,8 +47,8 @@ public class Users {
     @Column
     private String password;
 
-    @OneToOne
-    private Basket basket;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Basket basket = new Basket();
 
     @Column
     private LocalDateTime dateOfBirthday;

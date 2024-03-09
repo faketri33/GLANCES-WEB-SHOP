@@ -1,28 +1,9 @@
 package com.faketri.market;
 
-import com.faketri.market.entity.image.model.Image;
-import com.faketri.market.entity.product.model.Product;
-import com.faketri.market.entity.product.model.child.Brand;
-import com.faketri.market.entity.product.model.child.Categories;
-import com.faketri.market.entity.product.model.child.Characteristics;
-import com.faketri.market.infastructure.brand.gateway.BrandService;
-import com.faketri.market.infastructure.categories.gateway.CategoriesService;
-import com.faketri.market.infastructure.characteristics.gateway.CharacteristicsService;
-import com.faketri.market.infastructure.image.gateway.ImageService;
-import com.faketri.market.infastructure.promotion.gateway.PromotionService;
-import com.faketri.market.infastructure.rating.gateway.RatingService;
-import com.faketri.market.infastructure.user.gateway.UserService;
-import com.faketri.market.usecase.product.ProductServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The type Market application.
@@ -58,7 +39,7 @@ public class MarketApplication {
      * @param characteristicsService the characteristics service
      * @param imageService           the image service
      * @return the command line runner
-     */
+     *//*
     @Bean
     public CommandLineRunner commandLineRunner(
             ProductServiceImpl productService,
@@ -176,7 +157,7 @@ public class MarketApplication {
             productService.save(product);
             products.forEach(productService::save);
         };
-    }
+    }*/
 
 }
 

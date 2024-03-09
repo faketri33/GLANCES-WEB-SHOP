@@ -1,7 +1,7 @@
 import { $axios } from "@/shared/client/AxiosClient";
 import { Product } from "@/entities/product/model/Product";
 import { PageableType } from "@/shared/pageable/pageableType";
-import Characteristics from "@/entities/characteristics/model/Characteristics";
+import { Characteristics } from "@/entities/characteristics/model/Characteristics";
 
 export const ProductActions = {
   loadProduct(
@@ -20,7 +20,7 @@ export const ProductActions = {
   loadProductByCategories(
     pageNumber: number,
     pageSize: number,
-    categoriesId: number,
+    categoriesId: string,
     filter?: Characteristics[]
   ): Promise<PageableType<Product>> {
     return new Promise<PageableType<Product>>((resolve) =>
@@ -51,23 +51,6 @@ export const ProductActions = {
         })
         .then((data) => resolve(data.data))
         .catch((err) => new Error(err.message))
-    );
-  },
-
-  loadProductWithFilter(
-    pageNumber: number,
-    pageSize: number,
-    filter: Characteristics[]
-  ): Promise<PageableType<Product>> {
-    return new Promise<PageableType<Product>>((resolve) =>
-      $axios
-        .post("/product/categories/2/filter", filter, {
-          params: { number: pageNumber, size: pageSize },
-        })
-        .then((data) => {
-          $axios.defaults.headers.common["Authorization"] = data.data.token;
-          resolve(data.data);
-        })
     );
   },
 

@@ -1,4 +1,4 @@
-package com.faketri.market.entity.user.gateway;
+package com.faketri.market.entity.user.gateway.repository;
 
 import com.faketri.market.entity.user.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -19,10 +19,10 @@ import java.util.UUID;
 @Service
 public class CategoriesServiceImpl implements CategoriesService {
 
-    private final CategoriesRepository categoriesImpl;
+    private final CategoriesRepository categoriesRepository;
 
-    public CategoriesServiceImpl(CategoriesRepository categoriesImpl) {
-        this.categoriesImpl = categoriesImpl;
+    public CategoriesServiceImpl(CategoriesRepository categoriesRepository) {
+        this.categoriesRepository = categoriesRepository;
     }
 
     /**
@@ -32,7 +32,7 @@ public class CategoriesServiceImpl implements CategoriesService {
      * @return the categories
      */
     public Categories findById(UUID id) {
-        return categoriesImpl.findById(id)
+        return categoriesRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Categories with id - " + id + " not found"));
     }
@@ -43,7 +43,7 @@ public class CategoriesServiceImpl implements CategoriesService {
      * @return the list
      */
     public List<Categories> findAll() {
-        return categoriesImpl.findAll();
+        return categoriesRepository.findAll();
     }
 
     /**
@@ -54,7 +54,7 @@ public class CategoriesServiceImpl implements CategoriesService {
      */
     public Page<Categories> findAll(Pageable pageable
     ) {
-        return categoriesImpl.findAll(pageable);
+        return categoriesRepository.findAll(pageable);
     }
 
     /**
@@ -64,8 +64,8 @@ public class CategoriesServiceImpl implements CategoriesService {
      * @return the categories
      */
     public Categories save(Categories categories) {
-        return categoriesImpl.findByName(categories.getName())
-                .orElse(categoriesImpl.save(categories));
+        return categoriesRepository.findByName(categories.getName())
+                .orElse(categoriesRepository.save(categories));
     }
 
     /**
@@ -74,7 +74,7 @@ public class CategoriesServiceImpl implements CategoriesService {
      * @param categories the categories
      */
     public void delete(Categories categories) {
-        categoriesImpl.delete(categories);
+        categoriesRepository.delete(categories);
     }
 
 }

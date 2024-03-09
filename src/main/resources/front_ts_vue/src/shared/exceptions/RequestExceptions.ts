@@ -1,5 +1,6 @@
 export class RequestExceptions extends Error {
   private _httpStatus: number;
+
   constructor(message: string, httpStatus: number) {
     super(message);
     this.name = "RequestExceptions";

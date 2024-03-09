@@ -19,6 +19,7 @@
         v-bind:isSmallWidth="true"
         v-bind:likes="isLiked(product.id)"
         v-on:addToFavorite="addToFavorite"
+        v-on:toBasket="toBasket"
       />
     </div>
   </main>
@@ -48,6 +49,10 @@ const addToFavorite = (product: Product, operation: boolean) =>
   operation
     ? userStore.likeProduct(product)
     : userStore.dislikeProduct(product);
+
+const toBasket = (product: Product) => {
+  userStore.addToBasket(product);
+};
 
 onMounted(async () => {
   productData.value = await ProductActions.loadProduct(0, 20);

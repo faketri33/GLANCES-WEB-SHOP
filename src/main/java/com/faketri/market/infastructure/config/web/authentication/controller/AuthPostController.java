@@ -1,9 +1,9 @@
 package com.faketri.market.infastructure.config.web.authentication.controller;
 
+import com.faketri.market.infastructure.config.web.authentication.dto.JwtAuthenticationResponse;
 import com.faketri.market.infastructure.config.web.authentication.gateway.AuthService;
 import com.faketri.market.infastructure.user.dto.SignInRequest;
 import com.faketri.market.infastructure.user.dto.SignUpRequest;
-import com.faketri.market.infastructure.user.dto.UserResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -27,29 +27,23 @@ public class AuthPostController {
     }
 
     @RequestMapping("/sing-in")
-    public ResponseEntity<UserResponse> singIn(
+    public ResponseEntity<JwtAuthenticationResponse> singIn(
             @RequestBody @Valid SignInRequest signInRequest
     ) {
         log.info("Request to sing in from user with login " + signInRequest.getLogin());
         var authenticationResponse = authService.signIn(signInRequest);
         return ResponseEntity.ok()
-                .header("Authorization",
-                        authenticationResponse.toString()
-                )
-                .body(authenticationResponse.getUser());
+                .body(authenticationResponse);
     }
 
     @RequestMapping("/sing-up")
-    public ResponseEntity<UserResponse> singUp(
+    public ResponseEntity<JwtAuthenticationResponse> singUp(
             @RequestBody @Valid SignUpRequest signUpRequest
     ) {
         log.info("Request to sing up from user with login " + signUpRequest.getLogin());
         var authenticationResponse = authService.signUp(signUpRequest);
         return ResponseEntity.ok()
-                .header("Authorization",
-                        authenticationResponse.toString()
-                )
-                .body(authenticationResponse.getUser());
+                .body(authenticationResponse);
     }
 
 }
