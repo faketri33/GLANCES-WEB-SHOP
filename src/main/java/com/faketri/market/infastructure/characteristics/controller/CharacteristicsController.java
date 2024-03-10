@@ -3,6 +3,7 @@ package com.faketri.market.infastructure.characteristics.controller;
 import com.faketri.market.entity.product.model.child.Characteristics;
 import com.faketri.market.infastructure.characteristics.gateway.CharacteristicsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class CharacteristicsController {
 
     private final CharacteristicsService characteristicsService;
 
+    @Autowired
     public CharacteristicsController(CharacteristicsService characteristicsService) {
         this.characteristicsService = characteristicsService;
     }

@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
@@ -36,6 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsServerImpl userDetailsServer;
 
+    @Autowired
     public JwtAuthenticationFilter(JwtService jwtService, UserDetailsServerImpl userDetailsServer) {
         this.jwtService = jwtService;
         this.userDetailsServer = userDetailsServer;

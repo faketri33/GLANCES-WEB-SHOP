@@ -2,7 +2,6 @@ package com.faketri.market.entity.user.gateway.repository;
 
 import com.faketri.market.entity.user.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -14,7 +13,6 @@ import java.util.UUID;
  * @author Dmitriy Faketri
  */
 @Repository
-@EnableJpaRepositories
 public interface UserRepository extends JpaRepository<Users, Long> {
 
     /**

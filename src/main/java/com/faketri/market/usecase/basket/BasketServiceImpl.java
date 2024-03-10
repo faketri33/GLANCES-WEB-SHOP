@@ -4,6 +4,7 @@ import com.faketri.market.entity.basket.gateway.BasketRepository;
 import com.faketri.market.entity.basket.model.Basket;
 import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.infastructure.basket.gateway.BasketService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -13,6 +14,7 @@ public class BasketServiceImpl implements BasketService {
 
     private final BasketRepository basketRepository;
 
+    @Autowired
     public BasketServiceImpl(BasketRepository basketRepository) {
         this.basketRepository = basketRepository;
     }

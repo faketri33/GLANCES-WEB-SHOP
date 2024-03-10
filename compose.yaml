@@ -25,12 +25,28 @@ services:
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
       - pgadmin:/var/lib/pgadmin
-
     ports:
       - "${PGADMIN_PORT:-5050}:80"
     networks:
       - postgres
     restart: unless-stopped
+
+  spring-boot:
+    environment:
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_USERNAME: ${POSTGRES_USER}
+      JWT_KEY: ${JWT_KEY}
+      DB_CONNECT: ${DB_CONNECT}
+    image: spring-boot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - postgres
+    depends_on:
+      - postgres
 
 networks:
   postgres:
@@ -39,3 +55,4 @@ networks:
 volumes:
   postgres:
   pgadmin:
+  spring-boot:

@@ -4,6 +4,7 @@ import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.product.gateway.repo.child.BrandRepository;
 import com.faketri.market.entity.product.model.child.Brand;
 import com.faketri.market.infastructure.brand.gateway.BrandService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -18,6 +19,7 @@ public class BrandServiceImpl implements BrandService {
 
     private final BrandRepository brandImpl;
 
+    @Autowired
     public BrandServiceImpl(BrandRepository brandImpl) {
         this.brandImpl = brandImpl;
     }

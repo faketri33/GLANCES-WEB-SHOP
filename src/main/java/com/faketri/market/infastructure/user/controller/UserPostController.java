@@ -5,6 +5,7 @@ import com.faketri.market.entity.user.model.Users;
 import com.faketri.market.infastructure.user.gateway.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class UserPostController {
 
     private final UserService userService;
 
+    @Autowired
     public UserPostController(UserService userService) {
         this.userService = userService;
     }

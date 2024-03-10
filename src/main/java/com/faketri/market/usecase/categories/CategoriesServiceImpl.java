@@ -4,6 +4,7 @@ import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.product.gateway.repo.child.CategoriesRepository;
 import com.faketri.market.entity.product.model.child.Categories;
 import com.faketri.market.infastructure.categories.gateway.CategoriesService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     private final CategoriesRepository categoriesRepository;
 
+    @Autowired
     public CategoriesServiceImpl(CategoriesRepository categoriesRepository) {
         this.categoriesRepository = categoriesRepository;
     }

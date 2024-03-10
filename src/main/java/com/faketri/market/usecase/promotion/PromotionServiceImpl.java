@@ -3,8 +3,9 @@ package com.faketri.market.usecase.promotion;
 import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.promotion.gateway.PromotionRepository;
 import com.faketri.market.entity.promotion.model.Promotion;
+import com.faketri.market.infastructure.product.gateway.ProductService;
 import com.faketri.market.infastructure.promotion.gateway.PromotionService;
-import com.faketri.market.usecase.product.ProductServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,10 @@ import java.util.UUID;
 public class PromotionServiceImpl implements PromotionService {
 
     private final PromotionRepository promotionImpl;
-    private final ProductServiceImpl productService;
+    private final ProductService productService;
 
-    public PromotionServiceImpl(PromotionRepository promotionImpl, ProductServiceImpl productService) {
+    @Autowired
+    public PromotionServiceImpl(PromotionRepository promotionImpl, ProductService productService) {
         this.promotionImpl = promotionImpl;
         this.productService = productService;
     }

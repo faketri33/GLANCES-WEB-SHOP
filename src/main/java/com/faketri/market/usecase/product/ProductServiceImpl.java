@@ -6,6 +6,7 @@ import com.faketri.market.entity.product.model.Product;
 import com.faketri.market.entity.product.model.child.Characteristics;
 import com.faketri.market.infastructure.product.gateway.ProductService;
 import com.faketri.market.infastructure.product.gateway.filter.ProductSpecification;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,15 +27,8 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productImpl;
     private final ProductSpecification productSpecification;
 
-    /**
-     * Instantiates a new Product service.
-     *
-     * @param productImpl          the product repository
-     * @param productSpecification the product specification
-     */
-    public ProductServiceImpl(ProductRepository productImpl,
-                              ProductSpecification productSpecification
-    ) {
+    @Autowired
+    public ProductServiceImpl(ProductRepository productImpl, ProductSpecification productSpecification) {
         this.productImpl = productImpl;
         this.productSpecification = productSpecification;
     }

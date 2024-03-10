@@ -4,6 +4,7 @@ import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.image.gateway.ImageRepository;
 import com.faketri.market.entity.image.model.Image;
 import com.faketri.market.infastructure.image.gateway.ImageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageImpl;
 
+    @Autowired
     public ImageServiceImpl(ImageRepository imageImpl) {
         this.imageImpl = imageImpl;
     }

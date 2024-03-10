@@ -2,6 +2,7 @@ package com.faketri.market.usecase.user;
 
 import com.faketri.market.entity.user.model.Users;
 import com.faketri.market.infastructure.user.gateway.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +21,7 @@ public class UserDetailsServerImpl implements UserDetailsService {
 
     private final UserService userService;
 
+    @Autowired
     public UserDetailsServerImpl(UserService userService) {
         this.userService = userService;
     }

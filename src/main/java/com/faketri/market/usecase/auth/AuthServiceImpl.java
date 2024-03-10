@@ -11,6 +11,7 @@ import com.faketri.market.infastructure.user.dto.SignUpRequest;
 import com.faketri.market.usecase.user.UserDetailsServerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtServiceImpl jwtService;
     private final AuthenticationManager authenticationManager;
 
+    @Autowired
     public AuthServiceImpl(UserDetailsServerImpl userDetailsServer, PasswordEncoder passwordEncoder, JwtServiceImpl jwtService, AuthenticationManager authenticationManager) {
         this.userDetailsServer = userDetailsServer;
         this.passwordEncoder = passwordEncoder;

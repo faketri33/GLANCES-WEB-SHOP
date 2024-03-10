@@ -3,6 +3,7 @@ package com.faketri.market.infastructure.categories.controller;
 import com.faketri.market.entity.product.model.child.Categories;
 import com.faketri.market.infastructure.categories.gateway.CategoriesService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ public class CategoriesController {
 
     private final CategoriesService categoriesService;
 
+    @Autowired
     public CategoriesController(CategoriesService categoriesService) {
         this.categoriesService = categoriesService;
     }

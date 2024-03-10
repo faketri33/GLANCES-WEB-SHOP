@@ -3,6 +3,7 @@ package com.faketri.market.usecase.rating;
 import com.faketri.market.entity.rating.gateway.RatingRepository;
 import com.faketri.market.entity.rating.model.Rating;
 import com.faketri.market.infastructure.rating.gateway.RatingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class RatingServiceImpl implements RatingService {
 
     private final RatingRepository ratingImpl;
 
+    @Autowired
     public RatingServiceImpl(RatingRepository ratingImpl) {
         this.ratingImpl = ratingImpl;
     }

@@ -3,6 +3,7 @@ package com.faketri.market.usecase.characteristics;
 import com.faketri.market.entity.product.gateway.repo.child.CharacteristicsRepository;
 import com.faketri.market.entity.product.model.child.Characteristics;
 import com.faketri.market.infastructure.characteristics.gateway.CharacteristicsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class CharacteristicsServiceImpl implements CharacteristicsService {
 
     private final CharacteristicsRepository characteristicsImpl;
 
+    @Autowired
     public CharacteristicsServiceImpl(CharacteristicsRepository characteristicsImpl) {
         this.characteristicsImpl = characteristicsImpl;
     }
