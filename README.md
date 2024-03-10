@@ -31,7 +31,7 @@ docker-compose --env-file .config/.env build
 ### Стандартная
 
 ```
-mvm clear package
+mvn clear package
 ```
 
 # Docker
