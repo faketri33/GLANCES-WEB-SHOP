@@ -25,7 +25,7 @@
 ### Docker
 
 ```
-docker-compose --env-file .config/.env up -d
+docker-compose --env-file .config/.env build
 ```
 
 ### Стандартная
@@ -33,9 +33,7 @@ docker-compose --env-file .config/.env up -d
 ```
 mvm clear package
 ```
-
-path to jar - [market-0.0.1-SNAPSHOT.jar](target%2Fmarket-0.0.1-SNAPSHOT.jar)
-
+
 # Docker
 
 ### Dockerfile для автоматической сборки проекта
