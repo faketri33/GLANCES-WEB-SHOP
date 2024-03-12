@@ -3,7 +3,7 @@ import { Characteristics } from "@/entities/characteristics/model/Characteristic
 
 export const CharacteristicsAction = {
   loadCharacteristicsByProductCategories(
-    categoriesId: number
+    categoriesId: string
   ): Promise<Characteristics[]> {
     return new Promise<Characteristics[]>((resolve) =>
       $axios

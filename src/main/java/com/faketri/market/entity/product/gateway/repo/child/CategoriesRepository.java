@@ -14,7 +14,7 @@ import java.util.UUID;
  * @author Dmitriy Faketri
  */
 @Repository
-public interface CategoriesRepository extends JpaRepository<Categories, Long> {
+public interface CategoriesRepository extends JpaRepository<Categories, UUID> {
 
     Optional<Categories> findById(UUID aLong);
 

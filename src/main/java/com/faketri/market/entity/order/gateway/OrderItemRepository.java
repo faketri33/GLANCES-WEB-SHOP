@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The interface Order item repository.
@@ -12,13 +13,13 @@ import java.util.Optional;
  * @author Dmitriy Faketri
  */
 @Repository
-public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
+public interface OrderItemRepository extends JpaRepository<OrderItem, UUID> {
 
     @Override
-    Optional<OrderItem> findById(Long aLong);
+    Optional<OrderItem> findById(UUID uuid);
 
     @Override
-    void deleteById(Long aLong);
+    void deleteById(UUID uuid);
 
 
 }

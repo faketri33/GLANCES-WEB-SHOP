@@ -7,7 +7,7 @@
             class="border rounded-5"
             :src="
               'http://localhost:8080/api/image/' +
-              userStore.getUser?.profileImage.id
+              userStore.getUser?.profileImage?.id
             "
             alt="Изображения профиля"
             style="max-width: 200px"
@@ -61,8 +61,8 @@ const router = useRouter();
 const userStore = userStoreModule();
 
 const userLogout = () => {
-  userStore.logout();
   router.push("/");
+  userStore.logout();
 };
 
 onMounted(() => {

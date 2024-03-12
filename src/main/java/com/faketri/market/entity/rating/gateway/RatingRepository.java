@@ -14,7 +14,7 @@ import java.util.UUID;
  * @author Dmitriy Faketri
  */
 @Repository
-public interface RatingRepository extends JpaRepository<Rating, Long> {
+public interface RatingRepository extends JpaRepository<Rating, UUID> {
 
 
     /**

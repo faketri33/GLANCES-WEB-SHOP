@@ -18,10 +18,10 @@ import java.util.UUID;
  */
 @Repository
 public interface CharacteristicsRepository
-        extends JpaRepository<Characteristics, Long> {
+        extends JpaRepository<Characteristics, UUID> {
 
     @Override
-    Optional<Characteristics> findById(Long aLong);
+    Optional<Characteristics> findById(UUID aLong);
 
 
     @Override
@@ -39,7 +39,10 @@ public interface CharacteristicsRepository
     @Transactional
     @Modifying
     @Query("update Characteristics c set c.name = ?1, c.value = ?2 where c.id = ?3")
-    int updateNameAndValueById(String name, String value, Long id);
+    int updateNameAndValueById(String name, String value, UUID id);
+
+    @Query("select distinct c from Characteristics c inner join c.products products where products.categories.id = ?1")
+    List<Characteristics> findDistinctByProducts_Categories_Id(UUID id);
 
     /**
      * Find distinct by products categories id list.
@@ -47,8 +50,6 @@ public interface CharacteristicsRepository
      * @param id the id
      * @return the list
      */
-    @Query("select distinct c from Characteristics c inner join c.products products where products.categories.id = ?1")
-    List<Characteristics> findDistinctByProducts_Categories_Id(UUID id);
 
     /**
      * Find by name and value optional.

@@ -33,10 +33,10 @@ services:
 
   spring-boot:
     environment:
-      DB_PASSWORD: ${POSTGRES_PASSWORD}
-      DB_USERNAME: ${POSTGRES_USER}
-      JWT_KEY: ${JWT_KEY}
       DB_CONNECT: ${DB_CONNECT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_KEY: ${JWT_KEY}
     image: spring-boot
     build:
       context: .

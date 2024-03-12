@@ -4,21 +4,30 @@ import { UserActions } from "@/entities/user/api/model/actions";
 import { $axios } from "@/shared/client/AxiosClient";
 import { Product } from "@/entities/product/model/Product";
 import { RequestExceptions } from "@/shared/exceptions/RequestExceptions";
+import { LoginException } from "@/entities/user/model/LoginException";
 
 export const userStoreModule = defineStore("user", {
   state: () => ({
     user: {} as User,
-    isLogin: !localStorage.getItem("token"),
+    isLogin: !!localStorage.getItem("token"),
     isLoading: true,
-    errorMessage: {} as RequestExceptions,
+    errorMessage: {} as LoginException,
   }),
   getters: {
     getUser: (state) => {
       return state.user;
     },
     isLikedProduct: (state) => {
-      return (product: any) => state.user.favoriteProduct.some(product);
+      return (id: number) => {
+        return state.user.favoriteProduct?.some((product) => product.id === id);
+      };
     },
+    getBasketPrice: (state) =>
+      state?.user.basket?.products.reduce(
+        (acc, product) =>
+          (acc += product.isPromoActive ? product.promoPrice : product.price),
+        0
+      ),
   },
   actions: {
     signIn(params: User) {
@@ -64,13 +73,26 @@ export const userStoreModule = defineStore("user", {
         const index = this.user.favoriteProduct.indexOf(product, 0);
         if (index > -1) {
           this.user.favoriteProduct.splice(index, 1);
+          UserActions.dislikeProduct(product);
         }
-        UserActions.dislikeProduct(product);
       } else alert("Вы не авторизованы");
     },
 
     addToBasket(product: Product) {
-      UserActions.addToBasket(product);
+      if (this.isLogin) {
+        this.user.basket.products.push(product);
+        UserActions.addToBasket(product);
+      } else alert("Вы не авторизованы");
+    },
+
+    removeFromBasket(product: Product) {
+      if (this.isLogin) {
+        const index = this.user.basket.products.indexOf(product, 0);
+        if (index > -1) {
+          this.user.basket.products.splice(index, 1);
+          UserActions.removeFromBasket(product);
+        }
+      } else alert("Вы не авторизованы");
     },
 
     updateUser(response: User) {
@@ -80,7 +102,7 @@ export const userStoreModule = defineStore("user", {
       this.isLoading = false;
     },
 
-    updateErrorMessage(response: RequestExceptions) {
+    updateErrorMessage(response: LoginException) {
       this.errorMessage = response;
     },
   },

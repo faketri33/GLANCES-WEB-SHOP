@@ -16,8 +16,9 @@
         <ProductCard
           v-for="product in pages[currentPages].content"
           v-bind:product="product"
-          v-bind:likes="isLiked(product.id)"
-          v-on:addToFavorite="addToFavorite"
+          v-bind:likes="userStore.isLikedProduct(product.id)"
+          v-on:addToFavorite="userStore.likeProduct(product)"
+          v-on:toBasket="userStore.addToBasket(product)"
           :key="product.id"
         ></ProductCard>
         <div class="row">
@@ -45,7 +46,7 @@ import CharacteristicsList from "@/entities/characteristics/ui/CharacteristicsLi
 import { PageableType } from "@/shared/pageable/pageableType";
 import { Product } from "@/entities/product/model/Product";
 import { CharacteristicsAction } from "@/entities/characteristics/api/model/actions";
-import Characteristics from "@/entities/characteristics/model/Characteristics";
+import { Characteristics } from "@/entities/characteristics/model/Characteristics";
 import { userStoreModule } from "@/entities/user/api/index.js";
 
 const route = useRoute();
@@ -59,15 +60,6 @@ const pages = ref<PageableType<Product>[]>([]);
 const characteristics = ref<Characteristics[]>();
 
 const filter = ref<Characteristics[]>([]);
-
-const addToFavorite = (product: Product, operation: boolean) =>
-  operation
-    ? userStore.likeProduct(product)
-    : userStore.dislikeProduct(product);
-
-const isLiked = (id: number): boolean => {
-  return userStore.getUser?.favoriteProduct?.some((r) => r.id === id);
-};
 
 const useFiltered = async (selectedValues: Characteristics[]) => {
   filter.value = selectedValues;

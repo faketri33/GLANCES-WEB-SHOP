@@ -17,7 +17,7 @@ import java.util.UUID;
  * @author Dmitriy Faketri
  */
 @Repository
-public interface BrandRepository extends JpaRepository<Brand, Long> {
+public interface BrandRepository extends JpaRepository<Brand, UUID> {
 
     /**
      * Update name by id int.
@@ -29,7 +29,7 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
     @Transactional
     @Modifying
     @Query("update Brand b set b.name = ?1 where b.id = ?2")
-    int updateNameById(String name, Long id);
+    int updateNameById(String name, UUID id);
 
     Optional<Brand> findById(UUID aLong);
 

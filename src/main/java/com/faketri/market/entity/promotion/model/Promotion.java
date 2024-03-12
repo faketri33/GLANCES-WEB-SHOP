@@ -24,7 +24,7 @@ public class Promotion {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Image banner;
 
     @Column

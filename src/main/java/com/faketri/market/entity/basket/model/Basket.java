@@ -17,7 +17,7 @@ public class Basket {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
-    @OneToMany
+    @ManyToMany
     List<Product> products = new ArrayList<>();
     @Column
     private BigDecimal price;

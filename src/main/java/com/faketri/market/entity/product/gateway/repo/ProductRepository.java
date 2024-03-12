@@ -20,7 +20,7 @@ import java.util.UUID;
  */
 @Repository
 public interface ProductRepository
-        extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+        extends JpaRepository<Product, UUID>, JpaSpecificationExecutor<Product> {
 
     Optional<Product> findOne(Specification<Product> spec);
 

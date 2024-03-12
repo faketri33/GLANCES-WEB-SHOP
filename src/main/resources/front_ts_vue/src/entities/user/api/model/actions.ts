@@ -2,7 +2,6 @@ import { User } from "@/entities/user/model/User";
 import { $axios } from "@/shared/client/AxiosClient";
 import { Product } from "@/entities/product/model/Product";
 import { AxiosResponse } from "axios";
-import { RequestExceptions } from "@/shared/exceptions/RequestExceptions";
 
 export const UserActions = {
   async signIn(params: User): Promise<User> {
@@ -12,9 +11,7 @@ export const UserActions = {
     });
     return response.status === 200
       ? Promise.resolve(this.additionDataToStore(response))
-      : Promise.reject(
-          new RequestExceptions(response.data.statusCode, response.data.message)
-        );
+      : Promise.reject(response.data);
   },
   async signUp(params: User): Promise<User> {
     const response = await $axios.post("/auth/sing-up", {
@@ -24,9 +21,7 @@ export const UserActions = {
     });
     return response.status === 200
       ? Promise.resolve(this.additionDataToStore(response))
-      : Promise.reject(
-          new RequestExceptions(response.data.statusCode, response.data.message)
-        );
+      : Promise.reject(response.data);
   },
   async loadUserByLogin(login: string): Promise<User> {
     const response = await $axios.get("/user/", {
@@ -36,9 +31,7 @@ export const UserActions = {
     });
     return response.status === 200
       ? Promise.resolve(response.data)
-      : Promise.reject(
-          new RequestExceptions(response.data.statusCode, response.data.message)
-        );
+      : Promise.reject(response.data);
   },
   async likeProduct(product: Product) {
     return await $axios.post("/user/like/product", product);

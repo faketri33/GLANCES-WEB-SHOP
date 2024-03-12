@@ -1,5 +1,6 @@
 import { Product } from "@/entities/product/model/Product";
 import { Image } from "@/entities/image/model/Image";
+import { Basket } from "@/entities/basket/model/basket";
 
 export type User = {
   id: number;
@@ -9,6 +10,7 @@ export type User = {
   surname: string;
   email: string;
   password: string;
+  basket: Basket;
   city: string;
   role: Array<string>;
   orders: Array<string>;

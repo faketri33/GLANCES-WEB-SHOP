@@ -6,7 +6,7 @@
   >
     <div class="card-body text-center">
       <img
-        style="width: 100px; height: 134px"
+        style="max-width: 120px; max-height: 134px"
         :src="'http://localhost:8080/api/image/' + categories.image.id"
         alt=""
       />

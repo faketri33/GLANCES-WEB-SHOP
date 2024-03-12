@@ -87,10 +87,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { userStoreModule } from "@/entities/user/api/index.js";
-import User from "@/entities/user/model/User";
-import { ErrorResponse } from "@/entities/user/api/model/actions";
+import { User } from "@/entities/user/model/User";
 
-const user = new User(0, "", "", "", "");
+const user = {} as User;
 
 const isSingIn = ref(true);
 const userStore = userStoreModule();
@@ -100,7 +99,7 @@ const auth = () => {
   else userStore.signUp(user);
 };
 
-onMounted(() => (userStore.errorMessage = new ErrorResponse()));
+// onMounted(() => (userStore.errorMessage));
 </script>
 
 <style scoped>

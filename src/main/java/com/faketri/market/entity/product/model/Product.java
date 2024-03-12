@@ -33,7 +33,7 @@ public class Product {
     private String nameModel;
     @ManyToOne
     private Categories categories;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<Image> image = new HashSet<>();
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Characteristics> characteristics = new HashSet<>();

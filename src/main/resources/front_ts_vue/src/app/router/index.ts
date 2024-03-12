@@ -5,6 +5,7 @@ import ProductView from "@/pages/ProductView.vue";
 import CategoriesSelected from "@/pages/CategoriesSelected.vue";
 import AuthenticationPages from "@/pages/AuthenticationPages.vue";
 import UserPage from "@/pages/UserPages.vue";
+import BasketPage from "@/pages/BasketPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -36,6 +37,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/profile/",
     name: "profile",
     component: UserPage,
+  },
+  {
+    path: "/basket/",
+    name: "basket",
+    component: BasketPage,
   },
 ];
 

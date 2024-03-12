@@ -21,7 +21,7 @@ public class Categories {
     private UUID id;
     @Column
     private String name;
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     private Image image;
 
     /**

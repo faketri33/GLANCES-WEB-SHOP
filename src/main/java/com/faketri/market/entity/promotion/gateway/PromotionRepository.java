@@ -12,15 +12,15 @@ import java.util.UUID;
  *
  * @author Dmitriy Faketri
  */
-public interface PromotionRepository extends JpaRepository<Promotion, Long> {
-    
+public interface PromotionRepository extends JpaRepository<Promotion, UUID> {
+
     Optional<Promotion> findById(UUID aLong);
 
     @Override
     List<Promotion> findAll();
 
     @Override
-    void deleteById(Long aLong);
+    void deleteById(UUID aLong);
 
 
 }

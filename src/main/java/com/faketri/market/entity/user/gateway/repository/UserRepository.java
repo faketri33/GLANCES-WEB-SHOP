@@ -13,7 +13,7 @@ import java.util.UUID;
  * @author Dmitriy Faketri
  */
 @Repository
-public interface UserRepository extends JpaRepository<Users, Long> {
+public interface UserRepository extends JpaRepository<Users, UUID> {
 
     /**
      * Find by login optional.

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The interface Order repository.
@@ -18,32 +19,30 @@ import java.util.Optional;
  * @author Dmitriy Faketri
  */
 @Repository
-public interface OrderRepository extends JpaRepository<Orders, Long> {
+public interface OrderRepository extends JpaRepository<Orders, UUID> {
 
     @Override
-    Optional<Orders> findById(Long aLong);
+    Optional<Orders> findById(UUID id);
 
     /**
      * Update status order by id int.
      *
      * @param statusOrder the status order
      * @param id          the id
-     *
      * @return the int
      */
     @Transactional
     @Modifying
     @Query("update Orders o set o.statusOrder = ?1 where o.id = ?2")
-    int updateStatusOrderById(EStatusOrder statusOrder, Long id);
+    int updateStatusOrderById(EStatusOrder statusOrder, UUID id);
 
     /**
      * Find by users id list.
      *
      * @param id the id
-     *
      * @return the list
      */
     @Query("select o from Orders o where o.users.id = :id")
-    List<Orders> findByUsers_Id(@Param("id") Long id);
+    List<Orders> findByUsers_Id(@Param("id") UUID id);
 
 }

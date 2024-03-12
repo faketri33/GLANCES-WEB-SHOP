@@ -13,13 +13,13 @@ import java.util.UUID;
  * @author Dmitriy Faketri
  */
 @Repository
-public interface ImageRepository extends JpaRepository<Image, Long> {
+public interface ImageRepository extends JpaRepository<Image, UUID> {
 
-    Optional<Image> findById(UUID aLong);
+    Optional<Image> findById(UUID uuid);
 
     Optional<Image> findFirstByPath(String path);
 
-    void deleteById(UUID aLong);
+    void deleteById(UUID uuid);
 
 
 }

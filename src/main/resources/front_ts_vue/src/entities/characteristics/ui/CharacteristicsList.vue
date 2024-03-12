@@ -35,7 +35,6 @@ export default {
   },
   computed: {
     getCharacteristics() {
-      console.log(this.characteristics);
       return this.characteristics.reduce((acc, obj) => {
         const key = obj.name;
         if (!acc[key]) {
