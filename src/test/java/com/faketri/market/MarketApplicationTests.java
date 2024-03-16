@@ -1,7 +1,7 @@
 package com.faketri.market;
 
-import com.faketri.market.infastructure.product.gateway.filter.ProductSpecification;
-import com.faketri.market.usecase.product.ProductServiceImpl;
+import com.faketri.market.infastructure.productPayload.product.gateway.filter.ProductSpecification;
+import com.faketri.market.usecase.productPayload.product.ProductServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

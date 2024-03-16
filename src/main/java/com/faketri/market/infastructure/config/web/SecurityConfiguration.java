@@ -1,7 +1,7 @@
 package com.faketri.market.infastructure.config.web;
 
 import com.faketri.market.infastructure.config.web.authentication.JwtAuthenticationFilter;
-import com.faketri.market.usecase.user.UserDetailsServerImpl;
+import com.faketri.market.usecase.userPayload.user.UserDetailsServerImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

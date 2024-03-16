@@ -18,7 +18,7 @@
   Диаграмма базы данных
 </h2>
 
-<img src="https://github.com/faketri/OnlineMarket/blob/master/assets/DbDiagrams.svg">
+<img src="./assets/DbDiagrams.jpg">
 
 # Сборка проекта
 
@@ -33,7 +33,7 @@ docker-compose --env-file .config/.env build
 ```
 mvn clear package
 ```
-
+
 # Docker
 
 ### Dockerfile для автоматической сборки проекта
@@ -116,92 +116,120 @@ volumes:
 
 ```
 
-+---entity // Описание сущностей, репозитории.
-¦ +---exception
-¦ +---image
-¦ ¦ +---exception
-¦ ¦ +---gateway
-¦ ¦ L---model
-¦ +---order
-¦ ¦ +---exception
-¦ ¦ +---gateway
-¦ ¦ L---model
-¦ +---product
-¦ ¦ +---exception
-¦ ¦ +---gateway
-¦ ¦ ¦ L---repo
-¦ ¦ ¦ L---child
-¦ ¦ L---model
-¦ ¦ L---child
-¦ +---promotion
-¦ ¦ +---exception
-¦ ¦ +---gateway
-¦ ¦ L---model
-¦ +---rating
-¦ ¦ +---exception
-¦ ¦ +---gateway
-¦ ¦ L---model
-¦ L---user
-¦ +---exception
-¦ +---gateway
-¦ L---model
-+---infastructure // Контроллеры, dto, сервисы
-¦ +---brand
-¦ ¦ +---controller
-¦ ¦ +---dto
-¦ ¦ L---gateway
-¦ +---categories
-¦ ¦ +---controller
-¦ ¦ +---dto
-¦ ¦ L---gateway
-¦ +---characteristics
-¦ ¦ +---controller
-¦ ¦ +---dto
-¦ ¦ L---gateway
-¦ +---config
-¦ ¦ +---exception
-¦ ¦ L---web
-¦ ¦ +---authentication
-¦ ¦ ¦ +---controller
-¦ ¦ ¦ +---dto
-¦ ¦ ¦ L---gateway
-¦ ¦ L---documentation
-¦ +---image
-¦ ¦ +---controller
-¦ ¦ +---dto
-¦ ¦ L---gateway
-¦ +---order
-¦ ¦ +---controller
-¦ ¦ +---dto
-¦ ¦ L---gateway
-¦ +---product
-¦ ¦ +---controller
-¦ ¦ +---dto
-¦ ¦ L---gateway
-¦ ¦ L---filter
-¦ +---promotion
-¦ ¦ +---controller
-¦ ¦ +---dto
-¦ ¦ L---gateway
-¦ +---rating
-¦ ¦ +---controller
-¦ ¦ +---dto
-¦ ¦ L---gateway
-¦ L---user
-¦ +---controller
-¦ +---dto
-¦ L---gateway
-L---usecase // Реализация сервисов
-+---auth
-+---brand
-+---categories
-+---characteristics
-+---image
-+---product
-¦ +---child
-¦ L---filter
-+---promotion
-+---rating
-L---user
-
++---entity      // Модели сущностей для базы данных, репозитории, ошибки
+¦   +---exception // Глобальный ошибки
+¦   +---image
+¦   ¦   +---exception // Локальные ошибки для сущности
+¦   ¦   +---gateway   // Репозитории
+¦   ¦   L---model     // Модель сущности
+¦   +---productPayload // Область продукта
+¦   ¦   +---brand
+¦   ¦   ¦   +---exception
+¦   ¦   ¦   +---gateway
+¦   ¦   ¦   L---model
+¦   ¦   +---categories
+¦   ¦   ¦   +---exception
+¦   ¦   ¦   +---gateway
+¦   ¦   ¦   L---model
+¦   ¦   +---characteristics
+¦   ¦   ¦   +---exception
+¦   ¦   ¦   +---gateway
+¦   ¦   ¦   L---model
+¦   ¦   +---product
+¦   ¦   ¦   +---exception
+¦   ¦   ¦   +---gateway
+¦   ¦   ¦   ¦   L---repo
+¦   ¦   ¦   L---model
+¦   ¦   +---promotion
+¦   ¦   ¦   +---exception
+¦   ¦   ¦   +---gateway
+¦   ¦   ¦   L---model
+¦   ¦   L---rating
+¦   ¦       +---exception
+¦   ¦       +---gateway
+¦   ¦       L---model
+¦   L---userPayload  // Область пользователя
+¦       +---basket
+¦       ¦   +---exception
+¦       ¦   +---gateway
+¦       ¦   L---model
+¦       +---order
+¦       ¦   +---exception
+¦       ¦   +---gateway
+¦       ¦   L---model
+¦       L---user
+¦           +---exception
+¦           +---gateway
+¦           ¦   +---mapper
+¦           ¦   L---repository
+¦           L---model
++---infastructure    // Сервисы, контролеры, DTO
+¦   +---config
+¦   ¦   +---exception
+¦   ¦   L---web
+¦   ¦       +---authentication
+¦   ¦       ¦   +---controller
+¦   ¦       ¦   +---dto
+¦   ¦       ¦   L---gateway
+¦   ¦       L---documentation
+¦   +---image
+¦   ¦   +---controller
+¦   ¦   +---dto
+¦   ¦   L---gateway
+¦   +---productPayload
+¦   ¦   +---brand
+¦   ¦   ¦   +---controller
+¦   ¦   ¦   +---dto
+¦   ¦   ¦   L---gateway
+¦   ¦   +---categories
+¦   ¦   ¦   +---controller
+¦   ¦   ¦   +---dto
+¦   ¦   ¦   L---gateway
+¦   ¦   +---characteristics
+¦   ¦   ¦   +---controller
+¦   ¦   ¦   +---dto
+¦   ¦   ¦   L---gateway
+¦   ¦   +---product
+¦   ¦   ¦   +---controller
+¦   ¦   ¦   +---dto
+¦   ¦   ¦   L---gateway
+¦   ¦   ¦       L---filter
+¦   ¦   +---promotion
+¦   ¦   ¦   +---controller
+¦   ¦   ¦   +---dto
+¦   ¦   ¦   L---gateway
+¦   ¦   L---rating
+¦   ¦       +---controller
+¦   ¦       +---dto
+¦   ¦       L---gateway
+¦   L---userPayload
+¦       +---basket
+¦       ¦   +---controller
+¦       ¦   +---dto
+¦       ¦   L---gateway
+¦       +---order
+¦       ¦   +---controller
+¦       ¦   +---dto
+¦       ¦   L---gateway
+¦       L---user
+¦           +---controller
+¦           +---dto
+¦           L---gateway
+L---usecase         // Реализация сервисов, логика.
+    +---image
+    +---productPayload
+    ¦   +---brand
+    ¦   +---categories
+    ¦   +---characteristics
+    ¦   +---product
+    ¦   ¦   +---child
+    ¦   ¦   L---filter
+    ¦   +---promotion
+    ¦   L---rating
+    L---userPayload
+        +---auth
+        +---basket
+        +---order
+        L---user
+            L---mapper
 ```

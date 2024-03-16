@@ -1,6 +1,6 @@
 package com.faketri.market.infastructure.config.web.authentication.dto;
 
-import com.faketri.market.infastructure.user.dto.UserResponse;
+import com.faketri.market.infastructure.userPayload.user.dto.UserResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 

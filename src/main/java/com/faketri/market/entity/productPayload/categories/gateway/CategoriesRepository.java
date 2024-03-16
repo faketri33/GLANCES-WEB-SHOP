@@ -1,0 +1,44 @@
+package com.faketri.market.entity.productPayload.categories.gateway;
+
+import com.faketri.market.entity.productPayload.categories.model.Categories;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+/**
+ * The interface Categories repository.
+ *
+ * @author Dmitriy Faketri
+ */
+@Repository
+public interface CategoriesRepository extends JpaRepository<Categories, UUID> {
+
+    Optional<Categories> findById(UUID aLong);
+
+    void deleteById(UUID aLong);
+
+    @Override
+    List<Categories> findAll();
+
+    /**
+     * Exists by name boolean.
+     *
+     * @param name the name
+     * @return the boolean
+     */
+    boolean existsByName(String name);
+
+    /**
+     * Find by name optional.
+     *
+     * @param name the name
+     * @return the optional
+     */
+    Optional<Categories> findByName(String name);
+
+    Categories save(Categories categories);
+
+}

@@ -1,7 +1,7 @@
 package com.faketri.market.infastructure.config.exception;
 
 import com.faketri.market.entity.exception.ResourceNotFoundException;
-import com.faketri.market.entity.user.exception.PasswordNotValidException;
+import com.faketri.market.entity.userPayload.user.exception.PasswordNotValidException;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -33,7 +33,6 @@ public class GlobalExceptionHandler {
      * Handle exception response entity.
      *
      * @param e the e
-     *
      * @return the response entity
      */
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -49,7 +48,6 @@ public class GlobalExceptionHandler {
      * Handle exception response entity.
      *
      * @param e the e
-     *
      * @return the response entity
      */
     @ExceptionHandler(PasswordNotValidException.class)
@@ -57,9 +55,9 @@ public class GlobalExceptionHandler {
             PasswordNotValidException e
     ) {
         return new ResponseEntity<>(new AppErrorArray(HttpStatus.UNAUTHORIZED.value(),
-                                                      Map.of("password",
-                                                             e.getMessage()
-                                                      )
+                Map.of("password",
+                        e.getMessage()
+                )
         ), HttpStatus.UNAUTHORIZED);
     }
 
@@ -67,7 +65,6 @@ public class GlobalExceptionHandler {
      * Handle exception response entity.
      *
      * @param e the e
-     *
      * @return the response entity
      */
     @ExceptionHandler(ChangeSetPersister.NotFoundException.class)
@@ -84,7 +81,6 @@ public class GlobalExceptionHandler {
      * Handle exception response entity.
      *
      * @param e the
-     *
      * @return the response entity
      */
     @ExceptionHandler(EmptyResultDataAccessException.class)
@@ -101,7 +97,6 @@ public class GlobalExceptionHandler {
      * Handle exception response entity.
      *
      * @param e the e
-     *
      * @return the response entity
      */
     @ExceptionHandler(ExpiredJwtException.class)
@@ -116,7 +111,6 @@ public class GlobalExceptionHandler {
      * Handle exception response entity.
      *
      * @param e the e
-     *
      * @return the response entity
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -124,12 +118,12 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException e
     ) {
         return new ResponseEntity<>(new AppErrorArray(e.getStatusCode().value(),
-                                                      e.getFieldErrors()
-                                                       .stream()
-                                                       .collect(Collectors.toMap(
-                                                               FieldError::getField,
-                                                               FieldError::getDefaultMessage
-                                                       ))
+                e.getFieldErrors()
+                        .stream()
+                        .collect(Collectors.toMap(
+                                FieldError::getField,
+                                FieldError::getDefaultMessage
+                        ))
         ), e.getStatusCode());
     }
 
@@ -138,9 +132,9 @@ public class GlobalExceptionHandler {
             HttpMessageNotReadableException e
     ) throws IOException {
         return new ResponseEntity<>(new AppError(403,
-                                                 Objects.requireNonNull(e.getHttpInputMessage()
-                                                                         .getBody()
-                                                                         .toString())
+                Objects.requireNonNull(e.getHttpInputMessage()
+                        .getBody()
+                        .toString())
         ), HttpStatusCode.valueOf(403));
     }
 

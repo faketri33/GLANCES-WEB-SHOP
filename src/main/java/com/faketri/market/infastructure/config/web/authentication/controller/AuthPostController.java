@@ -2,8 +2,8 @@ package com.faketri.market.infastructure.config.web.authentication.controller;
 
 import com.faketri.market.infastructure.config.web.authentication.dto.JwtAuthenticationResponse;
 import com.faketri.market.infastructure.config.web.authentication.gateway.AuthService;
-import com.faketri.market.infastructure.user.dto.SignInRequest;
-import com.faketri.market.infastructure.user.dto.SignUpRequest;
+import com.faketri.market.infastructure.userPayload.user.dto.SignInRequest;
+import com.faketri.market.infastructure.userPayload.user.dto.SignUpRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;

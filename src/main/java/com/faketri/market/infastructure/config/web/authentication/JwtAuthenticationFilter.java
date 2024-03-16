@@ -1,7 +1,7 @@
 package com.faketri.market.infastructure.config.web.authentication;
 
 import com.faketri.market.infastructure.config.web.authentication.gateway.JwtService;
-import com.faketri.market.usecase.user.UserDetailsServerImpl;
+import com.faketri.market.usecase.userPayload.user.UserDetailsServerImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
