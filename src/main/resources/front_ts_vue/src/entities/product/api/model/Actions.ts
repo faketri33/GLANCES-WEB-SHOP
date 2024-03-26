@@ -54,15 +54,14 @@ export const ProductActions = {
     );
   },
 
-  loadProductById(id: number): Promise<Product> {
-    return new Promise<Product>((resolve) =>
+  loadProductById(id: string): Promise<Product> {
+    return new Promise<Product>((resolve, reject) =>
       $axios
         .get("/product/" + id)
         .then((data) => {
-          $axios.defaults.headers.common["Authorization"] = data.data.token;
           resolve(data.data);
         })
-        .catch((err) => new Error(err.message))
+        .catch((err) => reject(err.message))
     );
   },
 };

@@ -1,6 +1,6 @@
-import { Product } from "@/entities/product/model/Product";
+import { ProductItem } from "@/entities/product/model/ProductItem";
 
 export type Basket = {
   id: string;
-  products: Array<Product>;
+  products: Array<ProductItem>;
 };

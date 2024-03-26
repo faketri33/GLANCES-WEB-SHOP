@@ -8,6 +8,10 @@ public interface UserService {
 
     Users findByLogin(String login);
 
+    boolean existsByLogin(String login);
+
+    boolean existsByEmail(String login);
+
     Users findById(UUID id);
 
     Users getCurrentUser();

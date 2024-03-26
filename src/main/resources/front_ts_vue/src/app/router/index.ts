@@ -6,6 +6,7 @@ import CategoriesSelected from "@/pages/CategoriesSelected.vue";
 import AuthenticationPages from "@/pages/AuthenticationPages.vue";
 import UserPage from "@/pages/UserPages.vue";
 import BasketPage from "@/pages/BasketPage.vue";
+import CharacteristicsToProductPage from "@/entities/characteristics/ui/CharacteristicsToProductPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {

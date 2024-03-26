@@ -39,7 +39,7 @@ public class Promotion {
     @Column
     private LocalDateTime dateOfEnd;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private List<Product> promotionProductItems = new ArrayList<>();
 
     /**

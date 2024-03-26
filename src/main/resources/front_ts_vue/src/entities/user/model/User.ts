@@ -3,7 +3,7 @@ import { Image } from "@/entities/image/model/Image";
 import { Basket } from "@/entities/basket/model/basket";
 
 export type User = {
-  id: number;
+  id: string;
   login: string;
   profileImage: Image;
   name: string;

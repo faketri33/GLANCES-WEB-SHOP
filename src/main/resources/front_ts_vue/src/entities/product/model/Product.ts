@@ -4,7 +4,7 @@ import { Image } from "@/entities/image/model/Image";
 import { Categories } from "@/entities/categories/model/Categories";
 
 export type Product = {
-  id: number;
+  id: string;
   brand: Brand;
   nameModel: string;
   categories: Categories;

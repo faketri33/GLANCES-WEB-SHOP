@@ -25,7 +25,6 @@ import com.faketri.market.infastructure.userPayload.user.gateway.UserService;
 import com.github.javafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CMDLRunner {
-
 
     public CommandLineRunner commandLineRunner(
             ProductService productService,
@@ -75,7 +73,7 @@ public class CMDLRunner {
                                 brands.get(i % 50),
                                 fakerEn.commerce().productName(),
                                 categories.get(i % 25),
-                                BigDecimal.valueOf(fakerEn.number().numberBetween(15000, 500000)),
+                                fakerEn.number().numberBetween(5000, 500000),
                                 fakerEn.number().numberBetween(0, 1000),
                                 fakerEn.number().numberBetween(0, 100000)
                         )
@@ -110,8 +108,8 @@ public class CMDLRunner {
 
             Users user = new Users();
 
-            user.setLogin("testerovka");
-            user.setEmail("test@test");
+            user.setLogin("testerovkaNew");
+            user.setEmail("test@testNew");
             user.setPassword("123123123");
 
             user = UserMapper.toObj(authService.signUp(

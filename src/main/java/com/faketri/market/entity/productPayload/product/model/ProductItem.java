@@ -3,7 +3,6 @@ package com.faketri.market.entity.productPayload.product.model;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -24,7 +23,7 @@ public class ProductItem {
     @Column
     private Integer quantity;
     @Column
-    private BigDecimal price;
+    private Integer price;
 
     /**
      * Instantiates a new Order item.
@@ -47,7 +46,7 @@ public class ProductItem {
 
     @PrePersist
     private void setPrice() {
-        price = product.getPrice().multiply(BigDecimal.valueOf(quantity));
+        price = product.getPrice() * quantity;
     }
 
     public UUID getId() {
@@ -74,11 +73,11 @@ public class ProductItem {
         this.quantity = quantity;
     }
 
-    public BigDecimal getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 

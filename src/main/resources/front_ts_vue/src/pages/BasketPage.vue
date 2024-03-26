@@ -1,17 +1,17 @@
 <template>
   <div class="container">
     <div class="wrapper row">
-      <div class="col">
+      <div class="col-12 col-sm-10 col-md-8">
         <h1>Товары в корзине</h1>
         <div class="product-list">
           <ProductCard
-            v-for="product in userStore?.getUser.basket?.products"
-            v-bind:product="product"
-            :key="product.id"
+            v-for="productItem in userStore?.getUser.basket?.products"
+            v-bind:product="productItem.product"
+            :key="productItem.product.id"
           />
         </div>
       </div>
-      <div class="col-3">
+      <div class="col-12 col-md-4">
         <h1>Оплата</h1>
         <form>
           <p>
@@ -32,13 +32,6 @@ import ProductCard from "@/entities/product/ui/ProductCard.vue";
 import { userStoreModule } from "@/entities/user/api/index.js";
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";
-import VueCarousel from "@chenfengyuan/vue-carousel";
-
-const data = [
-  '<div class="example-slide">Slide 1</div>',
-  '<div class="example-slide">Slide 2</div>',
-  '<div class="example-slide">Slide 3</div>',
-];
 
 const router = useRouter();
 const userStore = userStoreModule();

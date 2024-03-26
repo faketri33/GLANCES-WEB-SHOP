@@ -3,8 +3,8 @@ import { User } from "@/entities/user/model/User";
 import { UserActions } from "@/entities/user/api/model/actions";
 import { $axios } from "@/shared/client/AxiosClient";
 import { Product } from "@/entities/product/model/Product";
-import { RequestExceptions } from "@/shared/exceptions/RequestExceptions";
 import { LoginException } from "@/entities/user/model/LoginException";
+import { ProductItem } from "@/entities/product/model/ProductItem";
 
 export const userStoreModule = defineStore("user", {
   state: () => ({
@@ -18,14 +18,13 @@ export const userStoreModule = defineStore("user", {
       return state.user;
     },
     isLikedProduct: (state) => {
-      return (id: number) => {
+      return (id: string) => {
         return state.user.favoriteProduct?.some((product) => product.id === id);
       };
     },
     getBasketPrice: (state) =>
       state?.user.basket?.products.reduce(
-        (acc, product) =>
-          (acc += product.isPromoActive ? product.promoPrice : product.price),
+        (acc, productItem) => (acc += productItem.price),
         0
       ),
   },
@@ -80,14 +79,22 @@ export const userStoreModule = defineStore("user", {
 
     addToBasket(product: Product) {
       if (this.isLogin) {
-        this.user.basket.products.push(product);
+        const productItem: ProductItem = {
+          id: "",
+          product: product,
+          quantity: 1,
+          price: product.price,
+        };
+        this.user.basket.products.push(productItem);
         UserActions.addToBasket(product);
       } else alert("Вы не авторизованы");
     },
 
     removeFromBasket(product: Product) {
       if (this.isLogin) {
-        const index = this.user.basket.products.indexOf(product, 0);
+        const index = this.user.basket.products.findIndex((productItem) => {
+          return productItem.product === product;
+        }, 0);
         if (index > -1) {
           this.user.basket.products.splice(index, 1);
           UserActions.removeFromBasket(product);

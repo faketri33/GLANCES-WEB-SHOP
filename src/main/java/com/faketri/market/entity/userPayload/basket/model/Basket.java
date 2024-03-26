@@ -4,7 +4,6 @@ import com.faketri.market.entity.productPayload.product.model.ProductItem;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,15 +16,15 @@ public class Basket {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
-    @ManyToMany
+    @OneToMany(cascade = CascadeType.ALL)
     List<ProductItem> products = new ArrayList<>();
     @Column
-    private BigDecimal price;
+    private Integer price;
 
     public Basket() {
     }
 
-    public Basket(UUID id, List<ProductItem> products, BigDecimal price) {
+    public Basket(UUID id, List<ProductItem> products, Integer price) {
         this.id = id;
         this.products = products;
         this.price = price;
@@ -34,7 +33,7 @@ public class Basket {
     @PrePersist
     @PreUpdate
     private void updatePrice() {
-        products.forEach(product -> price = price.add(product.getPrice()));
+        products.forEach(product -> price = price + product.getPrice());
     }
 
     public UUID getId() {
@@ -53,11 +52,11 @@ public class Basket {
         this.products = products;
     }
 
-    public BigDecimal getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 

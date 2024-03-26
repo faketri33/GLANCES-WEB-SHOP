@@ -36,7 +36,7 @@ _axios.interceptors.request.use(async (config: AxiosRequestConfig): AxiosRequest
 
 // Add a response interceptor
 _axios.interceptors.response.use((response): Promise<AxiosResponse> | any => {
-  if (response.status === 403) alert("Вы не авторизованы");
+  if(response.status === 401) localStorage.clear();
   return response
   }, function (error) {
       // Do something with response error

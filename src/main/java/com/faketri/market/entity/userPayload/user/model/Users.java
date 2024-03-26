@@ -28,7 +28,7 @@ public class Users {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -41,7 +41,7 @@ public class Users {
     @Column
     private String surname;
 
-    @Column
+    @Column(unique = true)
     private String login;
 
     @Column

@@ -46,18 +46,31 @@ public class UserPostController {
     }
 
     @RequestMapping("/basket/add")
-    public void addToBasket(@RequestBody ProductItem product) {
+    public void addToBasket(@RequestBody Product product) {
         log.info("ADD BASKET PROD " + product.getId());
         Users user = userService.getCurrentUser();
-        user.getBasket().getProducts().add(product);
+
+        user.getBasket().getProducts()
+                .stream()
+                .filter(productItem1 -> productItem1.getProduct().equals(product))
+                .findAny()
+                .ifPresentOrElse(null,
+                        () -> user.getBasket().getProducts().add(new ProductItem(null, product, 1)));
+
         userService.save(user);
     }
 
     @RequestMapping("/basket/remove")
-    public void removeFromBasket(@RequestBody ProductItem product) {
+    public void removeFromBasket(@RequestBody Product product) {
         log.info("REMOVE BASKET PROD " + product.getId());
         Users user = userService.getCurrentUser();
-        user.getBasket().getProducts().remove(product);
+        ProductItem productItem = user.getBasket()
+                .getProducts()
+                .stream()
+                .filter(productItems -> productItems.getProduct().equals(product))
+                .findFirst()
+                .orElseThrow();
+        user.getBasket().getProducts().remove(productItem);
         userService.save(user);
     }
 }

@@ -129,12 +129,8 @@ public class ProductServiceImpl implements ProductService {
             Pageable pageable, UUID categoriesId,
             List<Characteristics> characteristics
     ) {
-        return productImpl.findAll(productSpecification.hasCategories(
-                                categoriesId)
-                        .and(productSpecification.hasCharacteristics(
-                                characteristics)),
-                pageable
-        );
+        return productImpl.findAll(productSpecification.hasCategories(categoriesId)
+                .and(productSpecification.hasCharacteristics(characteristics)), pageable);
     }
 
     /**

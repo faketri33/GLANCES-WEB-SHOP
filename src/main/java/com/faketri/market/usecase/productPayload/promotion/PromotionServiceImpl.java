@@ -69,11 +69,8 @@ public class PromotionServiceImpl implements PromotionService {
      */
     public void isPromotionActive(Promotion promotion) {
         LocalDateTime dateNow = LocalDateTime.now();
-        if (dateNow.isAfter(promotion.getDateOfStart()) && dateNow.isBefore(promotion.getDateOfEnd())) {
-            System.out.println("работают");
+        if (dateNow.isAfter(promotion.getDateOfStart()) && dateNow.isBefore(promotion.getDateOfEnd()))
             promotion.getPromotionProductItems().forEach(product -> product.setPromoItem(true));
-
-        }
     }
 
     /**
@@ -84,7 +81,6 @@ public class PromotionServiceImpl implements PromotionService {
      */
     public Promotion save(Promotion promotion) {
         isPromotionActive(promotion);
-        System.out.println(promotion.getPromotionProductItems());
         return promotionImpl.save(promotion);
     }
 

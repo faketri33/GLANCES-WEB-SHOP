@@ -2,22 +2,18 @@ package com.faketri.market.infastructure.config.exception;
 
 import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.userPayload.user.exception.PasswordNotValidException;
-import io.jsonwebtoken.ExpiredJwtException;
+import com.faketri.market.entity.userPayload.user.exception.UserAlreadyExistsException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -99,8 +95,8 @@ public class GlobalExceptionHandler {
      * @param e the e
      * @return the response entity
      */
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<AppError> handleException(ExpiredJwtException e) {
+    @ExceptionHandler(JwtValidException.class)
+    public ResponseEntity<AppError> handleException(JwtValidException e) {
         return new ResponseEntity<>(
                 new AppError(HttpStatus.UNAUTHORIZED.value(), e.getMessage()),
                 HttpStatus.UNAUTHORIZED
@@ -127,16 +123,11 @@ public class GlobalExceptionHandler {
         ), e.getStatusCode());
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<AppError> handleException(
-            HttpMessageNotReadableException e
-    ) throws IOException {
-        return new ResponseEntity<>(new AppError(403,
-                Objects.requireNonNull(e.getHttpInputMessage()
-                        .getBody()
-                        .toString())
-        ), HttpStatusCode.valueOf(403));
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<AppErrorArray> handleException(
+            UserAlreadyExistsException e
+    ) {
+        return new ResponseEntity<>(new AppErrorArray(HttpStatus.BAD_REQUEST.value(),
+                Map.of("login", e.getMessage())), HttpStatus.BAD_REQUEST);
     }
-
-
 }

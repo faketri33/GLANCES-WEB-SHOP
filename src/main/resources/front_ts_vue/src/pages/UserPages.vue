@@ -1,6 +1,6 @@
 <template>
   <div class="root container mt-5">
-    <div v-if="!userStore.isLoading" class="user-profile">
+    <div v-if="!userStore.isLoading" class="user-profile border p-4 rounded-2">
       <div class="wrapper row">
         <div class="col-12 col-md-4 col-lg-3 img text-center">
           <img
@@ -20,8 +20,11 @@
           </div>
         </div>
       </div>
-
-      <form class="d-flex flex-column col-md-5 gap-3 mt-5" action="">
+      <h1 class="mt-3">Данные пользователя</h1>
+      <form
+        class="d-flex border p-3 flex-column col-12 col-sm-9 col-md-6 gap-3 mt-5"
+        action=""
+      >
         <input
           class="input-group-text"
           :placeholder="userStore.getUser.name || 'Имя'"

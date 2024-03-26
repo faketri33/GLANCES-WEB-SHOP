@@ -12,4 +12,12 @@ export const CharacteristicsAction = {
         .catch((err) => new Error(err.message))
     );
   },
+
+  loadCharacteristicsByProductId(productId: string) {
+    return [
+      { id: null, name: "ТЕСТЕРОВОЧКА", value: "ТЕСТЕРОВОЧКА" },
+      { id: null, name: "ТЕСТЕРОВОЧКА1", value: "ТЕСТЕРОВОЧКА1" },
+      { id: null, name: "ТЕСТЕРОВОЧКА2", value: "ТЕСТЕРОВОЧКА2" },
+    ];
+  },
 };

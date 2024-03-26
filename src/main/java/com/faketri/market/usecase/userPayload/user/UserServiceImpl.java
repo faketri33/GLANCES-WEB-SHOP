@@ -41,6 +41,16 @@ public class UserServiceImpl implements UserService {
                         "Пользователь с логином " + login + " не найден"));
     }
 
+    @Override
+    public boolean existsByLogin(String login) {
+        return userImpl.existsByLogin(login);
+    }
+
+    @Override
+    public boolean existsByEmail(String login) {
+        return false;
+    }
+
     /**
      * Find by id users.
      *

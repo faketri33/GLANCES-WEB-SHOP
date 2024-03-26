@@ -5,7 +5,7 @@ import com.faketri.market.entity.productPayload.rating.model.Rating;
 import com.faketri.market.infastructure.productPayload.rating.gateway.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -31,8 +31,8 @@ public class RatingServiceImpl implements RatingService {
      * @param id the id
      * @return the page
      */
-    public Page<Rating> findByIdProduct(UUID id) {
-        return ratingImpl.findByProduct_Id(id, PageRequest.of(0, 20));
+    public Page<Rating> findByIdProduct(UUID id, Pageable pageable) {
+        return ratingImpl.findByProduct_Id(id, pageable);
     }
 
     /**

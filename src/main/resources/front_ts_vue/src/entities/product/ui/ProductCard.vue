@@ -24,12 +24,17 @@
       </swiper>
     </div>
     <div
-      class="card-body"
+      class="card-body mt-3"
       :class="typeCard ? 'd-flex flex-column col-3 gap-3' : ''"
     >
-      <h5 class="card-title mb-2 cut-text">
-        {{ getFullName }}
-      </h5>
+      <router-link
+        class="text-decoration-none text-black"
+        :to="'/product/' + product.id"
+      >
+        <h5 class="card-title mb-2 cut-text">
+          {{ getFullName }}
+        </h5>
+      </router-link>
       <p class="card-price text-center">
         {{ product.price }} ₽
         <span v-if="product.isPromoActive" class="original-price">87 999₽</span>

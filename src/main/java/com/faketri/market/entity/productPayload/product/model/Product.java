@@ -8,8 +8,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -39,9 +37,9 @@ public class Product {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Characteristics> characteristics = new HashSet<>();
     @Column
-    private BigDecimal price;
+    private Integer price;
     @Column
-    private BigDecimal promoPrice = BigDecimal.ZERO;
+    private Integer promoPrice = 0;
     @Column
     private Boolean isPromoItem = false;
     @Column
@@ -70,7 +68,7 @@ public class Product {
      * @param quantitySold the quantity sold
      */
     public Product(UUID id, Brand brand, String nameModel,
-                   Categories categories, BigDecimal price, int quantity,
+                   Categories categories, Integer price, int quantity,
                    int quantitySold
     ) {
         this.id = id;
@@ -130,19 +128,19 @@ public class Product {
         this.characteristics = characteristics;
     }
 
-    public BigDecimal getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
-    public BigDecimal getPromoPrice() {
+    public Integer getPromoPrice() {
         return promoPrice;
     }
 
-    public void setPromoPrice(BigDecimal promoPrice) {
+    public void setPromoPrice(Integer promoPrice) {
         this.promoPrice = promoPrice;
     }
 
@@ -159,7 +157,10 @@ public class Product {
     }
 
     public void setDiscount(Short discount) {
-        promoPrice = price.subtract(price.divide(BigDecimal.valueOf(100), RoundingMode.UNNECESSARY).multiply(BigDecimal.valueOf(discount)));
+        if (discount > 0 && discount < 99)
+            promoPrice = price - (price / 100) * discount;
+        else promoPrice = price;
+        
         this.discount = discount;
     }
 

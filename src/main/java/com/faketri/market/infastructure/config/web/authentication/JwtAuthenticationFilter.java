@@ -1,7 +1,9 @@
 package com.faketri.market.infastructure.config.web.authentication;
 
+import com.faketri.market.infastructure.config.exception.JwtValidException;
 import com.faketri.market.infastructure.config.web.authentication.gateway.JwtService;
 import com.faketri.market.usecase.userPayload.user.UserDetailsServerImpl;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,14 +52,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException, AuthenticationException {
 
         var authHeader = request.getHeader(HEADER_NAME);
+
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader,
                 BEARER_PREFIX
         )) {
             filterChain.doFilter(request, response);
             return;
         }
+
         var jwt = authHeader.substring(BEARER_PREFIX.length());
-        var username = jwtService.extractUserName(jwt);
+        String username = "";
+
+        try {
+            username = jwtService.extractUserName(jwt);
+        } catch (ExpiredJwtException ex) {
+            throw new JwtValidException("Для продолжения пожалуйста пройтите повторную аутентификацию.");
+        }
+        
         if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext()
                 .getAuthentication() == null) {
             UserDetails userDetails =
