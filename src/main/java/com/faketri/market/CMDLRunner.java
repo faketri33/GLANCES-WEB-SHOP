@@ -1,27 +1,26 @@
 package com.faketri.market;
 
 import com.faketri.market.entity.image.model.Image;
-import com.faketri.market.entity.productPayload.brand.model.Brand;
-import com.faketri.market.entity.productPayload.categories.model.Categories;
-import com.faketri.market.entity.productPayload.characteristics.gateway.CharacteristicsRepository;
-import com.faketri.market.entity.productPayload.characteristics.model.Characteristics;
-import com.faketri.market.entity.productPayload.product.model.Product;
-import com.faketri.market.entity.productPayload.product.model.ProductItem;
-import com.faketri.market.entity.productPayload.promotion.model.Promotion;
-import com.faketri.market.entity.userPayload.order.model.Orders;
-import com.faketri.market.entity.userPayload.user.gateway.mapper.UserMapper;
-import com.faketri.market.entity.userPayload.user.model.Users;
-import com.faketri.market.infastructure.config.web.authentication.gateway.AuthService;
+import com.faketri.market.entity.product.payload.brand.model.Brand;
+import com.faketri.market.entity.product.payload.categories.model.Categories;
+import com.faketri.market.entity.product.payload.characteristics.gateway.CharacteristicsRepository;
+import com.faketri.market.entity.product.payload.characteristics.model.Characteristics;
+import com.faketri.market.entity.product.payload.product.model.Product;
+import com.faketri.market.entity.product.payload.product.model.ProductItem;
+import com.faketri.market.entity.product.payload.promotion.model.Promotion;
+import com.faketri.market.entity.user.payload.order.model.Orders;
+import com.faketri.market.entity.user.payload.user.model.Users;
 import com.faketri.market.infastructure.image.gateway.ImageService;
-import com.faketri.market.infastructure.productPayload.brand.gateway.BrandService;
-import com.faketri.market.infastructure.productPayload.categories.gateway.CategoriesService;
-import com.faketri.market.infastructure.productPayload.characteristics.gateway.CharacteristicsService;
-import com.faketri.market.infastructure.productPayload.product.gateway.ProductService;
-import com.faketri.market.infastructure.productPayload.promotion.gateway.PromotionService;
-import com.faketri.market.infastructure.productPayload.rating.gateway.RatingService;
-import com.faketri.market.infastructure.userPayload.order.gateway.OrderService;
-import com.faketri.market.infastructure.userPayload.user.dto.SignUpRequest;
-import com.faketri.market.infastructure.userPayload.user.gateway.UserService;
+import com.faketri.market.infastructure.product.payload.brand.gateway.BrandService;
+import com.faketri.market.infastructure.product.payload.categories.gateway.CategoriesService;
+import com.faketri.market.infastructure.product.payload.characteristics.gateway.CharacteristicsService;
+import com.faketri.market.infastructure.product.payload.product.gateway.ProductService;
+import com.faketri.market.infastructure.product.payload.promotion.gateway.PromotionService;
+import com.faketri.market.infastructure.product.payload.rating.gateway.RatingService;
+import com.faketri.market.infastructure.user.payload.auth.gateway.AuthService;
+import com.faketri.market.infastructure.user.payload.order.gateway.OrderService;
+import com.faketri.market.infastructure.user.payload.user.dto.SignUpRequest;
+import com.faketri.market.infastructure.user.payload.user.gateway.UserService;
 import com.github.javafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 
@@ -112,11 +111,11 @@ public class CMDLRunner {
             user.setEmail("test@testNew");
             user.setPassword("123123123");
 
-            user = UserMapper.toObj(authService.signUp(
+            authService.signUp(
                     new SignUpRequest(user.getLogin(),
                             user.getEmail(),
                             user.getPassword())
-            ).getUser());
+            );
 
             Orders orders = new Orders();
 

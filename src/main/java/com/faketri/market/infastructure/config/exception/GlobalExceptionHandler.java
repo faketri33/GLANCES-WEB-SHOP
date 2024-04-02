@@ -1,8 +1,8 @@
 package com.faketri.market.infastructure.config.exception;
 
 import com.faketri.market.entity.exception.ResourceNotFoundException;
-import com.faketri.market.entity.userPayload.user.exception.PasswordNotValidException;
-import com.faketri.market.entity.userPayload.user.exception.UserAlreadyExistsException;
+import com.faketri.market.entity.user.payload.user.exception.PasswordNotValidException;
+import com.faketri.market.entity.user.payload.user.exception.UserAlreadyExistsException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
