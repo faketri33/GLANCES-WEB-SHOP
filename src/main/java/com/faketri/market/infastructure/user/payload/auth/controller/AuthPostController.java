@@ -50,14 +50,14 @@ public class AuthPostController {
     public ResponseEntity<JwtAuthenticationResponse> getAccessToken(
             @RequestBody String refreshToken
     ) {
-        return null;
+        return ResponseEntity.ok().body(authService.getAccessToken(refreshToken));
     }
 
     @RequestMapping("/refresh")
     public ResponseEntity<JwtAuthenticationResponse> getRefreshToken(
             @RequestBody String refreshToken
     ) {
-        return null;
+        return ResponseEntity.ok().body(authService.getRefreshToken(refreshToken));
     }
 
 }

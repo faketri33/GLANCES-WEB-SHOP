@@ -3,10 +3,12 @@ package com.faketri.market.usecase.user.payload.jwt;
 import com.faketri.market.entity.user.payload.jwt.gateway.JwtRefreshRepository;
 import com.faketri.market.entity.user.payload.jwt.model.JwtRefresh;
 import com.faketri.market.infastructure.user.payload.jwt.gateway.JwtRefreshService;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class JwtRefreshServiceImpl implements JwtRefreshService {
 
     private final JwtRefreshRepository jwtRefreshRepository;

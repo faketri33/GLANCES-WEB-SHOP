@@ -12,4 +12,7 @@ public interface AuthService {
 
     JwtAuthenticationResponse signUp(SignUpRequest signUpRequest);
 
+    JwtAuthenticationResponse getAccessToken(String refreshToken);
+
+    JwtAuthenticationResponse getRefreshToken(String refreshToken);
 }

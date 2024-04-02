@@ -3,6 +3,8 @@ package com.faketri.market.usecase.user.payload.auth;
 import com.faketri.market.infastructure.user.payload.auth.dto.JwtAuthenticationResponse;
 import com.faketri.market.infastructure.user.payload.auth.gateway.JwtService;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +31,10 @@ public class JwtServiceImpl implements JwtService {
     private final SecretKey jwtAccessSecret;
     private final SecretKey jwtRefreshSecret;
 
-    public JwtServiceImpl(@Value("${jwt.secret.access.key}") SecretKey jwtAccessSecret,
-                          @Value("${jwt.secret.refresh.key}") SecretKey jwtRefreshSecret) {
-        this.jwtAccessSecret = jwtAccessSecret;
-        this.jwtRefreshSecret = jwtRefreshSecret;
+    public JwtServiceImpl(@Value("${jwt.secret.access.key}") String jwtAccessSecret,
+                          @Value("${jwt.secret.refresh.key}") String jwtRefreshSecret) {
+        this.jwtAccessSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtAccessSecret));
+        this.jwtRefreshSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtRefreshSecret));
     }
 
     public String extractUserName(String token) {
@@ -40,9 +42,12 @@ public class JwtServiceImpl implements JwtService {
     }
 
     public JwtAuthenticationResponse generateToken(UserDetails user) {
+        String access = generateAccessToken(user);
+        String refresh = generateRefreshToken(user);
         return new JwtAuthenticationResponse(
-                generateAccessToken(user),
-                generateRefreshToken(user)
+                access,
+                refresh,
+                getRefreshTokenExpired(refresh)
         );
     }
 
@@ -107,6 +112,13 @@ public class JwtServiceImpl implements JwtService {
 
     public Claims getRefreshClaims(String token) {
         return getClaims(token, jwtRefreshSecret);
+    }
+
+    private LocalDateTime getRefreshTokenExpired(String refresh) {
+        return getRefreshClaims(refresh).getExpiration()
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 
     private Claims getClaims(String token, Key secret) {

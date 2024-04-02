@@ -43,7 +43,7 @@ public class Orders {
     @Column
     private Integer price;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Payment payment = new Payment();
     @Column
     private EStatusOrder statusOrder = EStatusOrder.IN_DELIVERING;

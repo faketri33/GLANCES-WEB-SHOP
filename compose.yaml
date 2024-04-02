@@ -31,19 +31,21 @@ services:
       - postgres
     restart: unless-stopped
 
-  spring-boot:
+  spring:
+    container_name: glances_back
     environment:
       DB_CONNECT: ${DB_CONNECT}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      JWT_KEY: ${JWT_KEY}
-      SALT: ${PASSWORD_SALT}
+      JWT_ACCESS_KEY: ${JWT_ACCESS_KEY}
+      JWT_REFRESH_KEY: ${JWT_REFRESH_KEY}
+      PASSWORD_SALT: ${PASSWORD_SALT}
     image: spring-boot
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "9000:9000"
     networks:
       - postgres
     depends_on:
@@ -56,4 +58,4 @@ networks:
 volumes:
   postgres:
   pgadmin:
-  spring-boot:
+  spring:

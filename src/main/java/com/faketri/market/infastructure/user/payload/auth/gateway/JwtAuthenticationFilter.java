@@ -1,6 +1,6 @@
-package com.faketri.market.infastructure.user.payload.auth;
+package com.faketri.market.infastructure.user.payload.auth.gateway;
 
-import com.faketri.market.infastructure.user.payload.auth.gateway.JwtService;
+import com.faketri.market.infastructure.config.exception.JwtValidException;
 import com.faketri.market.usecase.user.payload.user.UserDetailsServerImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -50,34 +50,42 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException, AuthenticationException {
 
         String token = getTokenFromRequest(request);
+
+        if (StringUtils.isEmpty(token)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String username = jwtService.extractUserName(token);
 
-        if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsServer.loadUserByUsername(username);
-            if (jwtService.validateAccessToken(token)) {
-                SecurityContext context =
-                        SecurityContextHolder.createEmptyContext();
-                var authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
+        if (jwtService.validateAccessToken(token))
+            throw new JwtValidException("Not valid token");
 
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                context.setAuthentication(authToken);
-                SecurityContextHolder.setContext(context);
-                log.info("User with login - " + username + " authorization");
-            }
+        if (StringUtils.isNotEmpty(username)
+                && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsServer.loadUserByUsername(username);
+
+            SecurityContext context =
+                    SecurityContextHolder.createEmptyContext();
+            var authToken = new UsernamePasswordAuthenticationToken(
+                    userDetails,
+                    null,
+                    userDetails.getAuthorities()
+            );
+
+            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            context.setAuthentication(authToken);
+            SecurityContextHolder.setContext(context);
+            log.info("User with login - " + username + " authorization");
         }
         filterChain.doFilter(request, response);
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
         final String bearer = request.getHeader(HEADER_NAME);
-        if (StringUtils.isNotEmpty(bearer) && bearer.startsWith(BEARER_PREFIX)) {
+        if (StringUtils.isNotEmpty(bearer) && bearer.startsWith(BEARER_PREFIX))
             return bearer.substring(7);
-        }
-        return null;
+        return "";
     }
 
 }

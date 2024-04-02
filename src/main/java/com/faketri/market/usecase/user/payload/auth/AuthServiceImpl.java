@@ -76,10 +76,10 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(signUpRequest.getEmail());
         user.getRole().add(ERole.CUSTOMER);
 
-        user = userDetailsServer.getUserService().save(user);
+        final Users finalUser = userDetailsServer.getUserService().save(user);
 
-        log.info("User sign up with login " + user.getLogin());
-        return jwtService.generateToken(userDetailsServer.generateUserDetails(user));
+        log.info("User sign up with login " + finalUser.getLogin());
+        return generatedJwt(user);
     }
 
     /**
@@ -101,10 +101,10 @@ public class AuthServiceImpl implements AuthService {
             throw new PasswordNotValidException("Неверный пароль");
         }
 
-        var user = userDetailsServer.getUserService().findByLogin(signInRequest.getLogin());
+        final Users user = userDetailsServer.getUserService().findByLogin(signInRequest.getLogin());
 
         log.info("User sign in with login " + user.getLogin());
-        return jwtService.generateToken(userDetailsServer.generateUserDetails(user));
+        return generatedJwt(user);
     }
 
     public JwtAuthenticationResponse getAccessToken(String refreshToken) {
@@ -121,10 +121,10 @@ public class AuthServiceImpl implements AuthService {
 
 
         final UserDetails user = userDetailsServer.loadUserByUsername(login);
-        return new JwtAuthenticationResponse(jwtService.generateAccessToken(user), null);
+        return new JwtAuthenticationResponse(jwtService.generateAccessToken(user), null, null);
     }
 
-    public JwtAuthenticationResponse refresh(String refreshToken) {
+    public JwtAuthenticationResponse getRefreshToken(String refreshToken) {
         if (!jwtService.validateRefreshToken(refreshToken))
             throw new JwtValidException("Невалидный JWT токен");
 
@@ -136,13 +136,28 @@ public class AuthServiceImpl implements AuthService {
         if (!saveRefreshToken.getToken().equals(refreshToken))
             throw new JwtValidException("Невалидный JWT токен");
 
-        final UserDetails user = userDetailsServer.loadUserByUsername(login);
-        final JwtAuthenticationResponse jwtResponse = jwtService.generateToken(user);
+        final Users user = userDetailsServer.getUserService().findByLogin(login);
+        return generatedJwt(user);
+    }
 
-        saveRefreshToken.setToken(jwtResponse.getRefreshToken());
-        jwtRefreshService.save(saveRefreshToken);
-        return jwtResponse;
-
+    private JwtAuthenticationResponse generatedJwt(Users user) {
+        final JwtAuthenticationResponse authenticationResponse =
+                jwtService.generateToken(userDetailsServer.generateUserDetails(user));
+        jwtRefreshService
+                .findByUserLogin(user.getLogin())
+                .ifPresentOrElse(
+                        jwtRefresh -> {
+                            jwtRefresh.setToken(authenticationResponse.getRefreshToken());
+                            jwtRefresh.setDateOfExpiration(authenticationResponse.getExpiration());
+                            jwtRefreshService.save(jwtRefresh);
+                        },
+                        () ->
+                                jwtRefreshService.save(new JwtRefresh(null,
+                                        user,
+                                        authenticationResponse.getRefreshToken(),
+                                        authenticationResponse.getExpiration()))
+                );
+        return authenticationResponse;
     }
 
 }

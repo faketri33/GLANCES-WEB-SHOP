@@ -13,7 +13,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-
 /**
  * The type Product.
  *
@@ -32,9 +31,9 @@ public class Product {
     private String nameModel;
     @ManyToOne
     private Categories categories;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Image> image = new HashSet<>();
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Characteristics> characteristics = new HashSet<>();
     @Column
     private Integer price;

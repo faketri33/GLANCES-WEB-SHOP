@@ -3,6 +3,7 @@ package com.faketri.market.entity.user.payload.jwt.model;
 import com.faketri.market.entity.user.payload.user.model.Users;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -17,14 +18,22 @@ public class JwtRefresh {
     private Users user;
 
     private String token;
+    private LocalDateTime dateOfCreate;
+    private LocalDateTime dateOfExpiration;
 
     public JwtRefresh() {
     }
 
-    public JwtRefresh(UUID id, Users user, String token) {
+    public JwtRefresh(UUID id, Users user, String token, LocalDateTime dateOfExpiration) {
         this.id = id;
         this.user = user;
         this.token = token;
+        this.dateOfExpiration = dateOfExpiration;
+    }
+
+    @PrePersist
+    public void onCreate() {
+        this.dateOfCreate = LocalDateTime.now();
     }
 
     public UUID getId() {
@@ -49,5 +58,13 @@ public class JwtRefresh {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public LocalDateTime getDateOfExpiration() {
+        return dateOfExpiration;
+    }
+
+    public void setDateOfExpiration(LocalDateTime dateOfExpiration) {
+        this.dateOfExpiration = dateOfExpiration;
     }
 }
