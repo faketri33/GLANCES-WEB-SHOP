@@ -109,15 +109,14 @@ public class AuthServiceImpl implements AuthService {
 
     public JwtAuthenticationResponse getAccessToken(String refreshToken) {
         if (!jwtService.validateRefreshToken(refreshToken))
-            throw new JwtValidException("Invalid JWT token");
-
+            throw new JwtValidException("Невалидный JWT token");
         final Claims claims = jwtService.getRefreshClaims(refreshToken);
         final String login = claims.getSubject();
         final JwtRefresh saveRefreshToken = jwtRefreshService.findByUserLogin(login)
                 .orElseThrow(() -> new JwtValidException("Token for user " + login + " not found"));
 
         if (!saveRefreshToken.getToken().equals(refreshToken))
-            throw new JwtValidException("JWT token not equals");
+            throw new JwtValidException("JWT token не совпадает");
 
 
         final UserDetails user = userDetailsServer.loadUserByUsername(login);
@@ -131,7 +130,7 @@ public class AuthServiceImpl implements AuthService {
         final Claims claims = jwtService.getRefreshClaims(refreshToken);
         final String login = claims.getSubject();
         final JwtRefresh saveRefreshToken = jwtRefreshService.findByUserLogin(login)
-                .orElseThrow(() -> new JwtValidException("Token for user " + login + " not found"));
+                .orElseThrow(() -> new JwtValidException("Токен для пользователя - " + login + " не найден"));
 
         if (!saveRefreshToken.getToken().equals(refreshToken))
             throw new JwtValidException("Невалидный JWT токен");

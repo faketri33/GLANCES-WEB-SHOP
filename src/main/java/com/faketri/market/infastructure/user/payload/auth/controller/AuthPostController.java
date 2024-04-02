@@ -2,6 +2,7 @@ package com.faketri.market.infastructure.user.payload.auth.controller;
 
 import com.faketri.market.infastructure.user.payload.auth.dto.JwtAuthenticationResponse;
 import com.faketri.market.infastructure.user.payload.auth.gateway.AuthService;
+import com.faketri.market.infastructure.user.payload.jwt.dto.JwtRefreshRequest;
 import com.faketri.market.infastructure.user.payload.user.dto.SignInRequest;
 import com.faketri.market.infastructure.user.payload.user.dto.SignUpRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -48,16 +49,16 @@ public class AuthPostController {
 
     @RequestMapping("/access")
     public ResponseEntity<JwtAuthenticationResponse> getAccessToken(
-            @RequestBody String refreshToken
+            @RequestBody JwtRefreshRequest refreshToken
     ) {
-        return ResponseEntity.ok().body(authService.getAccessToken(refreshToken));
+        return ResponseEntity.ok().body(authService.getAccessToken(refreshToken.getRefreshToken()));
     }
 
     @RequestMapping("/refresh")
     public ResponseEntity<JwtAuthenticationResponse> getRefreshToken(
-            @RequestBody String refreshToken
+            @RequestBody JwtRefreshRequest refreshToken
     ) {
-        return ResponseEntity.ok().body(authService.getRefreshToken(refreshToken));
+        return ResponseEntity.ok().body(authService.getRefreshToken(refreshToken.getRefreshToken()));
     }
 
 }

@@ -23,8 +23,6 @@ import com.faketri.market.infastructure.user.payload.user.dto.SignUpRequest;
 import com.faketri.market.infastructure.user.payload.user.gateway.UserService;
 import com.github.javafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,9 +31,9 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
+
 public class CMDLRunner {
-    @Bean
+ 
     public CommandLineRunner commandLineRunner(
             ProductService productService,
             PromotionService promotionService,
