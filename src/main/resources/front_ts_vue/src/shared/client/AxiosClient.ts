@@ -1,7 +1,7 @@
-import axios, { AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosInstance } from "axios";
 import { Vue } from "vue-class-component";
 
-const BASE_URL = "http://127.0.0.1:8080/api";
+const BASE_URL = "http://127.0.0.1:9000/api";
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
@@ -12,7 +12,7 @@ const config = {
   baseURL: BASE_URL,
   timeout: 30000,
   headers: {
-    Authorization: localStorage.getItem("token")
+    Authorization: localStorage.getItem("type") || "" + localStorage.getItem("token") || ""
   },
   validateStatus (status: number) {
     return status < 500 // Resolve only if the status code is less than 500
@@ -34,15 +34,42 @@ _axios.interceptors.request.use(async (config: AxiosRequestConfig): AxiosRequest
 )
 /* eslint-disable */
 
-// Add a response interceptor
-_axios.interceptors.response.use((response): Promise<AxiosResponse> | any => {
-  if(response.status === 401) localStorage.clear();
-  return response
-  }, function (error) {
-      // Do something with response error
-      return Promise.reject(error.response);
+// который в случае невалидного accessToken попытается его обновить
+// и переотправить запрос с обновленным accessToken
+_axios.interceptors.response.use(
+  // в случае валидного accessToken ничего не делаем:
+  (config) => {
+    return config;
+  },
+  // в случае просроченного accessToken пытаемся его обновить:
+  async (error) => {
+    // предотвращаем зацикленный запрос, добавляя свойство _isRetry
+    const originalRequest = {...error.config};
+    originalRequest._isRetry = true;
+    if (
+      // проверим, что ошибка именно из-за невалидного accessToken
+      error.response.status === 401 &&
+      // проверим, что запрос не повторный
+      error.config &&
+      !error.config._isRetry
+    ) {
+      try {
+        // запрос на обновление токенов
+        const resp = await _axios.post("/api/auth/access");
+        // сохраняем новый accessToken в localStorage
+        localStorage.setItem("type", resp.data.type);
+        localStorage.setItem("token", resp.data.accessToken);
+        // переотправляем запрос с обновленным accessToken
+        return _axios.request(originalRequest);
+      } catch (error) {
+        console.log("AUTH ERROR");
+      }
+    }
+    // на случай, если возникла другая ошибка (не связанная с авторизацией)
+    // пробросим эту ошибку
+    throw error;
   }
-)
+);
 
 class AxiosPlugin {
   public install () {

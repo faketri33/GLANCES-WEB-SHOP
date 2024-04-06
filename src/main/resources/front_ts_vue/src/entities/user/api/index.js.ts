@@ -45,9 +45,9 @@ export const userStoreModule = defineStore("user", {
       this.isLoading = false;
     },
 
-    async loadUserByLogin(login: string) {
+    loadUser() {
       this.isLoading = true;
-      UserActions.loadUserByLogin(login)
+      UserActions.loadUser()
         .then((r) => this.updateUser(r))
         .catch((err) => this.updateErrorMessage(err));
       this.isLoading = false;

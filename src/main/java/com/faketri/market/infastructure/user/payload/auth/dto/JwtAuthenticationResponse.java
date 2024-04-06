@@ -1,5 +1,6 @@
 package com.faketri.market.infastructure.user.payload.auth.dto;
 
+import com.faketri.market.infastructure.user.payload.user.dto.UserResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Schema(description = "Ответ c токеном доступа")
 public class JwtAuthenticationResponse {
 
+    private UserResponse user;
     @Schema(description = "Токен доступа",
             example = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTYyMjUwNj...")
     private String accessToken;
@@ -27,6 +29,21 @@ public class JwtAuthenticationResponse {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.expiration = expiration;
+    }
+
+    public JwtAuthenticationResponse(UserResponse user, String accessToken, String refreshToken, LocalDateTime expiration) {
+        this.user = user;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+        this.expiration = expiration;
+    }
+
+    public UserResponse getUser() {
+        return user;
+    }
+
+    public void setUser(UserResponse user) {
+        this.user = user;
     }
 
     public String getAccessToken() {

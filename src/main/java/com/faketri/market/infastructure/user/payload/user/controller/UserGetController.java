@@ -8,9 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * The type User controller.
@@ -38,15 +39,8 @@ public class UserGetController {
      * @return the users
      */
     @RequestMapping("/")
-    public UserResponse findByLogin(@RequestParam String login) {
-        log.info(String.format("get user with login - %s", login));
-        Users user = userService.findByLogin(login);
-        System.out.println(user.getPassword());
+    public UserResponse findMe() {
+        Users user = userService.getCurrentUser();
         return UserMapper.toResponse(user);
-    }
-
-    @RequestMapping("/{id}")
-    public UserResponse findById(@RequestParam UUID id) {
-        return UserMapper.toResponse(userService.findById(id));
     }
 }

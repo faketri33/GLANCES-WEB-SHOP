@@ -43,10 +43,16 @@ public class ImageController {
     public void getImageGetId(@PathVariable UUID id,
                               HttpServletResponse response
     ) throws IOException {
-        InputStream in = new ClassPathResource(imageService.findById(id)
-                .getPath()).getInputStream();
-        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-        IOUtils.copy(in, response.getOutputStream());
+        try {
+            InputStream in = new ClassPathResource(imageService.findById(id)
+                    .getPath()).getInputStream();
+            response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+            IOUtils.copy(in, response.getOutputStream());
+        } catch (Exception e) {
+            InputStream in = new ClassPathResource("images/NotFound.png").getInputStream();
+            response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+            IOUtils.copy(in, response.getOutputStream());
+        }
     }
 
 }

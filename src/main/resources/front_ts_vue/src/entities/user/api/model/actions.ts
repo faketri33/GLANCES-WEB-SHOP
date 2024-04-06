@@ -9,8 +9,9 @@ export const UserActions = {
       login: params.login,
       password: params.password,
     });
+
     return response.status === 200
-      ? Promise.resolve(this.additionDataToStore(response))
+      ? Promise.resolve(this.additionDataToStore(response.data))
       : Promise.reject(response.data);
   },
   async signUp(params: User): Promise<User> {
@@ -19,16 +20,13 @@ export const UserActions = {
       email: params.email,
       password: params.password,
     });
+
     return response.status === 200
-      ? Promise.resolve(this.additionDataToStore(response))
+      ? Promise.resolve(this.additionDataToStore(response.data))
       : Promise.reject(response.data);
   },
-  async loadUserByLogin(login: string): Promise<User> {
-    const response = await $axios.get("/user/", {
-      params: {
-        login: login,
-      },
-    });
+  async loadUser(): Promise<User> {
+    const response = await $axios.get("/user/");
     return response.status === 200
       ? Promise.resolve(response.data)
       : Promise.reject(response.data);

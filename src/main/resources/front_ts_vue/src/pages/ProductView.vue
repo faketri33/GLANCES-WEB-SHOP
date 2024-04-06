@@ -18,7 +18,7 @@
             :key="image.id"
           >
             <img
-              :src="'http://localhost:8080/api/image/' + image.id"
+              :src="'http://localhost:9000/api/image/' + image.id"
               alt=""
               style="max-height: 220px"
             />
@@ -36,7 +36,7 @@
         >
           <swiper-slide v-for="image in product.image" :key="image.id">
             <img
-              :src="'http://localhost:8080/api/image/' + image.id"
+              :src="'http://localhost:9000/api/image/' + image.id"
               alt=""
               style="max-height: 120px"
             />

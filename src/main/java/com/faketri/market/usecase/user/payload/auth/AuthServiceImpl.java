@@ -3,6 +3,7 @@ package com.faketri.market.usecase.user.payload.auth;
 import com.faketri.market.entity.user.payload.jwt.model.JwtRefresh;
 import com.faketri.market.entity.user.payload.user.exception.PasswordNotValidException;
 import com.faketri.market.entity.user.payload.user.exception.UserAlreadyExistsException;
+import com.faketri.market.entity.user.payload.user.gateway.mapper.UserMapper;
 import com.faketri.market.entity.user.payload.user.model.ERole;
 import com.faketri.market.entity.user.payload.user.model.Users;
 import com.faketri.market.infastructure.config.exception.JwtValidException;
@@ -35,7 +36,6 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
     private final UserDetailsServerImpl userDetailsServer;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -120,7 +120,10 @@ public class AuthServiceImpl implements AuthService {
 
 
         final UserDetails user = userDetailsServer.loadUserByUsername(login);
-        return new JwtAuthenticationResponse(jwtService.generateAccessToken(user), null, null);
+        return new JwtAuthenticationResponse(
+                jwtService.generateAccessToken(user),
+                null,
+                null);
     }
 
     public JwtAuthenticationResponse getRefreshToken(String refreshToken) {
@@ -142,6 +145,7 @@ public class AuthServiceImpl implements AuthService {
     private JwtAuthenticationResponse generatedJwt(Users user) {
         final JwtAuthenticationResponse authenticationResponse =
                 jwtService.generateToken(userDetailsServer.generateUserDetails(user));
+        authenticationResponse.setUser(UserMapper.toResponse(user));
         jwtRefreshService
                 .findByUserLogin(user.getLogin())
                 .ifPresentOrElse(

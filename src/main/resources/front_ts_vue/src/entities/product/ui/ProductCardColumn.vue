@@ -10,7 +10,7 @@
       style="color: black; gap: 24px"
     >
       <img
-        :src="'http://localhost:8080/api/image/' + product.image[0].id"
+        :src="'http://localhost:9000/api/image/' + product.image[0].id"
         class="card-img-top"
         :alt="getFullName"
         style="max-height: 206px; max-width: 174px"

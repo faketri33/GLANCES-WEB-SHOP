@@ -9,7 +9,7 @@
     >
       <img
         style="max-width: 120px; max-height: 134px"
-        :src="'http://localhost:8080/api/image/' + categories.image.id"
+        :src="'http://localhost:9000/api/image/' + categories.image.id"
         alt=""
       />
       <h5 class="text mt-2 align-items-center w-100">
