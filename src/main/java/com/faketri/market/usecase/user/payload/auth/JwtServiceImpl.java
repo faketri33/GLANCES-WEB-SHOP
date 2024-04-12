@@ -93,7 +93,7 @@ public class JwtServiceImpl implements JwtService {
                     .parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException expEx) {
-            log.error("Token expired", expEx);
+            log.error("Token expired");
         } catch (UnsupportedJwtException unsEx) {
             log.error("Unsupported jwt", unsEx);
         } catch (MalformedJwtException mjEx) {

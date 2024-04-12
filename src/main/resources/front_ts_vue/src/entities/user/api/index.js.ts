@@ -9,7 +9,7 @@ import { ProductItem } from "@/entities/product/model/ProductItem";
 export const userStoreModule = defineStore("user", {
   state: () => ({
     user: {} as User,
-    isLogin: !!localStorage.getItem("token"),
+    isLogin: !!localStorage.getItem("access"),
     isLoading: true,
     errorMessage: {} as LoginException,
   }),
@@ -32,7 +32,7 @@ export const userStoreModule = defineStore("user", {
     signIn(params: User) {
       this.isLoading = true;
       UserActions.signIn(params)
-        .then((r) => this.updateUser(r))
+        .then((user) => this.updateUser(user))
         .catch((err) => this.updateErrorMessage(err));
       this.isLoading = false;
     },
@@ -40,8 +40,12 @@ export const userStoreModule = defineStore("user", {
     signUp(params: User) {
       this.isLoading = true;
       UserActions.signUp(params)
-        .then((r) => this.updateUser(r))
-        .catch((err) => this.updateErrorMessage(err));
+        .then((r) => {
+          this.updateUser(r);
+        })
+        .catch((err) => {
+          this.updateErrorMessage(err);
+        });
       this.isLoading = false;
     },
 

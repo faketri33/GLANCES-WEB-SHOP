@@ -47,11 +47,11 @@ export const UserActions = {
     return await $axios.post("/user/basket/remove", product);
   },
 
-  additionDataToStore(response: AxiosResponse): User {
-    console.log(response);
-    localStorage.setItem("login", response.data.user.login);
-    localStorage.setItem("token", "Bearer " + response.data.token);
-    $axios.defaults.headers.common.Authorization = response.data.token;
-    return response.data.user;
+  additionDataToStore(response: any): User {
+    console.log(response.user);
+    localStorage.setItem("login", response.user.login);
+    localStorage.setItem("access", response.accessToken);
+    localStorage.setItem("refresh", response.refreshToken);
+    return response.user;
   },
 };

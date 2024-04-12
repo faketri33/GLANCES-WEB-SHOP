@@ -11,12 +11,6 @@ const BASE_URL = "http://127.0.0.1:9000/api";
 const config = {
   baseURL: BASE_URL,
   timeout: 30000,
-  headers: {
-    Authorization: localStorage.getItem("type") || "" + localStorage.getItem("token") || ""
-  },
-  validateStatus (status: number) {
-    return status < 500 // Resolve only if the status code is less than 500
-  }
 }
 /* eslint-enable */
 
@@ -25,7 +19,8 @@ const _axios: AxiosInstance = axios.create(config);
 /* eslint-disable */
 // @ts-ignore
 _axios.interceptors.request.use(async (config: AxiosRequestConfig): AxiosRequestConfig | Promise<AxiosRequestConfig> => {
-    config.headers.Authorization = localStorage.getItem("token");
+    if(localStorage.getItem("access") != null)
+      config.headers.Authorization = "Bearer " + localStorage.getItem("access");
     return Promise.resolve(config)
   },  (error) => {
     // Do something with request error
@@ -43,24 +38,22 @@ _axios.interceptors.response.use(
   },
   // в случае просроченного accessToken пытаемся его обновить:
   async (error) => {
-    // предотвращаем зацикленный запрос, добавляя свойство _isRetry
-    const originalRequest = {...error.config};
-    originalRequest._isRetry = true;
+    const config = error?.config;
+    console.log("I'A HERE");
     if (
-      // проверим, что ошибка именно из-за невалидного accessToken
-      error.response.status === 401 &&
-      // проверим, что запрос не повторный
-      error.config &&
-      !error.config._isRetry
+      error?.response?.status === 403 && !config?.sent
     ) {
       try {
+        config.sent = true;
         // запрос на обновление токенов
-        const resp = await _axios.post("/api/auth/access");
+        const resp = await _axios.post("/auth/access", {
+          refreshToken: localStorage.getItem("refresh")
+        });
         // сохраняем новый accessToken в localStorage
-        localStorage.setItem("type", resp.data.type);
-        localStorage.setItem("token", resp.data.accessToken);
+        localStorage.setItem("access", resp.data.accessToken);
         // переотправляем запрос с обновленным accessToken
-        return _axios.request(originalRequest);
+        return _axios.request(config);
+
       } catch (error) {
         console.log("AUTH ERROR");
       }

@@ -2,6 +2,7 @@ package com.faketri.market.infastructure.user.payload.auth.gateway;
 
 import com.faketri.market.infastructure.config.exception.JwtValidException;
 import com.faketri.market.usecase.user.payload.user.UserDetailsServerImpl;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,29 +57,36 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String username = jwtService.extractUserName(token);
+        try {
+            if (!jwtService.validateAccessToken(token))
+                throw new JwtValidException("Not valid token");
 
-        if (jwtService.validateAccessToken(token))
-            throw new JwtValidException("Not valid token");
+            String username = jwtService.extractUserName(token);
 
-        if (StringUtils.isNotEmpty(username)
-                && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsServer.loadUserByUsername(username);
+            if (StringUtils.isNotEmpty(username)
+                    && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsServer.loadUserByUsername(username);
 
-            SecurityContext context =
-                    SecurityContextHolder.createEmptyContext();
-            var authToken = new UsernamePasswordAuthenticationToken(
-                    userDetails,
-                    null,
-                    userDetails.getAuthorities()
-            );
+                SecurityContext context =
+                        SecurityContextHolder.createEmptyContext();
+                var authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
 
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            context.setAuthentication(authToken);
-            SecurityContextHolder.setContext(context);
-            log.info("User with login - " + username + " authorization");
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                context.setAuthentication(authToken);
+                SecurityContextHolder.setContext(context);
+                log.info("User with login - " + username + " authorization");
+
+            }
+        }catch (RuntimeException ex){
+            log.error(ex.getMessage());
         }
-        filterChain.doFilter(request, response);
+        finally {
+            filterChain.doFilter(request, response);
+        }
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {

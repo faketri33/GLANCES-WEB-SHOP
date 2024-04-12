@@ -1,12 +1,12 @@
 <template>
   <div class="root container mt-5">
-    <div v-if="!userStore.isLoading" class="user-profile border p-4 rounded-2">
+    <div v-if="userStore.user" class="user-profile border p-4 rounded-2">
       <div class="wrapper row">
         <div class="col-12 col-md-4 col-lg-3 img text-center">
           <img
             class="border rounded-5"
             :src="
-              'http://localhost:8080/api/image/' +
+              'http://localhost:9000/api/image/' +
               userStore.getUser?.profileImage?.id
             "
             alt="Изображения профиля"
@@ -35,7 +35,7 @@
         />
         <input
           class="input-group-text"
-          :placeholder="userStore.getUser._dateOfBirthday || 'День рождения'"
+          :placeholder="userStore.getUser.dateOfBirthday || 'День рождения'"
         />
         <input
           class="input-group-text"
@@ -64,8 +64,8 @@ const router = useRouter();
 const userStore = userStoreModule();
 
 const userLogout = () => {
-  router.push("/");
   userStore.logout();
+  router.push("/");
 };
 
 onMounted(() => {

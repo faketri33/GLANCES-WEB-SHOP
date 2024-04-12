@@ -53,9 +53,14 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((requests) ->
                         requests
                                 .requestMatchers(HttpMethod.POST, "/api/product/categories/*").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/product/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/characteristics/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/promotion/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/brand/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/image/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/rating/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
-                                .requestMatchers("/api/user/**").authenticated()
                                 .requestMatchers("/api/orders/**").authenticated()
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))

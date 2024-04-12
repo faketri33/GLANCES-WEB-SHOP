@@ -3,7 +3,7 @@ version: '3.5'
 services:
   postgres:
     container_name: postgres_container
-    image: postgres
+    image: postgres:16-alpine
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -51,7 +51,22 @@ services:
     depends_on:
       - postgres
 
+  vue:
+    container_name: vue_front
+    image: vue-js
+    build:
+      context: ./src/main/resources/front_ts_vue/
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - spring
+    depends_on:
+      - spring
+
 networks:
+  spring:
+    driver: bridge
   postgres:
     driver: bridge
 
@@ -59,3 +74,4 @@ volumes:
   postgres:
   pgadmin:
   spring:
+  vue:

@@ -5,7 +5,7 @@
         <swiper-slide v-for="promo in promotionData" :key="promo.id">
           <router-link :to="'/promotion/' + promo.id">
             <img
-              src="../../../images/promo-cover_L.png"
+              src="@/app/assets/img/promo-cover_L.png"
               alt=""
               style="width: 100%"
             />

@@ -20,6 +20,6 @@ const userStore = userStoreModule();
 onMounted(async () => {
   const login = localStorage.getItem("login");
   console.log(login);
-  return login != null ? await userStore.loadUserByLogin(login) : null;
+  return login ? await userStore.loadUser() : null;
 });
 </script>

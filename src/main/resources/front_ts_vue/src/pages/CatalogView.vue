@@ -25,9 +25,19 @@
           <div class="col-12">
             <nav aria-label="Page navigation">
               <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <!-- Add more page numbers here -->
+                <li
+                  v-for="number in pages[0].totalPages"
+                  :key="number"
+                  class="page-item"
+                >
+                  <a
+                    class="page-link"
+                    v-on:click="changePages(number - 1)"
+                    href="#"
+                  >
+                    {{ number }}
+                  </a>
+                </li>
               </ul>
             </nav>
           </div>
@@ -60,6 +70,15 @@ const pages = ref<PageableType<Product>[]>([]);
 const characteristics = ref<Characteristics[]>();
 
 const filter = ref<Characteristics[]>([]);
+
+const changePages = async (pageIndex: number) => {
+  currentPages.value = pageIndex;
+  if (!pages.value[pageIndex]) {
+    console.log("ГРУЗИМ");
+    const resp = await loadPages();
+    pages.value[pageIndex] = resp;
+  }
+};
 
 const useFiltered = async (selectedValues: Characteristics[]) => {
   filter.value = selectedValues;

@@ -3,6 +3,7 @@ package com.faketri.market.infastructure.config.exception;
 import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.user.payload.user.exception.PasswordNotValidException;
 import com.faketri.market.entity.user.payload.user.exception.UserAlreadyExistsException;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
@@ -97,6 +98,16 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(JwtValidException.class)
     public ResponseEntity<AppError> handleException(JwtValidException e) {
+        System.out.println("OBRABOTAL");
+        return new ResponseEntity<>(
+                new AppError(HttpStatus.UNAUTHORIZED.value(), e.getMessage()),
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<AppError> handleException(ExpiredJwtException e) {
+        System.out.println("OBRABOTAL EXPIRED");
         return new ResponseEntity<>(
                 new AppError(HttpStatus.UNAUTHORIZED.value(), e.getMessage()),
                 HttpStatus.UNAUTHORIZED
