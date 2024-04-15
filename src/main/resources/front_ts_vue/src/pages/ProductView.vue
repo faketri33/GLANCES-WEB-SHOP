@@ -3,8 +3,8 @@
     <h1 v-if="product">
       {{ product.brand.name + " " + product.nameModel }}
     </h1>
-    <div v-if="product" class="wrapper row border rounded-2">
-      <div class="col-12 col-sm-8 col-md-5 border rounded-2 p-2 img">
+    <div v-if="product" class="wrapper row rounded-2 shadow p-3">
+      <div class="col-12 col-sm-8 col-md-5 shadow rounded-2 p-2 img">
         <swiper
           :slidesPerView="1"
           :centered-slides="true"

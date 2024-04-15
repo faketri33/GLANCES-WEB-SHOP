@@ -6,13 +6,21 @@
         <ul style="list-style-type: none">
           <li v-for="subItem in item.values" :key="subItem">
             <input
+              v-if="!subItem.hidden"
+              class="form-check-input"
               type="checkbox"
               :id="subItem.id"
               :value="subItem.value"
               @click="addToSelected($event, subItem.id)"
             />
-            <label :for="subItem.id" class="ms-2">{{ subItem.value }}</label>
+            <label
+              class="form-check-label ms-2"
+              v-if="!subItem.hidden"
+              :for="subItem.id"
+              >{{ subItem.value }}</label
+            >
           </li>
+          <button class="btn btn-link">Показать еще</button>
         </ul>
       </div>
       <button class="btn btn-success" @click="getSelectedValues">
@@ -40,7 +48,11 @@ export default {
         if (!acc[key]) {
           acc[key] = { name: obj.name, values: [] };
         }
-        acc[key].values.push({ value: obj.value, id: obj.id });
+        acc[key].values.push({
+          value: obj.value,
+          id: obj.id,
+          hidden: acc[key].values.length < 3 ? false : true,
+        });
         return acc;
       }, {});
     },
@@ -55,7 +67,6 @@ export default {
         const index = this.selectedValues.findIndex(
           (element) => element.id === id
         );
-        console.log("INDEX", index);
         if (index > -1) {
           this.selectedValues.splice(index, 1);
         }

@@ -57,6 +57,11 @@ public class Rating {
         this.users = users;
     }
 
+    @PrePersist
+    public void onCreate(){
+        publishedOn = LocalDateTime.now();
+    }
+
     public UUID getId() {
         return id;
     }

@@ -8,6 +8,9 @@
             v-for="productItem in userStore?.getUser.basket?.products"
             v-bind:product="productItem.product"
             :key="productItem.product.id"
+            v-bind:likes="userStore.isLikedProduct(productItem.product.id)"
+            v-on:addToFavorite="userStore.likeProduct(productItem.product)"
+            v-on:toBasket="userStore.addToBasket(productItem.product)"
           />
         </div>
       </div>

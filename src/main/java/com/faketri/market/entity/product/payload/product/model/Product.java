@@ -31,6 +31,8 @@ public class Product {
     private String nameModel;
     @ManyToOne
     private Categories categories;
+
+    private String description;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Image> image = new HashSet<>();
     @ManyToMany(fetch = FetchType.LAZY)
@@ -109,6 +111,18 @@ public class Product {
 
     public void setCategories(Categories categories) {
         this.categories = categories;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getPromoItem() {
+        return isPromoItem;
     }
 
     public Set<Image> getImage() {

@@ -64,7 +64,7 @@ public class Users {
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private Set<Orders> orders = new HashSet<>();
 
-    @OneToMany
+    @ManyToMany
     private Set<Product> favoriteProduct = new HashSet<>();
 
     @Column
