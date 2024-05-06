@@ -45,4 +45,9 @@ public class RatingServiceImpl implements RatingService {
         return ratingImpl.save(rating);
     }
 
+    @Override
+    public void deleteById(UUID uuid) {
+        ratingImpl.deleteById(uuid);
+    }
+
 }

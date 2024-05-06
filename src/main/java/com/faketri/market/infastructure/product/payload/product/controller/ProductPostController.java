@@ -1,19 +1,36 @@
 package com.faketri.market.infastructure.product.payload.product.controller;
 
+import com.faketri.market.entity.image.model.Image;
+import com.faketri.market.entity.product.payload.brand.model.Brand;
 import com.faketri.market.entity.product.payload.characteristics.model.Characteristics;
 import com.faketri.market.entity.product.payload.product.model.Product;
+import com.faketri.market.infastructure.image.gateway.ImageService;
+import com.faketri.market.infastructure.product.payload.product.dto.ProductCreateRequest;
 import com.faketri.market.infastructure.product.payload.product.gateway.ProductService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Encoding;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.ServletContext;
+import jakarta.validation.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.UUID;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -30,13 +47,13 @@ public class ProductPostController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final ProductService productService;
+    private final String root = new ClassPathResource("/images/").getPath();
 
     /**
      * Instantiates a new Product controller.
      *
      * @param productService the product service
      */
-    @Autowired
     public ProductPostController(ProductService productService) {
         this.productService = productService;
     }
@@ -54,10 +71,12 @@ public class ProductPostController {
     public Page<Product> getByFilter(
             @PathVariable(value = "categoriesId") UUID categoriesId,
             @RequestParam(name = "number", required = true,
-                    defaultValue = "1") Integer pageNumber,
+                    defaultValue = "0") Integer pageNumber,
             @RequestParam(name = "size", required = true,
                     defaultValue = "20") Integer pageSize,
-            @RequestBody() List<Characteristics> filter
+            /*@RequestPart(value = "name", required = false) String name,
+            @RequestPart(value = "brand", required = false) Brand brand,*/
+            @RequestBody List<Characteristics> filter
     ) {
         log.info("Get product with filer, filter : " + filter.stream()
                 .map(item -> item.getName() + ": " + item.getValue())
@@ -74,10 +93,34 @@ public class ProductPostController {
      * REST service endpoint
      * Save product
      *
-     * @param product Object Product
+     * @param productCreateRequest Object Product
      */
-    @RequestMapping("/save")
-    public void save(@RequestBody Product product) {
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @RequestMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void save(
+            @RequestPart("product") final ProductCreateRequest productCreateRequest,
+            @RequestPart("images")  final List<MultipartFile> images) {
+        Product product = new Product();
+
+        product.setBrand(productCreateRequest.getBrand());
+        product.setCategories(productCreateRequest.getCategories());
+        product.setPrice(productCreateRequest.getPrice());
+        product.setQuantity(productCreateRequest.getQuantity());
+        product.setNameModel(productCreateRequest.getNameModel());
+
+        int iterator = 0;
+        String resourcesPath = new ClassPathResource("/src/main/resources/images/").getPath();
+        for (MultipartFile image : images) {
+            String imageName = product.getNameModel()+ "-" + iterator + "-" + image.getOriginalFilename();
+            System.out.println(imageName);
+            try {
+                image.transferTo(Paths.get(resourcesPath + imageName));
+            } catch (IOException e) {
+                log.error(this.getClass() + " " + e.getMessage());
+            }
+            product.getImage().add(new Image(null, "images/" + imageName));
+        }
+
         productService.save(product);
     }
 
@@ -87,8 +130,15 @@ public class ProductPostController {
      *
      * @param product Object Product
      */
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @RequestMapping("/update")
     public void update(@RequestBody Product product) {
+        productService.save(product);
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @RequestMapping("/update-list")
+    public void update(@RequestBody List<Product> product) {
         productService.save(product);
     }
 
@@ -98,6 +148,7 @@ public class ProductPostController {
      *
      * @param product Object Product
      */
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @RequestMapping("/delete")
     public void delete(@RequestBody Product product) {
         productService.delete(product);

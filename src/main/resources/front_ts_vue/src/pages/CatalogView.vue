@@ -18,7 +18,8 @@
           v-for="product in pages[currentPages].content"
           v-bind:product="product"
           v-bind:likes="userStore.isLikedProduct(product.id)"
-          v-on:addToFavorite="userStore.likeProduct(product)"
+          v-bind:isBasketItem="userStore.isInBasketProduct(product.id)"
+          v-on:addToFavorite="userStore.toFavorite"
           v-on:toBasket="userStore.addToBasket(product)"
           :key="product.id"
         ></ProductCard>

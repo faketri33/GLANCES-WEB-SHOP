@@ -26,11 +26,9 @@ public class UserGetController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserGetController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserGetController(UserService userService) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     /**

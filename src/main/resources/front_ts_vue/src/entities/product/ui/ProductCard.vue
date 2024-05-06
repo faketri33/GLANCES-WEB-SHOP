@@ -37,9 +37,13 @@
       </router-link>
       <p class="card-price text-center">
         {{ product.price }} ₽
-        <span v-if="product.isPromoActive" class="original-price">87 999₽</span>
+        <span v-if="product.isPromoActive" class="original-price">{{
+          product.promoPrice
+        }}</span>
       </p>
-      <div v-if="product.isPromoActive" class="discount-tag">-4%</div>
+      <div v-if="product.isPromoActive" class="discount-tag">
+        {{ product.discount }}
+      </div>
       <div
         class="option d-flex justify-content-between align-items-center mb-3"
       >
@@ -50,7 +54,7 @@
       </div>
       <div class="text-center w-100">
         <button @click="addToBasket" class="btn btn-primary w-100">
-          В корзину
+          {{ isBasketItem ? "Удалить из корзины" : "В корзину" }}
         </button>
       </div>
     </div>
@@ -75,6 +79,7 @@ export default {
   props: {
     product: Product,
     likes: Boolean,
+    isBasketItem: Boolean,
     typeCard: {
       type: Boolean,
       default: true,
@@ -101,13 +106,22 @@ export default {
       this.$emit("addToFavorite", this.product, this.mutateLikes);
     },
     addToBasket() {
+      this.mutateIsBasketItem = !this.mutateIsBasketItem;
       this.$emit("toBasket", this.product);
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+.swiper-slide {
+  opacity: 0 !important;
+}
+
+.swiper-slide-active {
+  opacity: 1 !important;
+}
+
 .card-price {
   font-weight: bold;
   font-size: 1.25rem;

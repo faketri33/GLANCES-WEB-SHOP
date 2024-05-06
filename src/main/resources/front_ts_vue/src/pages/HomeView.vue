@@ -32,15 +32,16 @@
         <swiper-slide
           :slidesPerView="'auto'"
           :centeredSlides="true"
-          v-for="product in productData.content"
+          v-for="product in productData?.content"
           :key="product.id"
         >
           <ProductCard
             v-bind:product="product"
             v-bind:typeCard="false"
             v-bind:likes="userStore.isLikedProduct(product.id)"
-            v-on:addToFavorite="userStore.likeProduct(product)"
-            v-on:toBasket="userStore.addToBasket(product)"
+            v-bind:isBasketItem="userStore.isInBasketProduct(product.id)"
+            v-on:addToFavorite="userStore.toFavorite(product)"
+            v-on:toBasket="userStore.toBasket(product)"
           />
         </swiper-slide>
       </swiper>

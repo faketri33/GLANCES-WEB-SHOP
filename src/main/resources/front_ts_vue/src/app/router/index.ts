@@ -6,6 +6,12 @@ import CategoriesSelected from "@/pages/CategoriesSelected.vue";
 import AuthenticationPages from "@/pages/AuthenticationPages.vue";
 import UserPage from "@/pages/UserPages.vue";
 import BasketPage from "@/pages/BasketPage.vue";
+import PromotionView from "@/pages/PromotionView.vue";
+import WorkSpace from "@/pages/employee/WorkSpace.vue";
+import OrdersPages from "@/pages/employee/OrdersPages.vue";
+import ProductCreate from "@/entities/product/ui/ProductCreate.vue";
+import OrdersList from "@/entities/orders/ui/OrdersList.vue";
+import OrderAbout from "@/entities/orders/ui/OrderAbout.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -42,6 +48,40 @@ const routes: Array<RouteRecordRaw> = [
     path: "/basket/",
     name: "basket",
     component: BasketPage,
+  },
+  {
+    path: "/promotion/:id",
+    name: "promotion",
+    component: PromotionView,
+  },
+  {
+    path: "/user/workspace",
+    name: "workspace",
+    component: WorkSpace,
+    children: [
+      {
+        path: "/user/workspace/product/create",
+        name: "ProductCreate",
+        component: ProductCreate,
+      },
+      {
+        path: "/user/workspace/orders",
+        name: "orders",
+        component: OrdersPages,
+        children: [
+          {
+            path: "/user/workspace/orders/about/:id",
+            name: "order-about",
+            component: OrderAbout,
+          },
+          {
+            path: "/user/workspace/orders/list",
+            name: "order-list",
+            component: OrdersList,
+          },
+        ],
+      },
+    ],
   },
 ];
 

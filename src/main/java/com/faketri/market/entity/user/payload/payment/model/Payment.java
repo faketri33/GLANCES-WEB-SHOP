@@ -1,7 +1,7 @@
 package com.faketri.market.entity.user.payload.payment.model;
 
-import com.faketri.market.entity.user.payload.order.model.Orders;
 import com.faketri.market.entity.user.payload.user.model.Users;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -13,25 +13,21 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private Users user;
-    @OneToOne
-    private Orders orders;
-    private PaymentStatus paymentStatus;
+    private PaymentStatus paymentStatus = PaymentStatus.AWAITING_PAID;
     private LocalDateTime dateOfCreate;
     private LocalDateTime dateOfPayment;
 
     public Payment() {
     }
 
-    public Payment(UUID id, Users user,
-                   Orders orders, PaymentStatus paymentStatus,
+    public Payment(UUID id, Users user, PaymentStatus paymentStatus,
                    LocalDateTime dateOfCreate, LocalDateTime dateOfPayment) {
         this.id = id;
         this.user = user;
-        this.orders = orders;
         this.paymentStatus = paymentStatus;
         this.dateOfCreate = dateOfCreate;
         this.dateOfPayment = dateOfPayment;
@@ -51,21 +47,12 @@ public class Payment {
         this.user = user;
     }
 
-
     public UUID getId() {
         return id;
     }
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public Orders getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Orders orders) {
-        this.orders = orders;
     }
 
     public PaymentStatus getPaymentStatus() {

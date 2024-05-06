@@ -9,8 +9,11 @@
             v-bind:product="productItem.product"
             :key="productItem.product.id"
             v-bind:likes="userStore.isLikedProduct(productItem.product.id)"
-            v-on:addToFavorite="userStore.likeProduct(productItem.product)"
-            v-on:toBasket="userStore.addToBasket(productItem.product)"
+            v-bind:isBasketItem="
+              userStore.isInBasketProduct(productItem.product.id)
+            "
+            v-on:addToFavorite="userStore.toFavorite(productItem.product)"
+            v-on:toBasket="userStore.toBasket(productItem.product)"
           />
         </div>
       </div>
@@ -23,7 +26,12 @@
               >{{ userStore?.getBasketPrice }} руб</span
             >
           </p>
-          <button class="btn btn-success">Оформить заказ</button>
+          <button
+            class="btn btn-success"
+            @click="userStore.createOrder(userStore.getUser.basket.products)"
+          >
+            Оформить заказ
+          </button>
         </form>
       </div>
     </div>

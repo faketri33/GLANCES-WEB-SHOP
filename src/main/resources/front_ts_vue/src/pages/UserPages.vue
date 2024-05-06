@@ -1,6 +1,6 @@
 <template>
   <div class="root container mt-5">
-    <div v-if="userStore.user" class="user-profile border p-4 rounded-2">
+    <div v-if="userStore.user" class="user-profile shadow border p-4 rounded-2">
       <div class="wrapper row">
         <div class="col-12 col-md-4 col-lg-3 img text-center">
           <img
@@ -17,6 +17,11 @@
           <div class="info flex-column ms-3">
             <h3 v-text="userStore.getUser.login"></h3>
             <h6 class="text-muted" v-text="userStore.getUser.email"></h6>
+            <RouterLink
+              v-if="userStore.getUser?.role?.some((r) => r === 'CUSTOMER')"
+              :to="'/user/workspace'"
+              >Кабинет работника</RouterLink
+            >
           </div>
         </div>
       </div>
@@ -48,7 +53,19 @@
         <button class="btn btn-success">Сохранить</button>
       </form>
 
-      <h2>Заказы - {{ userStore.getUser.orders?.length || 0 }}</h2>
+      <div class="oredrs shadow p-3 m-2">
+        <h2>Заказы - {{ userStore.getUser.orders?.length || 0 }}</h2>
+        <div
+          v-for="(order, index) in userStore.getUser.orders"
+          :key="index"
+          class="content"
+        >
+          <p>
+            {{ index + 1 }}) Номер заказа - {{ order.id }}, цена -
+            {{ order.price }}, статус - {{ order.statusOrder }}
+          </p>
+        </div>
+      </div>
 
       <button class="btn btn-light" @click="userLogout">Выйти</button>
     </div>

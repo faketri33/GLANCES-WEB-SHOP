@@ -22,6 +22,13 @@ export const userStoreModule = defineStore("user", {
         return state.user.favoriteProduct?.some((product) => product.id === id);
       };
     },
+    isInBasketProduct: (state) => {
+      return (id: string) => {
+        return state.user.basket?.products.some(
+          (productItem) => productItem.product.id === id
+        );
+      };
+    },
     getBasketPrice: (state) =>
       state?.user.basket?.products.reduce(
         (acc, productItem) => (acc += productItem.price),
@@ -33,7 +40,10 @@ export const userStoreModule = defineStore("user", {
       this.isLoading = true;
       UserActions.signIn(params)
         .then((user) => this.updateUser(user))
-        .catch((err) => this.updateErrorMessage(err));
+        .catch((err) => {
+          console.log(err);
+          throw err;
+        });
       this.isLoading = false;
     },
 
@@ -64,6 +74,11 @@ export const userStoreModule = defineStore("user", {
       delete $axios.defaults.headers.common.Authorization;
     },
 
+    toFavorite(product: Product) {
+      if (!this.isLikedProduct(product.id)) this.likeProduct(product);
+      else this.dislikeProduct(product);
+    },
+
     likeProduct(product: Product) {
       if (this.isLogin) {
         this.user.favoriteProduct.push(product);
@@ -81,6 +96,11 @@ export const userStoreModule = defineStore("user", {
       } else alert("Вы не авторизованы");
     },
 
+    toBasket(product: Product) {
+      if (this.isInBasketProduct(product.id)) this.removeFromBasket(product);
+      else this.addToBasket(product);
+    },
+
     addToBasket(product: Product) {
       if (this.isLogin) {
         const productItem: ProductItem = {
@@ -90,20 +110,31 @@ export const userStoreModule = defineStore("user", {
           price: product.price,
         };
         this.user.basket.products.push(productItem);
-        UserActions.addToBasket(product);
+        UserActions.addToBasket(productItem);
+      } else alert("Вы не авторизованы");
+    },
+
+    createOrder(product: Array<ProductItem>) {
+      if (this.isLogin) {
+        UserActions.createOrder(product);
       } else alert("Вы не авторизованы");
     },
 
     removeFromBasket(product: Product) {
       if (this.isLogin) {
+        console.log("удаляем");
         const index = this.user.basket.products.findIndex((productItem) => {
-          return productItem.product === product;
+          return productItem.product.id === product.id;
         }, 0);
         if (index > -1) {
           this.user.basket.products.splice(index, 1);
           UserActions.removeFromBasket(product);
         }
       } else alert("Вы не авторизованы");
+    },
+
+    addRating(productId: string, rating: object) {
+      UserActions.addRating(productId, rating);
     },
 
     updateUser(response: User) {

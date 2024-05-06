@@ -19,12 +19,12 @@ public class Basket {
     @OneToMany(cascade = CascadeType.ALL)
     List<ProductItem> products = new ArrayList<>();
     @Column
-    private Integer price;
+    private Long price;
 
     public Basket() {
     }
 
-    public Basket(UUID id, List<ProductItem> products, Integer price) {
+    public Basket(UUID id, List<ProductItem> products, Long price) {
         this.id = id;
         this.products = products;
         this.price = price;
@@ -52,11 +52,11 @@ public class Basket {
         this.products = products;
     }
 
-    public Integer getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 

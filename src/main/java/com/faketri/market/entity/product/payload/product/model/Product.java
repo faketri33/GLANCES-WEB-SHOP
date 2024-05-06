@@ -31,7 +31,7 @@ public class Product {
     private String nameModel;
     @ManyToOne
     private Categories categories;
-
+    @Column(length = 3000)
     private String description;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Image> image = new HashSet<>();
@@ -142,7 +142,7 @@ public class Product {
     }
 
     public Integer getPrice() {
-        return price;
+        return discount == 0 ? price : getPromoPrice();
     }
 
     public void setPrice(Integer price) {

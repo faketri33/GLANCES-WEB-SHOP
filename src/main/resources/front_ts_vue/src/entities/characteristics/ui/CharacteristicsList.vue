@@ -6,7 +6,7 @@
         <ul style="list-style-type: none">
           <li v-for="subItem in item.values" :key="subItem">
             <input
-              v-if="!subItem.hidden"
+              v-if="subItem.hidden"
               class="form-check-input"
               type="checkbox"
               :id="subItem.id"
@@ -15,12 +15,17 @@
             />
             <label
               class="form-check-label ms-2"
-              v-if="!subItem.hidden"
+              v-if="subItem.hidden"
               :for="subItem.id"
               >{{ subItem.value }}</label
             >
           </li>
-          <button class="btn btn-link">Показать еще</button>
+          <button
+            class="btn btn-link"
+            @click="showMore(item.name, !item.isOpen)"
+          >
+            {{ !item.isOpen ? "Показать еще" : "Скрыть" }}
+          </button>
         </ul>
       </div>
       <button class="btn btn-success" @click="getSelectedValues">
@@ -38,26 +43,33 @@ export default {
   },
   data() {
     return {
+      mutableCharacteristics: [],
       selectedValues: [],
     };
   },
+  created() {
+    this.formatedCharacteristics();
+  },
   computed: {
     getCharacteristics() {
-      return this.characteristics.reduce((acc, obj) => {
+      return this.mutableCharacteristics;
+    },
+  },
+  methods: {
+    formatedCharacteristics() {
+      this.mutableCharacteristics = this.characteristics.reduce((acc, obj) => {
         const key = obj.name;
         if (!acc[key]) {
-          acc[key] = { name: obj.name, values: [] };
+          acc[key] = { name: obj.name, values: [], isOpen: false };
         }
         acc[key].values.push({
           value: obj.value,
           id: obj.id,
-          hidden: acc[key].values.length < 3 ? false : true,
+          hidden: acc[key].values.length < 3 ? true : false,
         });
         return acc;
       }, {});
     },
-  },
-  methods: {
     addToSelected(e, id) {
       if (e.target.checked) {
         this.selectedValues.push(
@@ -74,6 +86,12 @@ export default {
     },
     getSelectedValues() {
       this.$emit("useFiltered", this.selectedValues);
+    },
+    showMore(key, type) {
+      this.getCharacteristics[key].isOpen = type;
+      [...this.getCharacteristics[key].values].slice(3).forEach((element) => {
+        element.hidden = type;
+      });
     },
   },
 };

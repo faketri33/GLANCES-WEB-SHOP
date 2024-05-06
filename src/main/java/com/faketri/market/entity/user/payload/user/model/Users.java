@@ -61,7 +61,7 @@ public class Users {
             joinColumns = @JoinColumn(name = "users_id"))
     private Set<ERole> role = new HashSet<>();
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Orders> orders = new HashSet<>();
 
     @ManyToMany
@@ -92,6 +92,13 @@ public class Users {
         this.email = email;
         this.login = login;
         this.password = password;
+        this.city = city;
+    }
+
+    public Users(UUID id, Image profileImage, String login, String city) {
+        this.id = id;
+        this.profileImage = profileImage;
+        this.login = login;
         this.city = city;
     }
 

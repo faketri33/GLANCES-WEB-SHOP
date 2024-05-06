@@ -1,17 +1,20 @@
 <template>
-  <div class="root">
+  <div class="root p-2 border rounded m-2">
     <div class="wrapper">
-      <div class="card row">
-        <div class="img col-3">
+      <div class="row">
+        <div class="img col-1">
           <img
-            :src="'localhost:8080/api/image/' + rating.users.profileImage.id"
+            class="rounded-circle"
+            :src="'http://localhost:9000/api/image/' + rating.userImage.id"
             alt=""
+            style="width: 100px"
           />
         </div>
-        <div class="body col d-flex flex-column">
+        <div class="body col-11 d-flex flex-column">
           <div class="username">
-            {{ rating.users.login + " " + rating.grade }}
+            {{ rating.username }}
           </div>
+          <div class="rating">Оценка - {{ rating.grade }}</div>
           <div class="card-body">{{ rating.description }}</div>
         </div>
       </div>

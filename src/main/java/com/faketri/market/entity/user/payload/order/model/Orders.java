@@ -1,5 +1,6 @@
 package com.faketri.market.entity.user.payload.order.model;
 
+import com.faketri.market.entity.product.payload.product.model.Product;
 import com.faketri.market.entity.product.payload.product.model.ProductItem;
 import com.faketri.market.entity.user.payload.payment.model.Payment;
 import com.faketri.market.entity.user.payload.user.model.Users;
@@ -31,7 +32,7 @@ public class Orders {
     @JsonIgnore
     private Users users;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<ProductItem> products = new ArrayList<>();
 
     @Column
@@ -41,7 +42,7 @@ public class Orders {
     private LocalDateTime dateOfRelease;
 
     @Column
-    private Integer price;
+    private Integer price = 0;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Payment payment = new Payment();
@@ -69,8 +70,9 @@ public class Orders {
     }
 
     @PrePersist
-    private void onCreate() {
+    public void onCreate() {
         dateOfCreate = LocalDateTime.now();
+        dateOfRelease = LocalDateTime.now().plusDays(5);
     }
 
     public UUID getId() {

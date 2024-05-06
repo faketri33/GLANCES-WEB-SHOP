@@ -23,6 +23,8 @@ import com.faketri.market.infastructure.user.payload.user.dto.SignUpRequest;
 import com.faketri.market.infastructure.user.payload.user.gateway.UserService;
 import com.github.javafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,9 +33,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 public class CMDLRunner {
- 
     public CommandLineRunner commandLineRunner(
             ProductService productService,
             PromotionService promotionService,
@@ -85,6 +85,7 @@ public class CMDLRunner {
                         new Image(null, "images/testImage/2.png"),
                         new Image(null, "images/testImage/3.png")
                 ));
+                product.setDescription(fakerRu.lorem().sentence(155));
                 product.getCharacteristics().addAll(Set.of(
                         new Characteristics(null, "Цвет", fakerRu.color().name()),
                         new Characteristics(null, "Материал", fakerRu.commerce().material()),
@@ -95,6 +96,7 @@ public class CMDLRunner {
             }).collect(Collectors.toList());
 
             Promotion promotion = new Promotion();
+            promotion.setBanner(new Image(null, "/images/promo-cover_L.png"));
             promotion.setDateOfStart(LocalDateTime.now());
             promotion.setTitle("ПРОДАМ ВСЕ И ВСЕМ АУКЦИЯ");
             promotion.setDescription(fakerRu.lorem().paragraph(25));
@@ -118,15 +120,6 @@ public class CMDLRunner {
                             user.getPassword())
             );
 
-            user = userService.findByLogin("testerovkaNew");
-
-            Orders orders = new Orders();
-
-            orders.getProducts().add(new ProductItem(null, products.get(0), 1));
-            orders.getProducts().add(new ProductItem(null, products.get(23), 4));
-            orders.setUsers(user);
-
-            orderService.save(orders);
         };
     }
 }

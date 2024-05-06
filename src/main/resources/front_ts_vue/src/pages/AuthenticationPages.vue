@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { userStoreModule } from "@/entities/user/api/index.js";
 import { User } from "@/entities/user/model/User";
 
@@ -95,8 +95,12 @@ const isSingIn = ref(true);
 const userStore = userStoreModule();
 
 const auth = () => {
-  if (!isSingIn.value) userStore.signIn(user);
-  else userStore.signUp(user);
+  try {
+    if (!isSingIn.value) userStore.signIn(user);
+    else userStore.signUp(user);
+  } catch (error) {
+    console.log("ERORR");
+  }
 };
 
 // onMounted(() => (userStore.errorMessage));

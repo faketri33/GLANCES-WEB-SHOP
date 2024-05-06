@@ -58,8 +58,6 @@ _axios.interceptors.response.use(
         console.log("AUTH ERROR");
       }
     }
-    // на случай, если возникла другая ошибка (не связанная с авторизацией)
-    // пробросим эту ошибку
     throw error;
   }
 );

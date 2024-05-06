@@ -2,13 +2,19 @@ package com.faketri.market.infastructure.user.payload.user.controller;
 
 import com.faketri.market.entity.product.payload.product.model.Product;
 import com.faketri.market.entity.product.payload.product.model.ProductItem;
+import com.faketri.market.entity.user.payload.order.gateway.mapper.OrderMapper;
+import com.faketri.market.entity.user.payload.order.model.Orders;
 import com.faketri.market.entity.user.payload.user.model.Users;
+import com.faketri.market.infastructure.user.payload.order.dto.OrdersDto;
 import com.faketri.market.infastructure.user.payload.user.gateway.UserService;
+import org.antlr.v4.runtime.atn.SemanticContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * The type Post controller.
@@ -46,16 +52,18 @@ public class UserPostController {
     }
 
     @RequestMapping("/basket/add")
-    public void addToBasket(@RequestBody Product product) {
+    public void addToBasket(@RequestBody ProductItem product) {
         log.info("ADD BASKET PROD " + product.getId());
         Users user = userService.getCurrentUser();
 
-        user.getBasket().getProducts()
+        user.getBasket()
+                .getProducts()
                 .stream()
-                .filter(productItem1 -> productItem1.getProduct().equals(product))
+                .filter(productItem1 -> productItem1.getProduct().equals(product.getProduct()))
                 .findAny()
-                .ifPresentOrElse(null,
-                        () -> user.getBasket().getProducts().add(new ProductItem(null, product, 1)));
+                .ifPresentOrElse(
+                        (productItem) -> productItem.setQuantity(productItem.getQuantity()),
+                        () -> user.getBasket().getProducts().add(product));
 
         userService.save(user);
     }
@@ -64,13 +72,38 @@ public class UserPostController {
     public void removeFromBasket(@RequestBody Product product) {
         log.info("REMOVE BASKET PROD " + product.getId());
         Users user = userService.getCurrentUser();
+
         ProductItem productItem = user.getBasket()
                 .getProducts()
                 .stream()
                 .filter(productItems -> productItems.getProduct().equals(product))
                 .findFirst()
                 .orElseThrow();
+
         user.getBasket().getProducts().remove(productItem);
+
         userService.save(user);
+    }
+
+    @RequestMapping("/order/create")
+    public OrdersDto createOrder(@RequestBody List<ProductItem> product) {
+        Users user = userService.getCurrentUser();
+        log.info("CREATE ORDER " + user.getId());
+
+        Orders orders = new Orders();
+
+        orders.getProducts().addAll(product);
+        orders.setUsers(user);
+        orders.setPrice(
+                product
+                    .stream().map(p -> p.getProduct().getPrice() * p.getQuantity())
+                    .reduce(Integer::sum)
+                    .orElse(0)
+        );
+        user.getOrders().add(orders);
+
+        userService.save(user);
+
+        return OrderMapper.toDto(orders);
     }
 }

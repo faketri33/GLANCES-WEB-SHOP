@@ -63,7 +63,10 @@
           </h2>
         </div>
         <div class="actions w-100 d-flex">
-          <button class="btn shadow me-2">
+          <button
+            class="btn shadow me-2"
+            @click="userStore.toFavorite(product!)"
+          >
             <img
               :src="
                 userStore.isLikedProduct(productId) ? '/red.svg' : '/Vector.svg'
@@ -71,26 +74,64 @@
               alt=""
             />
           </button>
-          <button @click="addToBasket" class="btn btn-primary w-100">
-            В корзину
+          <button
+            @click="userStore.toBasket(product!)"
+            class="btn btn-primary w-100"
+          >
+            {{
+              userStore.isInBasketProduct(product.id)
+                ? "Удалить из корзины"
+                : "В корзину"
+            }}
           </button>
         </div>
       </div>
       <div class="additional-information mt-5">
         <div class="additional-information-body">
+          <div class="description">
+            <h1>Описание</h1>
+            <p>
+              {{ product.description }}
+            </p>
+          </div>
           <div class="rating">
             <h1>Отзывы</h1>
             <div class="rating-add">
-              <router-link to="">
-                <button type="button" class="btn btn-outline-primary">
-                  Добавить отзыв
-                </button>
-              </router-link>
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                @click="showModal = true"
+              >
+                Добавить отзыв
+              </button>
+              <div>
+                <!-- Модальное окно -->
+                <ModelView v-bind:show="showModal" @close="showModal = false">
+                  <form
+                    class="d-flex flex-column gap-2"
+                    @submit.prevent="addRating"
+                  >
+                    <label for="grade">Рейтинг</label>
+                    <input type="text" id="grade" v-model="review.grade" />
+
+                    <label for="description">Описание</label>
+                    <input
+                      type="text"
+                      id="description"
+                      v-model="review.description"
+                    />
+
+                    <button class="btn btn-success" type="submit">
+                      Отправить
+                    </button>
+                  </form>
+                </ModelView>
+              </div>
             </div>
             <div v-if="productRating?.content" class="wrapper">
               <RatingComp
-                v-for="item in productRating.content"
-                :key="item.id"
+                v-for="(item, index) in productRating.content"
+                :key="index"
                 v-bind:rating="item"
               />
             </div>
@@ -114,6 +155,7 @@ import CharacteristicsToProductPage from "@/entities/characteristics/ui/Characte
 import RatingComp from "@/entities/rating/ui/RatingComp.vue";
 import { RatingAction } from "@/entities/rating/api/actions";
 import { userStoreModule } from "@/entities/user/api/index.js";
+import ModelView from "@/widgets/ModelView.vue";
 
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
@@ -128,13 +170,22 @@ const dataLoading = ref(true);
 const product = ref<Product>();
 const productRating = ref<PageableType<Rating>>();
 
-const thumbsSwiper = ref(null);
+const thumbsSwiper = ref<SwiperClass>();
 
 const setThumbsSwiper = (swiper: SwiperClass) => {
   thumbsSwiper.value = swiper;
 };
 
 const modules = [FreeMode, Navigation, Thumbs, Pagination];
+
+const showModal = ref(false);
+
+const review = ref({
+  grade: 1,
+  description: "ы",
+});
+
+const addRating = () => userStore.addRating(productId, review.value);
 
 onMounted(async () => {
   product.value = await ProductActions.loadProductById(productId);

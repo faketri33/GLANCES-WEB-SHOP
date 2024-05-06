@@ -2,6 +2,7 @@ import { $axios } from "@/shared/client/AxiosClient";
 import { Product } from "@/entities/product/model/Product";
 import { PageableType } from "@/shared/pageable/pageableType";
 import { Characteristics } from "@/entities/characteristics/model/Characteristics";
+import { isAxiosError } from "axios";
 
 export const ProductActions = {
   loadProduct(
@@ -63,5 +64,32 @@ export const ProductActions = {
         })
         .catch((err) => reject(err.message))
     );
+  },
+
+  saveProduct(product: any, images: any) {
+    const formData = new FormData();
+    formData.append("product", JSON.stringify(product));
+
+    for (let i = 0; i < images.length; i++) {
+      console.log(images);
+      formData.append("images", images[i]);
+    }
+
+    $axios({
+      method: "post",
+      url: "/product/save",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        // Обработка успешного ответа
+      })
+      .catch((error) => {
+        console.log(error);
+        // Обработка ошибки
+      });
   },
 };

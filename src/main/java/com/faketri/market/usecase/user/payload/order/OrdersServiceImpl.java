@@ -2,12 +2,14 @@ package com.faketri.market.usecase.user.payload.order;
 
 import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.user.payload.order.gateway.OrderRepository;
+import com.faketri.market.entity.user.payload.order.model.EStatusOrder;
 import com.faketri.market.entity.user.payload.order.model.Orders;
 import com.faketri.market.infastructure.user.payload.order.gateway.OrderService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -29,6 +31,11 @@ public class OrdersServiceImpl implements OrderService {
     @Override
     public Page<Orders> findAll(Pageable pageable) {
         return orderRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Orders> findByUuidSuffixAndStatusOrder(String uuidSuffix, Pageable pageable, EStatusOrder statusOrder) {
+        return orderRepository.findByUuidSuffixAndStatusOrder(uuidSuffix, uuidSuffix.length(), pageable, statusOrder);
     }
 
     @Override

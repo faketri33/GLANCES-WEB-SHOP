@@ -1,15 +1,21 @@
 package com.faketri.market.infastructure.product.payload.categories.controller;
 
+import com.faketri.market.entity.image.model.Image;
 import com.faketri.market.entity.product.payload.categories.model.Categories;
+import com.faketri.market.infastructure.product.payload.categories.dto.CategoriesRequest;
 import com.faketri.market.infastructure.product.payload.categories.gateway.CategoriesService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -19,10 +25,11 @@ import java.util.List;
  */
 @RestController
 @CrossOrigin({"http://localhost:8081", "http://192.168.1.106:8081/"})
-@RequestMapping(value = "/api/categories", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/categories", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "categories", description = "Operation with categories")
 public class CategoriesController {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final CategoriesService categoriesService;
 
     @Autowired
@@ -35,9 +42,36 @@ public class CategoriesController {
      *
      * @return the all
      */
-    @RequestMapping("/")
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Categories> getAll() {
         return categoriesService.findAll();
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @RequestMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, method = RequestMethod.POST)
+    public Categories save(@RequestPart("categories") CategoriesRequest categoriesRequest,
+                           @RequestPart("images")  final MultipartFile images){
+        String resourcesPath = new ClassPathResource("/src/main/resources/images/").getPath();
+
+        String imageName = categoriesRequest.getName() + "-" + images.getOriginalFilename();
+        System.out.println(imageName);
+        try {
+            images.transferTo(Paths.get(resourcesPath + imageName));
+        } catch (IOException e) {
+            log.error(this.getClass() + " " + e.getMessage());
+        }
+        Categories categories = new Categories();
+        categories.setName(categoriesRequest.getName());
+        categories.setImage(new Image(null, "images/" + imageName));
+
+
+        return categoriesService.save(categories);
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public void delete(@RequestBody Categories categories){
+        categoriesService.delete(categories);
     }
 
 }

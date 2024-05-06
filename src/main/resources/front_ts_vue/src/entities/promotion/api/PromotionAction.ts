@@ -8,4 +8,10 @@ export const PromotionAction = {
       ? Promise.resolve(response.data)
       : Promise.reject(response);
   },
+  async loadPromoById(id: string): Promise<Promotion> {
+    const response = await $axios.get("/promotion/" + id);
+    return response.status === 200
+      ? Promise.resolve(response.data)
+      : Promise.reject(response);
+  },
 };

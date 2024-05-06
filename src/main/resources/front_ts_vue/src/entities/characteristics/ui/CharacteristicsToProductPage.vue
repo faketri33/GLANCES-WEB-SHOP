@@ -13,7 +13,7 @@ import { defineProps } from "vue";
 import { Characteristics } from "@/entities/characteristics/model/Characteristics";
 
 defineProps<{
-  characteristics?: Characteristics;
+  characteristics?: Characteristics[];
 }>();
 </script>
 

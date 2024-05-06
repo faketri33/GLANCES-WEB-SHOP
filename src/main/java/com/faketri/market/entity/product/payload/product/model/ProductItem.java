@@ -42,10 +42,11 @@ public class ProductItem {
         this.id = id;
         this.product = product;
         this.quantity = quantity;
+        this.price = product.getPrice() * quantity;
     }
 
     @PrePersist
-    private void setPrice() {
+    private void onCreate() {
         price = product.getPrice() * quantity;
     }
 

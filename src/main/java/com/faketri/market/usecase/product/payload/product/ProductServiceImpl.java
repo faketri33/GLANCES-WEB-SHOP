@@ -144,6 +144,14 @@ public class ProductServiceImpl implements ProductService {
         return productImpl.save(product);
     }
 
+    @Override
+    @Transactional
+    public List<Product> save(List<Product> product) {
+        return product.stream()
+                .map(this::save)
+                .collect(Collectors.toList());
+    }
+
     /**
      * Update int.
      *

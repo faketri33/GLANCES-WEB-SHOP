@@ -1,8 +1,8 @@
-import { User } from "@/entities/user/model/User";
+import { Image } from "@/entities/image/model/Image";
 
 export type Rating = {
-  id: string;
   description: string;
   grade: number;
-  users: User;
+  userImage: Image;
+  username: string;
 };

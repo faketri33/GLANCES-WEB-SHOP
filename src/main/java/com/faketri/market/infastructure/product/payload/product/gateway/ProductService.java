@@ -29,6 +29,8 @@ public interface ProductService {
 
     Product save(Product product);
 
+    List<Product> save(List<Product> product);
+
     void delete(Product product);
 
 }
