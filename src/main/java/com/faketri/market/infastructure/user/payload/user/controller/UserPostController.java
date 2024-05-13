@@ -6,8 +6,10 @@ import com.faketri.market.entity.user.payload.order.gateway.mapper.OrderMapper;
 import com.faketri.market.entity.user.payload.order.model.Orders;
 import com.faketri.market.entity.user.payload.user.model.Users;
 import com.faketri.market.infastructure.user.payload.order.dto.OrdersDto;
+import com.faketri.market.infastructure.user.payload.user.dto.UserUpdateRequest;
 import com.faketri.market.infastructure.user.payload.user.gateway.UserService;
 import org.antlr.v4.runtime.atn.SemanticContext;
+import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +37,20 @@ public class UserPostController {
         this.userService = userService;
     }
 
+    @RequestMapping("/update")
+    public void updateUserDate(@RequestBody final UserUpdateRequest userUpdateRequest){
+        final Users user = userService.getCurrentUser();
+
+        user.setName(userUpdateRequest.getFirstName());
+        user.setSurname(userUpdateRequest.getLastName());
+        user.setDateOfBirthday(userUpdateRequest.getDateOfBirthday());
+        user.setEmail(userUpdateRequest.getEmail());
+
+        userService.save(user);
+    }
+
     @RequestMapping("/like/product")
-    public void likeProduct(@RequestBody Product product) {
+    public void likeProduct(@RequestBody final Product product) {
         log.info("LIKE PROD " + product.getId());
         Users user = userService.getCurrentUser();
         user.getFavoriteProduct().add(product);
@@ -44,7 +58,7 @@ public class UserPostController {
     }
 
     @RequestMapping("/dislike/product")
-    public void dislikeProduct(@RequestBody Product product) {
+    public void dislikeProduct(@RequestBody final Product product) {
         log.info("DISLIKE PROD " + product.getId());
         Users user = userService.getCurrentUser();
         user.getFavoriteProduct().remove(product);
@@ -52,7 +66,7 @@ public class UserPostController {
     }
 
     @RequestMapping("/basket/add")
-    public void addToBasket(@RequestBody ProductItem product) {
+    public void addToBasket(@RequestBody final ProductItem product) {
         log.info("ADD BASKET PROD " + product.getId());
         Users user = userService.getCurrentUser();
 
@@ -69,7 +83,7 @@ public class UserPostController {
     }
 
     @RequestMapping("/basket/remove")
-    public void removeFromBasket(@RequestBody Product product) {
+    public void removeFromBasket(@RequestBody final Product product) {
         log.info("REMOVE BASKET PROD " + product.getId());
         Users user = userService.getCurrentUser();
 
@@ -86,7 +100,7 @@ public class UserPostController {
     }
 
     @RequestMapping("/order/create")
-    public OrdersDto createOrder(@RequestBody List<ProductItem> product) {
+    public OrdersDto createOrder(@RequestBody final List<ProductItem> product) {
         Users user = userService.getCurrentUser();
         log.info("CREATE ORDER " + user.getId());
 

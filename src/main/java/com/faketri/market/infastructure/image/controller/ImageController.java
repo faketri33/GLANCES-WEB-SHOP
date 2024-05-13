@@ -1,5 +1,6 @@
 package com.faketri.market.infastructure.image.controller;
 
+import com.faketri.market.entity.image.model.Image;
 import com.faketri.market.infastructure.image.gateway.ImageService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,16 +41,18 @@ public class ImageController {
      * @throws IOException the io exception
      */
     @RequestMapping("/{id}")
-    public void getImageGetId(@PathVariable UUID id,
+    public void getImageGetId(@PathVariable final UUID id,
                               HttpServletResponse response
     ) throws IOException {
         try {
-            InputStream in = new ClassPathResource(imageService.findById(id)
-                    .getPath()).getInputStream();
+            final Image image = imageService.findById(id);
+            final ClassPathResource classPathResource = new ClassPathResource(image.getPath());
+            System.out.println(classPathResource.getPath());
+            final InputStream in = classPathResource.getInputStream();
             response.setContentType(MediaType.IMAGE_JPEG_VALUE);
             IOUtils.copy(in, response.getOutputStream());
         } catch (Exception e) {
-            InputStream in = new ClassPathResource("images/NotFound.png").getInputStream();
+            final InputStream in = new ClassPathResource("images/NotFound.png").getInputStream();
             response.setContentType(MediaType.IMAGE_JPEG_VALUE);
             IOUtils.copy(in, response.getOutputStream());
         }

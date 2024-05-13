@@ -31,12 +31,12 @@ public class BrandController {
                                @RequestParam(name = "size", defaultValue = "20") Integer size){
         return brandService.findAll(PageRequest.of(page, size));
     }
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public Brand save(@RequestBody Brand brand){
         return brandService.save(brand);
     }
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public void delete(@RequestBody Brand brand){
         brandService.delete(brand);

@@ -29,14 +29,14 @@ public class OrdersGetController {
         this.orderService = orderService;
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping("/id/{id}")
     public OrdersDto findAll(@PathVariable("id") UUID id) {
         System.out.println("HELLO");
         return OrderMapper.toDto(orderService.findById(id));
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping("/")
     public Page<OrdersDto> findAll(
             @RequestParam(name = "page", defaultValue = "0") Integer page,

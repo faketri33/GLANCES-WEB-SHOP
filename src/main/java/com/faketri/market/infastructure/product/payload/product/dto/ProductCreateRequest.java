@@ -2,17 +2,32 @@ package com.faketri.market.infastructure.product.payload.product.dto;
 
 import com.faketri.market.entity.product.payload.brand.model.Brand;
 import com.faketri.market.entity.product.payload.categories.model.Categories;
+import com.faketri.market.infastructure.product.payload.characteristics.dto.CharacteristicsRequest;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ProductCreateRequest {
 
+    @NotNull
     private Brand brand;
+    @NotNull
     private String nameModel;
+    @NotNull
     private Categories categories;
+    @NotNull
+    @Min(value = 100, message = "Цена не может быть меньше 100")
     private Integer price;
+    @NotNull
+    @Min(value = 1, message = "Количетсво не может быть меньше 1")
     private Integer quantity;
+
+    private Set<CharacteristicsRequest> characteristicsRequestSet = new HashSet<>();
 
     public ProductCreateRequest() {
     }
@@ -63,6 +78,14 @@ public class ProductCreateRequest {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Set<CharacteristicsRequest> getCharacteristicsRequestSet() {
+        return characteristicsRequestSet;
+    }
+
+    public void setCharacteristicsRequestSet(Set<CharacteristicsRequest> characteristicsRequestSet) {
+        this.characteristicsRequestSet = characteristicsRequestSet;
     }
 
     @Override

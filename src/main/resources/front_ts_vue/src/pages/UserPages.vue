@@ -18,8 +18,8 @@
             <h3 v-text="userStore.getUser.login"></h3>
             <h6 class="text-muted" v-text="userStore.getUser.email"></h6>
             <RouterLink
-              v-if="userStore.getUser?.role?.some((r) => r === 'CUSTOMER')"
-              :to="'/user/workspace'"
+              v-if="userStore.getUser?.role?.some((r) => r === 'EMPLOYEE')"
+              :to="'/user/workspace/orders/list'"
               >Кабинет работника</RouterLink
             >
           </div>

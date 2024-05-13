@@ -47,28 +47,28 @@ public class CategoriesController {
         return categoriesService.findAll();
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, method = RequestMethod.POST)
-    public Categories save(@RequestPart("categories") CategoriesRequest categoriesRequest,
+    public Categories save(@RequestPart("categories") final CategoriesRequest categoriesRequest,
                            @RequestPart("images")  final MultipartFile images){
-        String resourcesPath = new ClassPathResource("/src/main/resources/images/").getPath();
 
-        String imageName = categoriesRequest.getName() + "-" + images.getOriginalFilename();
+        final String path = "/app/images/";
+        final String imageName = path + categoriesRequest.getName() + "-" + images.getOriginalFilename();
         System.out.println(imageName);
         try {
-            images.transferTo(Paths.get(resourcesPath + imageName));
+            images.transferTo(Paths.get(imageName));
         } catch (IOException e) {
             log.error(this.getClass() + " " + e.getMessage());
         }
         Categories categories = new Categories();
         categories.setName(categoriesRequest.getName());
-        categories.setImage(new Image(null, "images/" + imageName));
+        categories.setImage(new Image(null, imageName));
 
 
         return categoriesService.save(categories);
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public void delete(@RequestBody Categories categories){
         categoriesService.delete(categories);

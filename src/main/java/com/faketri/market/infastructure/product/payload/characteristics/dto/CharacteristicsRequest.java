@@ -6,18 +6,8 @@ package com.faketri.market.infastructure.product.payload.characteristics.dto;
  * @author Dmitriy Faketri
  */
 public class CharacteristicsRequest {
-
-    private Long id;
     private String name;
     private String value;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

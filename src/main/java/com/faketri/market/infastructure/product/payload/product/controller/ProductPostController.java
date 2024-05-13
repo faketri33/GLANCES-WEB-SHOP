@@ -1,23 +1,14 @@
 package com.faketri.market.infastructure.product.payload.product.controller;
 
 import com.faketri.market.entity.image.model.Image;
-import com.faketri.market.entity.product.payload.brand.model.Brand;
 import com.faketri.market.entity.product.payload.characteristics.model.Characteristics;
 import com.faketri.market.entity.product.payload.product.model.Product;
-import com.faketri.market.infastructure.image.gateway.ImageService;
 import com.faketri.market.infastructure.product.payload.product.dto.ProductCreateRequest;
 import com.faketri.market.infastructure.product.payload.product.gateway.ProductService;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Encoding;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.ServletContext;
-import jakarta.validation.Path;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -95,10 +85,10 @@ public class ProductPostController {
      *
      * @param productCreateRequest Object Product
      */
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void save(
-            @RequestPart("product") final ProductCreateRequest productCreateRequest,
+            @Valid @RequestPart("product") final ProductCreateRequest productCreateRequest,
             @RequestPart("images")  final List<MultipartFile> images) {
         Product product = new Product();
 
@@ -109,16 +99,18 @@ public class ProductPostController {
         product.setNameModel(productCreateRequest.getNameModel());
 
         int iterator = 0;
-        String resourcesPath = new ClassPathResource("/src/main/resources/images/").getPath();
+        final String path = "/app/images/";
+        final String name = product.getNameModel().replace(' ', '-');
+
         for (MultipartFile image : images) {
-            String imageName = product.getNameModel()+ "-" + iterator + "-" + image.getOriginalFilename();
+            String imageName = path + name + "-" + iterator++ + "-" + image.getOriginalFilename();
             System.out.println(imageName);
             try {
-                image.transferTo(Paths.get(resourcesPath + imageName));
+                image.transferTo(Paths.get(imageName));
             } catch (IOException e) {
-                log.error(this.getClass() + " " + e.getMessage());
+                log.error(e.getMessage());
             }
-            product.getImage().add(new Image(null, "images/" + imageName));
+            product.getImage().add(new Image(null, imageName));
         }
 
         productService.save(product);
@@ -130,13 +122,13 @@ public class ProductPostController {
      *
      * @param product Object Product
      */
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping("/update")
     public void update(@RequestBody Product product) {
         productService.save(product);
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping("/update-list")
     public void update(@RequestBody List<Product> product) {
         productService.save(product);
@@ -148,7 +140,7 @@ public class ProductPostController {
      *
      * @param product Object Product
      */
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping("/delete")
     public void delete(@RequestBody Product product) {
         productService.delete(product);
