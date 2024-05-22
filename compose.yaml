@@ -56,7 +56,7 @@ services:
     image: vue-js
     build:
       context: .
-      dockerfile: FrontEnd/Dockerfile
+      dockerfile: FrontEnd/Docker/Dockerfile
     ports:
       - "8080:8080"
     networks:

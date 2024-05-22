@@ -55,22 +55,22 @@ ENTRYPOINT ["java", "-jar", "application.jar"]
 ```
 version: '3.5'
 
-  services:
-    postgres:
-      container_name: postgres_container
-      image: postgres
-      environment:
-        POSTGRES_USER: ${POSTGRES_USER}
-        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PGDATA: /data/postgres
     volumes:
-    - postgres:/data/postgres
+      - postgres:/data/postgres
     ports:
-    - "5432:5432"
+      - "5432:5432"
     networks:
-    - postgres
+      - postgres
     restart: unless-stopped
-  
+
   pgadmin:
     container_name: pgadmin_container
     image: dpage/pgadmin4
@@ -79,157 +79,199 @@ version: '3.5'
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
-    - pgadmin:/var/lib/pgadmin
+      - pgadmin:/var/lib/pgadmin
     ports:
-    - "${PGADMIN_PORT:-5050}:80"
+      - "${PGADMIN_PORT:-5050}:80"
     networks:
-    - postgres
+      - postgres
     restart: unless-stopped
-  
-  spring-boot:
+
+  spring:
+    container_name: glances_back
     environment:
-      DB_PASSWORD: ${POSTGRES_PASSWORD}
-      DB_USERNAME: ${POSTGRES_USER}
-      JWT_KEY: ${JWT_KEY}
       DB_CONNECT: ${DB_CONNECT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_ACCESS_KEY: ${JWT_ACCESS_KEY}
+      JWT_REFRESH_KEY: ${JWT_REFRESH_KEY}
+      PASSWORD_SALT: ${PASSWORD_SALT}
     image: spring-boot
     build:
+      context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "9000:9000"
     networks:
       - postgres
     depends_on:
       - postgres
-  
+
+  vue:
+    container_name: vue_front
+    image: vue-js
+    build:
+      context: .
+      dockerfile: FrontEnd/Docker/Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - spring
+    depends_on:
+      - spring
+
 networks:
+  spring:
+    driver: bridge
   postgres:
     driver: bridge
 
 volumes:
   postgres:
   pgadmin:
-  spring-boot:
+  spring:
+  vue:
 ```
 
 # Структура проекта
 
 ```
-
-+---entity      // Модели сущностей для базы данных, репозитории, ошибки
-¦   +---exception // Глобальный ошибки
-¦   +---image
-¦   ¦   +---exception // Локальные ошибки для сущности
-¦   ¦   +---gateway   // Репозитории
-¦   ¦   L---model     // Модель сущности
-¦   +---productPayload // Область продукта
-¦   ¦   +---brand
-¦   ¦   ¦   +---exception
-¦   ¦   ¦   +---gateway
-¦   ¦   ¦   L---model
-¦   ¦   +---categories
-¦   ¦   ¦   +---exception
-¦   ¦   ¦   +---gateway
-¦   ¦   ¦   L---model
-¦   ¦   +---characteristics
-¦   ¦   ¦   +---exception
-¦   ¦   ¦   +---gateway
-¦   ¦   ¦   L---model
-¦   ¦   +---product
-¦   ¦   ¦   +---exception
-¦   ¦   ¦   +---gateway
-¦   ¦   ¦   ¦   L---repo
-¦   ¦   ¦   L---model
-¦   ¦   +---promotion
-¦   ¦   ¦   +---exception
-¦   ¦   ¦   +---gateway
-¦   ¦   ¦   L---model
-¦   ¦   L---rating
-¦   ¦       +---exception
-¦   ¦       +---gateway
-¦   ¦       L---model
-¦   L---userPayload  // Область пользователя
-¦       +---basket
-¦       ¦   +---exception
-¦       ¦   +---gateway
-¦       ¦   L---model
-¦       +---order
-¦       ¦   +---exception
-¦       ¦   +---gateway
-¦       ¦   L---model
-¦       L---user
-¦           +---exception
-¦           +---gateway
-¦           ¦   +---mapper
-¦           ¦   L---repository
-¦           L---model
-+---infastructure    // Сервисы, контролеры, DTO
-¦   +---config
-¦   ¦   +---exception
-¦   ¦   L---web
-¦   ¦       +---authentication
-¦   ¦       ¦   +---controller
-¦   ¦       ¦   +---dto
-¦   ¦       ¦   L---gateway
-¦   ¦       L---documentation
-¦   +---image
-¦   ¦   +---controller
-¦   ¦   +---dto
-¦   ¦   L---gateway
-¦   +---productPayload
-¦   ¦   +---brand
-¦   ¦   ¦   +---controller
-¦   ¦   ¦   +---dto
-¦   ¦   ¦   L---gateway
-¦   ¦   +---categories
-¦   ¦   ¦   +---controller
-¦   ¦   ¦   +---dto
-¦   ¦   ¦   L---gateway
-¦   ¦   +---characteristics
-¦   ¦   ¦   +---controller
-¦   ¦   ¦   +---dto
-¦   ¦   ¦   L---gateway
-¦   ¦   +---product
-¦   ¦   ¦   +---controller
-¦   ¦   ¦   +---dto
-¦   ¦   ¦   L---gateway
-¦   ¦   ¦       L---filter
-¦   ¦   +---promotion
-¦   ¦   ¦   +---controller
-¦   ¦   ¦   +---dto
-¦   ¦   ¦   L---gateway
-¦   ¦   L---rating
-¦   ¦       +---controller
-¦   ¦       +---dto
-¦   ¦       L---gateway
-¦   L---userPayload
-¦       +---basket
-¦       ¦   +---controller
-¦       ¦   +---dto
-¦       ¦   L---gateway
-¦       +---order
-¦       ¦   +---controller
-¦       ¦   +---dto
-¦       ¦   L---gateway
-¦       L---user
-¦           +---controller
-¦           +---dto
-¦           L---gateway
-L---usecase         // Реализация сервисов, логика.
-    +---image
-    +---productPayload
-    ¦   +---brand
-    ¦   +---categories
-    ¦   +---characteristics
-    ¦   +---product
-    ¦   ¦   +---child
-    ¦   ¦   L---filter
-    ¦   +---promotion
-    ¦   L---rating
-    L---userPayload
-        +---auth
-        +---basket
-        +---order
-        L---user
-            L---mapper
+├───entity       // Модели сущностей для базы данных, репозитории
+│   ├───exception // Глобальный исключения
+│   ├───image
+│   │   ├───exception   // Локальные исключения для сущности
+│   │   ├───gateway     // Репозитории
+│   │   └───model       // Модель сущности
+│   ├───product         // Область продукта
+│   │   └───payload
+│   │       ├───brand
+│   │       │   ├───exception
+│   │       │   ├───gateway
+│   │       │   └───model
+│   │       ├───categories
+│   │       │   ├───exception
+│   │       │   ├───gateway
+│   │       │   └───model
+│   │       ├───characteristics
+│   │       │   ├───exception
+│   │       │   ├───gateway
+│   │       │   └───model
+│   │       ├───product
+│   │       │   ├───exception
+│   │       │   ├───gateway
+│   │       │   │   └───repo
+│   │       │   └───model
+│   │       ├───promotion
+│   │       │   ├───exception
+│   │       │   ├───gateway
+│   │       │   └───model
+│   │       └───rating
+│   │           ├───exception
+│   │           ├───gateway
+│   │           └───model
+│   └───user            // Область пользователя
+│       └───payload
+│           ├───basket
+│           │   ├───exception
+│           │   ├───gateway
+│           │   └───model
+│           ├───jwt
+│           │   ├───gateway
+│           │   └───model
+│           ├───order
+│           │   ├───exception
+│           │   ├───gateway
+│           │   │   └───mapper
+│           │   └───model
+│           ├───payment
+│           │   ├───exception
+│           │   ├───gateway
+│           │   └───model
+│           └───user
+│               ├───exception
+│               ├───gateway
+│               │   ├───mapper
+│               │   └───repository
+│               └───model
+├───infastructure       // Сервисы, контролеры, DTO
+│   ├───config
+│   │   ├───exception
+│   │   └───web
+│   │       └───documentation
+│   ├───image
+│   │   ├───controller
+│   │   ├───dto
+│   │   └───gateway
+│   ├───product
+│   │   └───payload
+│   │       ├───brand
+│   │       │   ├───controller
+│   │       │   ├───dto
+│   │       │   └───gateway
+│   │       ├───categories
+│   │       │   ├───controller
+│   │       │   ├───dto
+│   │       │   └───gateway
+│   │       ├───characteristics
+│   │       │   ├───controller
+│   │       │   ├───dto
+│   │       │   └───gateway
+│   │       ├───product
+│   │       │   ├───controller
+│   │       │   ├───dto
+│   │       │   └───gateway
+│   │       │       └───filter
+│   │       ├───promotion
+│   │       │   ├───controller
+│   │       │   ├───dto
+│   │       │   └───gateway
+│   │       └───rating
+│   │           ├───controller
+│   │           ├───dto
+│   │           └───gateway
+│   └───user
+│       └───payload
+│           ├───auth
+│           │   ├───controller
+│           │   ├───dto
+│           │   └───gateway
+│           ├───basket
+│           │   ├───controller
+│           │   ├───dto
+│           │   └───gateway
+│           ├───jwt
+│           │   ├───dto
+│           │   └───gateway
+│           ├───order
+│           │   ├───controller
+│           │   ├───dto
+│           │   └───gateway
+│           ├───payment
+│           │   ├───controller
+│           │   ├───dto
+│           │   └───gateway
+│           └───user
+│               ├───controller
+│               ├───dto
+│               └───gateway
+└───usecase             // Реализация сервисов, логика.
+    ├───image
+    ├───product
+    │   └───payload
+    │       ├───brand
+    │       ├───categories
+    │       ├───characteristics
+    │       ├───product
+    │       │   ├───child
+    │       │   └───filter
+    │       ├───promotion
+    │       └───rating
+    └───user
+        └───payload
+            ├───auth
+            ├───basket
+            ├───jwt
+            ├───order
+            ├───payment
+            └───user
+                └───mapper
 ```

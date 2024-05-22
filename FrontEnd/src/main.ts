@@ -1,9 +1,9 @@
 import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./app/router";
+import App from "@/App.vue";
+import router from "@/app/router";
 import "bootstrap/dist/css/bootstrap.css";
 import { createPinia } from "pinia";
-import "/src/app/assets/css/main.css";
+import "@/app/assets/css/main.css";
 
 createApp(App).use(axiosPlugin).use(createPinia()).use(router).mount("#app");
 
