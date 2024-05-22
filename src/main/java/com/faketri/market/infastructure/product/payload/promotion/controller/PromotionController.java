@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -66,7 +65,7 @@ public class PromotionController {
     @RequestMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Promotion save(
             @Valid @RequestPart("promo") final Promotion promotionCreateRequest,
-            @RequestPart("images")  final MultipartFile images) {
+            @RequestPart("images") final MultipartFile images) {
         Promotion promotion = new Promotion();
 
         promotion.setDescription(promotionCreateRequest.getDescription());
@@ -76,7 +75,7 @@ public class PromotionController {
         promotion.setTitle(promotionCreateRequest.getTitle());
 
         final String path = "/app/images/";
-        final String imageName = path + promotion.getTitle().replace(' ', '-')  + "-" + images.getOriginalFilename();
+        final String imageName = path + promotion.getTitle().replace(' ', '-') + "-" + images.getOriginalFilename();
 
         try {
             images.transferTo(Paths.get(imageName));

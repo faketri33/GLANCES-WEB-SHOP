@@ -9,8 +9,6 @@ import com.faketri.market.entity.user.payload.user.model.Users;
 import com.faketri.market.infastructure.user.payload.order.dto.OrdersDto;
 import com.faketri.market.infastructure.user.payload.user.dto.UserUpdateRequest;
 import com.faketri.market.infastructure.user.payload.user.gateway.UserService;
-import org.antlr.v4.runtime.atn.SemanticContext;
-import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The type Post controller.
@@ -41,17 +40,17 @@ public class UserPostController {
         this.userService = userService;
     }
 
-    @RequestMapping("/profile/image/update")
-    public Image updateUserImage(@RequestBody final MultipartFile file){
+    @RequestMapping(value = "/profile/image/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Image updateUserImage(@RequestBody final MultipartFile image) {
         final Users user = userService.getCurrentUser();
 
         final String path = "/app/images/";
         final String name = user.getLogin().replace(' ', '-');
 
-        final String imageName = path + name + "-" + file.getOriginalFilename();
+        final String imageName = path + name + "-" + Objects.requireNonNull(image.getOriginalFilename()).replace(' ', '-').toLowerCase();
         System.out.println(imageName);
         try {
-            file.transferTo(Paths.get(imageName));
+            image.transferTo(Paths.get(imageName));
         } catch (IOException e) {
             log.error(e.getMessage());
         }
@@ -62,7 +61,7 @@ public class UserPostController {
     }
 
     @RequestMapping("/profile/update")
-    public void updateUserData(@RequestBody final UserUpdateRequest userUpdateRequest){
+    public void updateUserData(@RequestBody final UserUpdateRequest userUpdateRequest) {
         final Users user = userService.getCurrentUser();
 
         user.setName(userUpdateRequest.getFirstName());
@@ -134,9 +133,9 @@ public class UserPostController {
         orders.setUsers(user);
         orders.setPrice(
                 product
-                    .stream().map(p -> p.getProduct().getPrice() * p.getQuantity())
-                    .reduce(Integer::sum)
-                    .orElse(0)
+                        .stream().map(p -> p.getProduct().getPrice() * p.getQuantity())
+                        .reduce(Integer::sum)
+                        .orElse(0)
         );
         user.getOrders().add(orders);
 

@@ -12,10 +12,15 @@ import java.util.UUID;
 public interface ProductSpecification {
 
     Specification<Product> hasCharacteristics(Characteristics characteristics);
+
     Specification<Product> hasCharacteristics(List<Characteristics> characteristics);
+
     Specification<Product> hasCharacteristicsByUUID(List<UUID> characteristics);
+
     Specification<Product> hasCategories(UUID categoriesId);
+
     Specification<Product> likeByNameModelOrBrandName(String name);
+
     Specification<Product> isPromoItem();
 
 }

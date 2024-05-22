@@ -22,23 +22,25 @@ public class BrandController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public List<Brand> findAll(){
+    public List<Brand> findAll() {
         return brandService.findAll();
     }
 
     @RequestMapping(value = "/page", method = RequestMethod.GET)
     public Page<Brand> findAll(@RequestParam(name = "page", defaultValue = "0") Integer page,
-                               @RequestParam(name = "size", defaultValue = "20") Integer size){
+                               @RequestParam(name = "size", defaultValue = "20") Integer size) {
         return brandService.findAll(PageRequest.of(page, size));
     }
+
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public Brand save(@RequestBody Brand brand){
+    public Brand save(@RequestBody Brand brand) {
         return brandService.save(brand);
     }
+
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public void delete(@RequestBody Brand brand){
+    public void delete(@RequestBody Brand brand) {
         brandService.delete(brand);
     }
 }

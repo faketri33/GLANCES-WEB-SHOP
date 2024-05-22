@@ -1,19 +1,9 @@
 package com.faketri.market;
 
-import com.faketri.market.entity.user.payload.user.model.ERole;
-import com.faketri.market.entity.user.payload.user.model.Users;
-import com.faketri.market.infastructure.user.payload.auth.gateway.AuthService;
-import com.faketri.market.infastructure.user.payload.user.dto.SignUpRequest;
-import com.faketri.market.infastructure.user.payload.user.gateway.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Set;
 
 /**
  * The type Market application.

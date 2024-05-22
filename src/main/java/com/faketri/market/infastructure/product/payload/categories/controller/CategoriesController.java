@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +49,7 @@ public class CategoriesController {
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, method = RequestMethod.POST)
     public Categories save(@RequestPart("categories") final CategoriesRequest categoriesRequest,
-                           @RequestPart("images")  final MultipartFile images){
+                           @RequestPart("images") final MultipartFile images) {
 
         final String path = "/app/images/";
         final String imageName = path + categoriesRequest.getName() + "-" + images.getOriginalFilename();
@@ -70,7 +69,7 @@ public class CategoriesController {
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public void delete(@RequestBody Categories categories){
+    public void delete(@RequestBody Categories categories) {
         categoriesService.delete(categories);
     }
 

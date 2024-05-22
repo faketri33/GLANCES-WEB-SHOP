@@ -1,6 +1,7 @@
 package com.faketri.market.infastructure.user.payload.user.dto;
 
 import com.faketri.market.entity.image.model.Image;
+
 import java.util.UUID;
 
 public class UserSmallDataResponse {

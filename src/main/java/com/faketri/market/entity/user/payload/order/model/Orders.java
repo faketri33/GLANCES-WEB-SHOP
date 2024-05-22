@@ -1,6 +1,5 @@
 package com.faketri.market.entity.user.payload.order.model;
 
-import com.faketri.market.entity.product.payload.product.model.Product;
 import com.faketri.market.entity.product.payload.product.model.ProductItem;
 import com.faketri.market.entity.user.payload.payment.model.Payment;
 import com.faketri.market.entity.user.payload.user.model.Users;

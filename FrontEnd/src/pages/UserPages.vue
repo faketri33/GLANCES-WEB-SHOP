@@ -11,11 +11,21 @@
             "
             alt="Изображение профиля"
             style="max-width: 200px"
-            @mouseover="showLoadingOverlay"
-            @mouseleave="hideLoadingOverlay"
-            @click="showFileInput"
           />
-          <i class="fa-solid fa-upload"></i>
+          <div class="upload-overlay rounded m-auto" @click="triggerFileInput">
+            <img
+              src="/upload-solid.svg"
+              alt="Upload Icon"
+              class="upload-icon"
+            />
+            <input
+              type="file"
+              class="file-input"
+              accept="image/jpeg, image/gif, image/png"
+              @change="handleFileChange"
+              ref="fileInput"
+            />
+          </div>
         </div>
         <div class="col mt-5">
           <div class="info flex-column ms-3">
@@ -83,25 +93,18 @@ import { onMounted, ref } from "vue";
 
 const router = useRouter();
 const userStore = userStoreModule();
-const loadingOverlay = ref(false);
+const fileInput = ref<HTMLInputElement | null>(null);
 
-const showLoadingOverlay = () => {
-  loadingOverlay.value = true;
+const triggerFileInput = () => {
+  if (fileInput.value) fileInput.value.click();
 };
-const hideLoadingOverlay = () => {
-  loadingOverlay.value = false;
-};
-const showFileInput = () => {
-  // Show file input dialog
-  const fileInput = document.createElement("input");
-  fileInput.type = "file";
-  fileInput.accept = "image/*";
-  fileInput.addEventListener("change", (e) => {
-    // Handle file selection
-    console.log(e.target.files[0]);
-  });
-  document.body.appendChild(fileInput);
-  fileInput.click();
+const handleFileChange = (event: any) => {
+  const file = event.target.files[0];
+  if (file) {
+    // Обработка файла, например, отправка на сервер или обновление изображения
+    userStore.uploadProfileImage(file);
+    console.log(file);
+  }
 };
 
 const userLogout = () => {
@@ -114,19 +117,36 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.profile-image:hover,
-.upload-icon:hover {
-  display: block;
+.img {
+  position: relative;
+}
+
+.upload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s;
+  cursor: pointer;
+  max-width: 200px;
+}
+
+.upload-overlay:hover {
+  opacity: 1;
 }
 
 .upload-icon {
+  width: 50px;
+  height: 50px;
+}
+
+.file-input {
   display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-  font-size: 2rem;
-  color: rgba(0, 0, 0, 0.5);
 }
 </style>

@@ -125,6 +125,10 @@ public class Product {
         return isPromoItem;
     }
 
+    public void setPromoItem(Boolean promoItem) {
+        isPromoItem = promoItem;
+    }
+
     public Set<Image> getImage() {
         return image;
     }
@@ -159,10 +163,6 @@ public class Product {
 
     public Boolean isPromoItem() {
         return isPromoItem;
-    }
-
-    public void setPromoItem(Boolean promoItem) {
-        isPromoItem = promoItem;
     }
 
     public Short getDiscount() {

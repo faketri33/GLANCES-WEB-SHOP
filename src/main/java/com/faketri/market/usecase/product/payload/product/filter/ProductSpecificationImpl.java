@@ -20,7 +20,7 @@ public class ProductSpecificationImpl implements ProductSpecification {
     ) {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.equal(
-                    root.join("characteristics").get("id"), characteristics.getId()
+                        root.join("characteristics").get("id"), characteristics.getId()
                 );
     }
 
@@ -38,10 +38,10 @@ public class ProductSpecificationImpl implements ProductSpecification {
     ) {
         return (root, query, criteriaBuilder) ->
                 root.join("characteristics")
-                    .get("id")
-                    .in(characteristics.stream()
-                    .map(Characteristics::getId)
-                    .toList());
+                        .get("id")
+                        .in(characteristics.stream()
+                                .map(Characteristics::getId)
+                                .toList());
     }
 
     public Specification<Product> hasCharacteristicsByUUID(
@@ -51,7 +51,7 @@ public class ProductSpecificationImpl implements ProductSpecification {
                 root.join("characteristics")
                         .get("id")
                         .in(characteristics.stream()
-                        .toList());
+                                .toList());
     }
 
     public Specification<Product> hasCategories(UUID categoriesId) {

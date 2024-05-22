@@ -133,7 +133,8 @@ public class ProductServiceImpl implements ProductService {
 
         Specification<Product> specification = productSpecification.likeByNameModelOrBrandName(name);
 
-        if (characteristics != null) specification = specification.and(productSpecification.hasCharacteristicsByUUID(characteristics));
+        if (characteristics != null)
+            specification = specification.and(productSpecification.hasCharacteristicsByUUID(characteristics));
         if (categoriesId != null) specification = specification.and(productSpecification.hasCategories(categoriesId));
 
         return productImpl.findAll(specification, pageable);

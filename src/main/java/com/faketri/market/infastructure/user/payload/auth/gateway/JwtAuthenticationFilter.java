@@ -2,7 +2,6 @@ package com.faketri.market.infastructure.user.payload.auth.gateway;
 
 import com.faketri.market.infastructure.config.exception.JwtValidException;
 import com.faketri.market.usecase.user.payload.user.UserDetailsServerImpl;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,10 +30,9 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
-
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String HEADER_NAME = "Authorization";
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final JwtService jwtService;
     private final UserDetailsServerImpl userDetailsServer;
 
@@ -81,10 +79,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 log.info("User with login - " + username + " authorization");
 
             }
-        }catch (RuntimeException ex){
+        } catch (RuntimeException ex) {
             log.error(ex.getMessage());
-        }
-        finally {
+        } finally {
             filterChain.doFilter(request, response);
         }
     }

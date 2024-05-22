@@ -5,10 +5,7 @@ import com.faketri.market.entity.product.payload.categories.model.Categories;
 import com.faketri.market.infastructure.product.payload.characteristics.dto.CharacteristicsRequest;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 

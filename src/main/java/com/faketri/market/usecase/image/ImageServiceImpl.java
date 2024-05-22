@@ -12,11 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * The type Image service.
- *
- * @author Dmitriy Faketri
- */
 @Service
 public class ImageServiceImpl implements ImageService {
 
@@ -27,43 +22,20 @@ public class ImageServiceImpl implements ImageService {
         this.imageImpl = imageImpl;
     }
 
-    /**
-     * Find by id image.
-     *
-     * @param id the id
-     * @return the image
-     */
     public Image findById(UUID id) {
         return imageImpl.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Image with id - " + id + " not found"));
     }
 
-    /**
-     * Find all list.
-     *
-     * @return the list
-     */
     public List<Image> findAll() {
         return imageImpl.findAll();
     }
 
-    /**
-     * Find all page.
-     *
-     * @param pageable the pageable
-     * @return the page
-     */
     public Page<Image> findAll(Pageable pageable) {
         return imageImpl.findAll(pageable);
     }
 
-    /**
-     * Save image.
-     *
-     * @param entity the entity
-     * @return the image
-     */
     public Image save(Image entity) {
         return imageImpl.findFirstByPath(entity.getPath())
                 .orElse(imageImpl.save(entity));
@@ -74,11 +46,6 @@ public class ImageServiceImpl implements ImageService {
         return null;
     }
 
-    /**
-     * Delete.
-     *
-     * @param entity the entity
-     */
     public void delete(Image entity) {
         imageImpl.delete(entity);
     }

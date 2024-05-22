@@ -4,12 +4,8 @@ import jakarta.servlet.MultipartConfigElement;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
-
-import java.util.List;
 
 @Configuration
 public class MultipartConfig {
@@ -17,6 +13,7 @@ public class MultipartConfig {
     public MultipartResolver multipartResolver() {
         return new StandardServletMultipartResolver();
     }
+
     @Bean
     public MultipartConfigElement multipartConfigElement() {
         return new MultipartConfigFactory().createMultipartConfig();

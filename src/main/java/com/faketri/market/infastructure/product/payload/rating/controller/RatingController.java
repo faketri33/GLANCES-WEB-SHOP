@@ -35,8 +35,8 @@ public class RatingController {
 
     @RequestMapping(value = "/{productId}", method = RequestMethod.GET)
     public Page<RatingDtoResponse> getRatingByProductId(@PathVariable UUID productId,
-                                             @RequestParam(name = "page", defaultValue = "0") Integer page,
-                                             @RequestParam(name = "size", defaultValue = "20") Integer size) {
+                                                        @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                        @RequestParam(name = "size", defaultValue = "20") Integer size) {
         return ratingService
                 .findByIdProduct(productId, PageRequest.of(page, size))
                 .map(rating -> new RatingDtoResponse(
@@ -72,7 +72,7 @@ public class RatingController {
 
     @PreAuthorize("hasRole('EMPLOYEE')")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-    public void delete(@RequestParam("id") UUID uuid){
+    public void delete(@RequestParam("id") UUID uuid) {
         ratingService.deleteById(uuid);
     }
 }

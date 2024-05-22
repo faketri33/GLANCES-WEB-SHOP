@@ -37,7 +37,7 @@ public class PromotionScheduler {
         promotions.stream()
                 .filter(p ->
                         p.getDateOfStart().isBefore(LocalDate.now())
-                        && p.getDateOfEnd().isAfter(LocalDate.now())
+                                && p.getDateOfEnd().isAfter(LocalDate.now())
                 )
                 .forEach(this::activatePromotion);
     }

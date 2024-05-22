@@ -11,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,7 +24,7 @@ public interface OrderRepository extends JpaRepository<Orders, UUID> {
 
     @Override
     Optional<Orders> findById(UUID id);
-    
+
     @Query("select o from Orders o where substring(CAST(o.id AS text), length(CAST(o.id AS text)) - :suffixLength + 1) = :suffix and o.statusOrder = :status")
     Page<Orders> findByUuidSuffixAndStatusOrder(@Param("suffix") String suffix, @Param("suffixLength") int suffixLength,
                                                 Pageable pageable, @Param("status") EStatusOrder statusOrder);

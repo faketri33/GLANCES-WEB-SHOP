@@ -58,7 +58,7 @@ public class Rating {
     }
 
     @PrePersist
-    public void onCreate(){
+    public void onCreate() {
         publishedOn = LocalDateTime.now();
     }
 

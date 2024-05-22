@@ -1,7 +1,6 @@
 package com.faketri.market.infastructure.product.payload.product.controller;
 
 import com.faketri.market.entity.image.model.Image;
-import com.faketri.market.entity.product.payload.characteristics.model.Characteristics;
 import com.faketri.market.entity.product.payload.product.model.Product;
 import com.faketri.market.infastructure.product.payload.product.dto.ProductCreateRequest;
 import com.faketri.market.infastructure.product.payload.product.gateway.ProductService;
@@ -10,18 +9,14 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 /**
  * The type Product controller.
@@ -46,7 +41,7 @@ public class ProductPostController {
     @RequestMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void save(
             @Valid @RequestPart("product") final ProductCreateRequest productCreateRequest,
-            @RequestPart("images")  final List<MultipartFile> images) {
+            @RequestPart("images") final List<MultipartFile> images) {
         Product product = new Product();
 
         product.setBrand(productCreateRequest.getBrand());

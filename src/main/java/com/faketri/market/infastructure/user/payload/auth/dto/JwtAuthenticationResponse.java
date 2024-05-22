@@ -14,13 +14,13 @@ import java.time.LocalDateTime;
 @Schema(description = "Ответ c токеном доступа")
 public class JwtAuthenticationResponse {
 
+    private final String type = "Bearer ";
     private UserResponse user;
     @Schema(description = "Токен доступа",
             example = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTYyMjUwNj...")
     private String accessToken;
     private String refreshToken;
     private LocalDateTime expiration;
-    private final String type = "Bearer ";
 
     public JwtAuthenticationResponse() {
     }

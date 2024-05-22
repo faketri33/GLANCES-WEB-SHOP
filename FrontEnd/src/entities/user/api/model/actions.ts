@@ -33,7 +33,7 @@ export const UserActions = {
     formData.append("image", image);
     const response = await $axios({
       method: "post",
-      url: "/product/save",
+      url: "/user/profile/image/update",
       data: formData,
       headers: {
         "Content-Type": "multipart/form-data",

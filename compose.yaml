@@ -55,7 +55,7 @@ services:
     container_name: vue_front
     image: vue-js
     build:
-      context: ./src/main/resources/front_ts_vue/
+      context: .
       dockerfile: FrontEnd/Dockerfile
     ports:
       - "8080:8080"

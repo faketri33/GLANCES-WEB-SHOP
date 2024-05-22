@@ -12,12 +12,12 @@ import java.util.UUID;
 @Entity
 @Table
 public class Basket {
+    @OneToMany(cascade = CascadeType.ALL)
+    List<ProductItem> products = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
-    @OneToMany(cascade = CascadeType.ALL)
-    List<ProductItem> products = new ArrayList<>();
     @Column
     private Long price;
 
