@@ -131,7 +131,7 @@ OnlineMarket/
 
 ## Лицензия
 
-Этот проект лицензирован под лицензией MIT. Подробности см. в файле LICENSE.
+Этот проект лицензирован под лицензией MIT. Подробности см. в файле <a href="https://github.com/faketri/OnlineMarket/blob/master/LICENSE">LICENSE</a>.
 
 ---
 
