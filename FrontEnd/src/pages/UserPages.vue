@@ -15,11 +15,7 @@
             @mouseleave="hideLoadingOverlay"
             @click="showFileInput"
           />
-          <div class="loading-overlay" v-if="loadingOverlay">
-            <div class="spinner-border text-primary" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
+          <i class="fa-solid fa-upload"></i>
         </div>
         <div class="col mt-5">
           <div class="info flex-column ms-3">
