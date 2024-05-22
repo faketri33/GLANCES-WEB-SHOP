@@ -85,7 +85,7 @@
 ### Структура проекта
 
 ```
-electronics-shop/
+OnlineMarket/
 ├── .config
 ├── .idea
 ├── assets
