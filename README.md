@@ -1,277 +1,144 @@
-# OnlineMarket
+---
 
-Интернет магазин электроники.
-Технлогии которые использовались при разработке -
-<ul>
-  <li>Java 17</li>
-  <li>Spring boot (Web, JPA, Security)</li>
-  <li>JWT</li>
-  <li>PostgreSQL</li>
-  <li>Docker</li>
-  <li>Git</li>
-  <li>HTML</li>
-  <li>CSS</li>
-  <li>Vue.js</li>
-</ul>
+# Интернет-магазин электроники
 
-<h2>
-  Диаграмма базы данных
-</h2>
+## Описание проекта
 
-<img src="./assets/DbDiagrams.jpg">
+Этот проект представляет собой интернет-магазин электроники, разработанный с использованием Spring Boot на стороне сервера и Vue.js на стороне клиента. Магазин предоставляет пользователям возможность просматривать, искать и покупать разнообразные электронные товары. Администраторы могут управлять товарами, категориями и акциями.
 
-# Сборка проекта
+## Стек технологий
 
-### Docker
+### Backend:
+- Java
+- Spring Boot
+- Spring Data JPA
+- Spring Security
+- Hibernate
+- PostgreSQL
 
-```
-docker-compose --env-file .config/.env build
-```
+### Frontend:
+- Vue.js
+- Vue Router
+- Axios
+- Bootstrap
+- Pinia
 
-### Стандартная
+### Инфраструктура:
+- Docker
+- Nginx
 
-```
-mvn clean package
-```
+## Возможности
 
-# Docker
+### Пользователь:
+- Просмотр товаров
+- Поиск товаров по категории и названию
+- Просмотр детальной информации о товаре
+- Добавление товаров в корзину
+- Оформление заказа
+- Просмотр истории заказов
 
-### Dockerfile для автоматической сборки проекта
+### Администратор:
+- Управление товарами (добавление, редактирование, удаление)
+- Управление категориями товаров
+- Создание и управление акциями и скидками
+- Просмотр списка заказов
 
-```
-FROM maven:3.8.4-openjdk-17 as builder
-WORKDIR /app
-COPY . /app/.
-RUN mvn -f /app/pom.xml clean package
+## Установка и запуск
 
-FROM amazoncorretto:17
-ARG JAR_FILE=*.jar
-COPY /target/${JAR_FILE} application.jar
-ENTRYPOINT ["java", "-jar", "application.jar"]
-```
+### Требования
+- Docker
+- Docker Compose
 
-### compose.yaml
+### Шаги для запуска проекта
 
-```
-version: '3.5'
+1. **Клонирование репозитория:**
+   ```sh
+   git clone https://github.com/faketri/OnlineMarket.git
+   cd OnlineMarket
+   ```
 
-services:
-  postgres:
-    container_name: postgres_container
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      PGDATA: /data/postgres
-    volumes:
-      - postgres:/data/postgres
-    ports:
-      - "5432:5432"
-    networks:
-      - postgres
-    restart: unless-stopped
+2. **Настройка окружения:**
+   Создайте файл `.env` в корневой директории и добавьте следующие переменные:
+   ```env
+    DB_CONNECT=jdbc:postgresql://postgres/postgres
+   
+    POSTGRES_USER=postgres
+    POSTGRES_PASSWORD=your_password
+    PGADMIN_DEFAULT_EMAIL=your_email
+    PGADMIN_DEFAULT_PASSWORD=your_password
+   
+    JWT_ACCESS_KEY=your_jwt_access
+    JWT_REFRESH_KEY=your_jwt_refresh
+    
+    PASSWORD_SALT=your_password_salt
+   ```
 
-  pgadmin:
-    container_name: pgadmin_container
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    ports:
-      - "${PGADMIN_PORT:-5050}:80"
-    networks:
-      - postgres
-    restart: unless-stopped
+3. **Сборка и запуск Docker контейнеров:**
+   ```sh
+   docker-compose up --build
+   ```
 
-  spring:
-    container_name: glances_back
-    environment:
-      DB_CONNECT: ${DB_CONNECT}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      JWT_ACCESS_KEY: ${JWT_ACCESS_KEY}
-      JWT_REFRESH_KEY: ${JWT_REFRESH_KEY}
-      PASSWORD_SALT: ${PASSWORD_SALT}
-    image: spring-boot
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "9000:9000"
-    networks:
-      - postgres
-    depends_on:
-      - postgres
+4. **Доступ к приложению:**
+   - Frontend: `http://localhost:8080`
+   - Backend API: `http://localhost:9000/api`
 
-  vue:
-    container_name: vue_front
-    image: vue-js
-    build:
-      context: .
-      dockerfile: FrontEnd/Docker/Dockerfile
-    ports:
-      - "8080:8080"
-    networks:
-      - spring
-    depends_on:
-      - spring
-
-networks:
-  spring:
-    driver: bridge
-  postgres:
-    driver: bridge
-
-volumes:
-  postgres:
-  pgadmin:
-  spring:
-  vue:
-```
-
-# Структура проекта
+### Структура проекта
 
 ```
-├───entity       // Модели сущностей для базы данных, репозитории
-│   ├───exception // Глобальный исключения
-│   ├───image
-│   │   ├───exception   // Локальные исключения для сущности
-│   │   ├───gateway     // Репозитории
-│   │   └───model       // Модель сущности
-│   ├───product         // Область продукта
-│   │   └───payload
-│   │       ├───brand
-│   │       │   ├───exception
-│   │       │   ├───gateway
-│   │       │   └───model
-│   │       ├───categories
-│   │       │   ├───exception
-│   │       │   ├───gateway
-│   │       │   └───model
-│   │       ├───characteristics
-│   │       │   ├───exception
-│   │       │   ├───gateway
-│   │       │   └───model
-│   │       ├───product
-│   │       │   ├───exception
-│   │       │   ├───gateway
-│   │       │   │   └───repo
-│   │       │   └───model
-│   │       ├───promotion
-│   │       │   ├───exception
-│   │       │   ├───gateway
-│   │       │   └───model
-│   │       └───rating
-│   │           ├───exception
-│   │           ├───gateway
-│   │           └───model
-│   └───user            // Область пользователя
-│       └───payload
-│           ├───basket
-│           │   ├───exception
-│           │   ├───gateway
-│           │   └───model
-│           ├───jwt
-│           │   ├───gateway
-│           │   └───model
-│           ├───order
-│           │   ├───exception
-│           │   ├───gateway
-│           │   │   └───mapper
-│           │   └───model
-│           ├───payment
-│           │   ├───exception
-│           │   ├───gateway
-│           │   └───model
-│           └───user
-│               ├───exception
-│               ├───gateway
-│               │   ├───mapper
-│               │   └───repository
-│               └───model
-├───infastructure       // Сервисы, контролеры, DTO
-│   ├───config
-│   │   ├───exception
-│   │   └───web
-│   │       └───documentation
-│   ├───image
-│   │   ├───controller
-│   │   ├───dto
-│   │   └───gateway
-│   ├───product
-│   │   └───payload
-│   │       ├───brand
-│   │       │   ├───controller
-│   │       │   ├───dto
-│   │       │   └───gateway
-│   │       ├───categories
-│   │       │   ├───controller
-│   │       │   ├───dto
-│   │       │   └───gateway
-│   │       ├───characteristics
-│   │       │   ├───controller
-│   │       │   ├───dto
-│   │       │   └───gateway
-│   │       ├───product
-│   │       │   ├───controller
-│   │       │   ├───dto
-│   │       │   └───gateway
-│   │       │       └───filter
-│   │       ├───promotion
-│   │       │   ├───controller
-│   │       │   ├───dto
-│   │       │   └───gateway
-│   │       └───rating
-│   │           ├───controller
-│   │           ├───dto
-│   │           └───gateway
-│   └───user
-│       └───payload
-│           ├───auth
-│           │   ├───controller
-│           │   ├───dto
-│           │   └───gateway
-│           ├───basket
-│           │   ├───controller
-│           │   ├───dto
-│           │   └───gateway
-│           ├───jwt
-│           │   ├───dto
-│           │   └───gateway
-│           ├───order
-│           │   ├───controller
-│           │   ├───dto
-│           │   └───gateway
-│           ├───payment
-│           │   ├───controller
-│           │   ├───dto
-│           │   └───gateway
-│           └───user
-│               ├───controller
-│               ├───dto
-│               └───gateway
-└───usecase             // Реализация сервисов, логика.
-    ├───image
-    ├───product
-    │   └───payload
-    │       ├───brand
-    │       ├───categories
-    │       ├───characteristics
-    │       ├───product
-    │       │   ├───child
-    │       │   └───filter
-    │       ├───promotion
-    │       └───rating
-    └───user
-        └───payload
-            ├───auth
-            ├───basket
-            ├───jwt
-            ├───order
-            ├───payment
-            └───user
-                └───mapper
+electronics-shop/
+├── .config
+├── .idea
+├── assets
+│── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── com
+│   │   │       └── faketri
+│   │   │           └── market
+│   │   │               ├── entity // Модели сущностей для базы данных
+│   │   │               ├── infastructure // Сервисы, контролеры, DTO
+│   │   │               ├── usecase // Реализация сервисов, логика.
+│   │   └── resources
+│   └── test
+├── Frontend
+│   ├── public
+│   ├── Docker
+│   ├── src
+│   │   ├── app
+│   │   ├── entities
+│   │   ├── pages
+│   │   ├── shared
+│   │   ├── widgets
+│   │   ├── App.vue
+│   │   └── main.ts
+│   ├── .env
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── vite.config.ts
+├── docker-compose.yml
+├── Dockerfile
 ```
+
+### Скрипты npm
+
+- `npm install` - Установка зависимостей
+- `npm run serve` - Запуск фронтенда в режиме разработки
+- `npm run build` - Сборка фронтенда для продакшн
+
+## Вклад в проект
+
+Если вы хотите внести вклад в этот проект, пожалуйста, создайте форк репозитория, внесите свои изменения и отправьте pull request. Мы рассмотрим его в ближайшее время.
+
+## Лицензия
+
+Этот проект лицензирован под лицензией MIT. Подробности см. в файле LICENSE.
+
+---
+
+### Примечания
+
+- Убедитесь, что вы установили все необходимые зависимости и настроили окружение перед запуском проекта.
+- Для корректной работы JWT, настройте секретный ключ в переменных окружения.
+- Обратите внимание, что пути и настройки могут отличаться в зависимости от вашей конкретной конфигурации и окружения.
+
+Если возникнут вопросы или проблемы, пожалуйста, создайте issue в репозитории.
