@@ -1,5 +1,6 @@
 package com.faketri.market.infastructure.product.payload.product.controller;
 
+import com.faketri.market.entity.product.payload.characteristics.model.Characteristics;
 import com.faketri.market.entity.product.payload.product.model.Product;
 import com.faketri.market.infastructure.product.payload.product.gateway.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -8,11 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * The type Product controller.
@@ -127,6 +130,29 @@ public class ProductGetController {
                     defaultValue = "20") Integer pageSize
     ) {
         return productService.findTopSelling(PageRequest.of(pageNumber, pageSize));
+    }
+
+    /**
+     * Gets by filter.
+     *
+     * @param pageNumber   the page number
+     * @param pageSize     the page size
+     * @param filter       the filter
+     * @return the by filter
+     */
+    @RequestMapping("/search")
+    public Page<Product> findBySearchParam(
+            @RequestParam(name = "number", required = true,
+                    defaultValue = "0") Integer pageNumber,
+            @RequestParam(name = "size", required = true,
+                    defaultValue = "20") Integer pageSize,
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "categories", required = false)  UUID categoriesId,
+            @RequestParam(value = "characteristics", required = false) List<UUID> filter
+    ) {
+        log.info("getByFilter: " + String.format("Name product - %s , categories id - %s", name, categoriesId));
+        return productService.findBySearchParam(PageRequest.of(pageNumber, pageSize), name, filter, categoriesId);
+
     }
 
 }

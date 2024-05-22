@@ -27,6 +27,8 @@ public interface ProductService {
                                                           List<Characteristics> characteristics
     );
 
+    Page<Product> findBySearchParam(Pageable pageable, String name, List<UUID> characteristics, UUID categoriesId);
+
     Product save(Product product);
 
     List<Product> save(List<Product> product);

@@ -2,7 +2,6 @@ import { $axios } from "@/shared/client/AxiosClient";
 import { Product } from "@/entities/product/model/Product";
 import { PageableType } from "@/shared/pageable/pageableType";
 import { Characteristics } from "@/entities/characteristics/model/Characteristics";
-import { isAxiosError } from "axios";
 
 export const ProductActions = {
   loadProduct(
@@ -39,6 +38,15 @@ export const ProductActions = {
             .then((data) => resolve(data.data))
             .catch((err) => new Error(err.message))
     );
+  },
+
+  async searchProduct(categoriesId: string, characteristics: [], name: string) {
+    const response = await $axios.get("/product/search", {
+      params: {
+        name: name,
+      },
+    });
+    return response.data;
   },
 
   loadProductInPromotion(

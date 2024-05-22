@@ -69,7 +69,9 @@
           >
             <img
               :src="
-                userStore.isLikedProduct(productId) ? '/red.svg' : '/Vector.svg'
+                userStore.isLikedProduct(product.id)
+                  ? '/red.svg'
+                  : '/Vector.svg'
               "
               alt=""
             />
@@ -145,7 +147,7 @@
 <script lang="ts" setup>
 import { Product } from "@/entities/product/model/Product";
 import { Rating } from "@/entities/rating/model";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { ProductActions } from "@/entities/product/api/model/Actions";
 import { useRoute } from "vue-router";
 import { Swiper, SwiperSlide } from "swiper/vue";
@@ -165,7 +167,6 @@ import { PageableType } from "@/shared/pageable/pageableType";
 const route = useRoute();
 const userStore = userStoreModule();
 
-const productId = route.params.id.toString();
 const dataLoading = ref(true);
 const product = ref<Product>();
 const productRating = ref<PageableType<Rating>>();
@@ -185,13 +186,28 @@ const review = ref({
   description: "ы",
 });
 
-const addRating = () => userStore.addRating(productId, review.value);
+watch(
+  () => route.params.id,
+  async () => {
+    console.log(route.params.id);
+    await loadProduct();
+  }
+);
 
-onMounted(async () => {
+const loadProduct = async () => {
+  const productId = route.params.id.toString();
   product.value = await ProductActions.loadProductById(productId);
   productRating.value = await RatingAction.loadByProductId(productId);
   dataLoading.value = false;
-  return { product, productRating, dataLoading };
+};
+
+const addRating = () => {
+  const productId = route.params.id.toString();
+  userStore.addRating(productId, review.value);
+};
+
+onMounted(async () => {
+  await loadProduct();
 });
 </script>
 

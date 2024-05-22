@@ -11,14 +11,31 @@
           >
         </div>
         <div class="header__item col-xl-6 col-md-4 col-sm-9">
-          <form class="d-flex w-100" role="search">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Поиск"
-              aria-label="Search"
-            />
-          </form>
+          <!-- Строка поиска -->
+          <input
+            type="text"
+            class="form-control"
+            v-model="searchQuery"
+            @input="fetchOptions"
+          />
+
+          <!-- Список вариантов -->
+          <ul
+            v-if="options.length"
+            class="list-group position-absolute mt-2"
+            style="z-index: 999"
+          >
+            <li
+              v-for="option in options"
+              :key="option.id"
+              class="list-group-item"
+              @click="selectOption(option)"
+            >
+              <router-link :to="'/product/' + option.id">
+                {{ option.nameModel }}
+              </router-link>
+            </li>
+          </ul>
         </div>
         <div
           class="tab__bar col-xl-3 col-md-5 col-lg-4 col-xs-9 col-sm-9 mt-2 row"
@@ -52,16 +69,36 @@
   </header>
 </template>
 
-<script lang="ts">
-import { Options, Vue } from "vue-class-component";
+<script setup>
+import { ProductActions } from "@/entities/product/api/model/Actions";
+import { ref, defineProps } from "vue";
 
-@Options({
-  name: "TheHeader",
-  props: {
-    isLogin: Boolean,
-  },
-})
-export default class TheHeader extends Vue {}
+defineProps({
+  isLogin: Boolean,
+});
+
+const searchQuery = ref("");
+const options = ref([]);
+
+const fetchOptions = async () => {
+  if (searchQuery.value.length < 3) return;
+  try {
+    const response = await ProductActions.searchProduct(
+      null,
+      null,
+      searchQuery.value
+    );
+    options.value = response.content;
+  } catch (error) {
+    console.error("Ошибка при загрузке вариантов:", error);
+  }
+};
+
+const selectOption = (option) => {
+  console.log("Выбран вариант:", option);
+  options.value = [];
+  // Дополнительные действия при выборе варианта
+};
 </script>
 
 <style lang="scss" scoped>

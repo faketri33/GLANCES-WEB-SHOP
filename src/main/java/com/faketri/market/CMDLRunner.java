@@ -26,6 +26,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,10 +98,10 @@ public class CMDLRunner {
 
             Promotion promotion = new Promotion();
             promotion.setBanner(new Image(null, "/images/promo-cover_L.png"));
-            promotion.setDateOfStart(LocalDateTime.now());
+            promotion.setDateOfStart(LocalDate.now());
             promotion.setTitle("ПРОДАМ ВСЕ И ВСЕМ АУКЦИЯ");
             promotion.setDescription(fakerRu.lorem().paragraph(25));
-            promotion.setDateOfEnd(LocalDateTime.of(2024, 10, 20, 0, 0));
+            promotion.setDateOfEnd(LocalDate.of(2024, 10, 20));
             promotion.getPromotionProductItems().addAll(
                     List.of(products.get(0), products.get(1), products.get(2), products.get(3),
                             products.get(4), products.get(5), products.get(6), products.get(7))

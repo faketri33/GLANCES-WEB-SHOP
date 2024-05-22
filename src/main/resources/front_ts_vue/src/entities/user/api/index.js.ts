@@ -36,6 +36,11 @@ export const userStoreModule = defineStore("user", {
       ),
   },
   actions: {
+    uploadProfileImage(image: any) {
+      UserActions.uploadProfileImage(image).then(
+        (data) => (this.user.profileImage = data)
+      );
+    },
     signIn(params: User) {
       this.isLoading = true;
       UserActions.signIn(params)

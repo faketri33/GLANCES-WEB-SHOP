@@ -2,6 +2,7 @@ import { User } from "@/entities/user/model/User";
 import { $axios } from "@/shared/client/AxiosClient";
 import { Product } from "@/entities/product/model/Product";
 import { ProductItem } from "@/entities/product/model/ProductItem";
+import { Image } from "@/entities/image/model/Image";
 
 export const UserActions = {
   async signIn(params: User): Promise<User> {
@@ -23,6 +24,22 @@ export const UserActions = {
   },
   async loadUser(): Promise<User> {
     const response = await $axios.get("/user/");
+    return response.status === 200
+      ? Promise.resolve(response.data)
+      : Promise.reject(response.data);
+  },
+  async uploadProfileImage(image: File): Promise<Image> {
+    const formData = new FormData();
+    formData.append("image", image);
+    const response = await $axios({
+      method: "post",
+      url: "/product/save",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
     return response.status === 200
       ? Promise.resolve(response.data)
       : Promise.reject(response.data);

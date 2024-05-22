@@ -12,6 +12,8 @@ import OrdersPages from "@/pages/employee/OrdersPages.vue";
 import ProductCreate from "@/entities/product/ui/ProductCreate.vue";
 import OrdersList from "@/entities/orders/ui/OrdersList.vue";
 import OrderAbout from "@/entities/orders/ui/OrderAbout.vue";
+import BrandCreate from "@/entities/brand/ui/BrandCreate.vue";
+import CategoriesCreate from "@/entities/categories/ui/CategoriesCreate.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -63,6 +65,16 @@ const routes: Array<RouteRecordRaw> = [
         path: "/user/workspace/product/create",
         name: "ProductCreate",
         component: ProductCreate,
+      },
+      {
+        path: "/user/workspace/brand/create",
+        name: "BrandPage",
+        component: BrandCreate,
+      },
+      {
+        path: "/user/workspace/categories/create",
+        name: "CategoriesCreate",
+        component: CategoriesCreate,
       },
       {
         path: "/user/workspace/orders",

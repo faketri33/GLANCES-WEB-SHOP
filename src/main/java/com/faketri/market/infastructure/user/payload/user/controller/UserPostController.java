@@ -1,5 +1,6 @@
 package com.faketri.market.infastructure.user.payload.user.controller;
 
+import com.faketri.market.entity.image.model.Image;
 import com.faketri.market.entity.product.payload.product.model.Product;
 import com.faketri.market.entity.product.payload.product.model.ProductItem;
 import com.faketri.market.entity.user.payload.order.gateway.mapper.OrderMapper;
@@ -15,7 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -37,8 +41,28 @@ public class UserPostController {
         this.userService = userService;
     }
 
-    @RequestMapping("/update")
-    public void updateUserDate(@RequestBody final UserUpdateRequest userUpdateRequest){
+    @RequestMapping("/profile/image/update")
+    public Image updateUserImage(@RequestBody final MultipartFile file){
+        final Users user = userService.getCurrentUser();
+
+        final String path = "/app/images/";
+        final String name = user.getLogin().replace(' ', '-');
+
+        final String imageName = path + name + "-" + file.getOriginalFilename();
+        System.out.println(imageName);
+        try {
+            file.transferTo(Paths.get(imageName));
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+
+        user.setProfileImage(new Image(null, imageName));
+
+        return userService.save(user).getProfileImage();
+    }
+
+    @RequestMapping("/profile/update")
+    public void updateUserData(@RequestBody final UserUpdateRequest userUpdateRequest){
         final Users user = userService.getCurrentUser();
 
         user.setName(userUpdateRequest.getFirstName());

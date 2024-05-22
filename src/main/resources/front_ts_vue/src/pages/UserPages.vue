@@ -2,16 +2,24 @@
   <div class="root container mt-5">
     <div v-if="userStore.user" class="user-profile shadow border p-4 rounded-2">
       <div class="wrapper row">
-        <div class="col-12 col-md-4 col-lg-3 img text-center">
+        <div class="col-12 col-md-4 col-lg-3 img text-center position-relative">
           <img
-            class="border rounded-5"
+            class="border rounded-5 profile-image"
             :src="
               'http://localhost:9000/api/image/' +
               userStore.getUser?.profileImage?.id
             "
-            alt="Изображения профиля"
+            alt="Изображение профиля"
             style="max-width: 200px"
+            @mouseover="showLoadingOverlay"
+            @mouseleave="hideLoadingOverlay"
+            @click="showFileInput"
           />
+          <div class="loading-overlay" v-if="loadingOverlay">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
         </div>
         <div class="col mt-5">
           <div class="info flex-column ms-3">
@@ -75,19 +83,54 @@
 <script setup lang="ts">
 import { userStoreModule } from "@/entities/user/api/index.js";
 import { useRouter } from "vue-router";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 const router = useRouter();
 const userStore = userStoreModule();
+const loadingOverlay = ref(false);
+
+const showLoadingOverlay = () => {
+  loadingOverlay.value = true;
+};
+const hideLoadingOverlay = () => {
+  loadingOverlay.value = false;
+};
+const showFileInput = () => {
+  // Show file input dialog
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = "image/*";
+  fileInput.addEventListener("change", (e) => {
+    // Handle file selection
+    console.log(e.target.files[0]);
+  });
+  document.body.appendChild(fileInput);
+  fileInput.click();
+};
 
 const userLogout = () => {
   userStore.logout();
   router.push("/");
 };
-
 onMounted(() => {
   if (!userStore.isLogin) router.push("/auth");
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.profile-image:hover,
+.upload-icon:hover {
+  display: block;
+}
+
+.upload-icon {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  font-size: 2rem;
+  color: rgba(0, 0, 0, 0.5);
+}
+</style>

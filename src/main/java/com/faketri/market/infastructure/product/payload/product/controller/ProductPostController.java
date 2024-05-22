@@ -35,56 +35,13 @@ import java.util.stream.Collectors;
 public class ProductPostController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
     private final ProductService productService;
     private final String root = new ClassPathResource("/images/").getPath();
 
-    /**
-     * Instantiates a new Product controller.
-     *
-     * @param productService the product service
-     */
     public ProductPostController(ProductService productService) {
         this.productService = productService;
     }
 
-    /**
-     * Gets by filter.
-     *
-     * @param categoriesId the categories id
-     * @param pageNumber   the page number
-     * @param pageSize     the page size
-     * @param filter       the filter
-     * @return the by filter
-     */
-    @RequestMapping("/categories/{categoriesId}")
-    public Page<Product> getByFilter(
-            @PathVariable(value = "categoriesId") UUID categoriesId,
-            @RequestParam(name = "number", required = true,
-                    defaultValue = "0") Integer pageNumber,
-            @RequestParam(name = "size", required = true,
-                    defaultValue = "20") Integer pageSize,
-            /*@RequestPart(value = "name", required = false) String name,
-            @RequestPart(value = "brand", required = false) Brand brand,*/
-            @RequestBody List<Characteristics> filter
-    ) {
-        log.info("Get product with filer, filter : " + filter.stream()
-                .map(item -> item.getName() + ": " + item.getValue())
-                .collect(Collectors.joining(
-                        ", ")));
-
-        return productService.findByCategoriesFilteredCharacteristics(PageRequest.of(pageNumber, pageSize),
-                categoriesId,
-                filter
-        );
-    }
-
-    /**
-     * REST service endpoint
-     * Save product
-     *
-     * @param productCreateRequest Object Product
-     */
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void save(
@@ -103,7 +60,7 @@ public class ProductPostController {
         final String name = product.getNameModel().replace(' ', '-');
 
         for (MultipartFile image : images) {
-            String imageName = path + name + "-" + iterator++ + "-" + image.getOriginalFilename();
+            final String imageName = path + name + "-" + iterator++ + "-" + image.getOriginalFilename();
             System.out.println(imageName);
             try {
                 image.transferTo(Paths.get(imageName));
@@ -116,12 +73,6 @@ public class ProductPostController {
         productService.save(product);
     }
 
-    /**
-     * REST service endpoint
-     * Update product
-     *
-     * @param product Object Product
-     */
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping("/update")
     public void update(@RequestBody Product product) {
@@ -134,12 +85,6 @@ public class ProductPostController {
         productService.save(product);
     }
 
-    /**
-     * REST service endpoint
-     * Delete product
-     *
-     * @param product Object Product
-     */
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping("/delete")
     public void delete(@RequestBody Product product) {

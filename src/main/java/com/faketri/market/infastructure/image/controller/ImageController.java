@@ -10,6 +10,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
@@ -47,8 +49,7 @@ public class ImageController {
         try {
             final Image image = imageService.findById(id);
             final ClassPathResource classPathResource = new ClassPathResource(image.getPath());
-            System.out.println(classPathResource.getPath());
-            final InputStream in = classPathResource.getInputStream();
+            final InputStream in = classPathResource.exists() ? classPathResource.getInputStream() : new FileInputStream(image.getPath());
             response.setContentType(MediaType.IMAGE_JPEG_VALUE);
             IOUtils.copy(in, response.getOutputStream());
         } catch (Exception e) {

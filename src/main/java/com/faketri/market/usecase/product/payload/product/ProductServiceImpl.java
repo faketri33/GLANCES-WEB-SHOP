@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -126,6 +127,18 @@ public class ProductServiceImpl implements ProductService {
         return productImpl.findAll(productSpecification.hasCategories(categoriesId)
                 .and(productSpecification.hasCharacteristics(characteristics)), pageable);
     }
+
+    @Override
+    public Page<Product> findBySearchParam(Pageable pageable, String name, List<UUID> characteristics, UUID categoriesId) {
+
+        Specification<Product> specification = productSpecification.likeByNameModelOrBrandName(name);
+
+        if (characteristics != null) specification = specification.and(productSpecification.hasCharacteristicsByUUID(characteristics));
+        if (categoriesId != null) specification = specification.and(productSpecification.hasCategories(categoriesId));
+
+        return productImpl.findAll(specification, pageable);
+    }
+
 
     /**
      * Save product.

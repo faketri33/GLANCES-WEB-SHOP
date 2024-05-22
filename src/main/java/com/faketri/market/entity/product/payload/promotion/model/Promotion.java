@@ -5,6 +5,7 @@ import com.faketri.market.entity.product.payload.product.model.Product;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +35,10 @@ public class Promotion {
     private String description;
 
     @Column
-    private LocalDateTime dateOfStart;
+    private LocalDate dateOfStart;
 
     @Column
-    private LocalDateTime dateOfEnd;
+    private LocalDate dateOfEnd;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private List<Product> promotionProductItems = new ArrayList<>();
@@ -59,7 +60,7 @@ public class Promotion {
      * @param dateOfEnd   the date of end
      */
     public Promotion(UUID id, Image banner, String title, String description,
-                     LocalDateTime dateOfStart, LocalDateTime dateOfEnd
+                     LocalDate dateOfStart, LocalDate dateOfEnd
     ) {
         this.id = id;
         this.banner = banner;
@@ -101,19 +102,19 @@ public class Promotion {
         this.description = description;
     }
 
-    public LocalDateTime getDateOfStart() {
+    public LocalDate getDateOfStart() {
         return dateOfStart;
     }
 
-    public void setDateOfStart(LocalDateTime dateOfStart) {
+    public void setDateOfStart(LocalDate dateOfStart) {
         this.dateOfStart = dateOfStart;
     }
 
-    public LocalDateTime getDateOfEnd() {
+    public LocalDate getDateOfEnd() {
         return dateOfEnd;
     }
 
-    public void setDateOfEnd(LocalDateTime dateOfEnd) {
+    public void setDateOfEnd(LocalDate dateOfEnd) {
         this.dateOfEnd = dateOfEnd;
     }
 

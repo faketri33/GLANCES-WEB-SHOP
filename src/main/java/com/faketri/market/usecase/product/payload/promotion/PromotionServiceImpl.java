@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -68,7 +69,7 @@ public class PromotionServiceImpl implements PromotionService {
      * @param promotion the promotion
      */
     public void isPromotionActive(Promotion promotion) {
-        LocalDateTime dateNow = LocalDateTime.now();
+        LocalDate dateNow = LocalDate.now();
         if (dateNow.isAfter(promotion.getDateOfStart()) && dateNow.isBefore(promotion.getDateOfEnd()))
             promotion.getPromotionProductItems().forEach(product -> product.setPromoItem(true));
     }

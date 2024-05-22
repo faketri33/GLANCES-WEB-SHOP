@@ -1,7 +1,6 @@
 package com.faketri.market.infastructure.user.payload.user.dto;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class UserUpdateRequest {
 
