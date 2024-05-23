@@ -7,7 +7,7 @@
 1. [Описание проекта](#description)
 2. [Стек технологий](#technology)
 3. [Возможности](#opportunities)
-4. [Установка и запуск](#installationAndLaunch)
+4. [Установка и запуск](#installation)
 5. [Структура проекта](#projectStruct)
 6. [Скрипты npm](#scripts)
 7. [Вклад в проект](#contribution)
@@ -56,7 +56,7 @@
 - Создание и управление акциями и скидками
 - Просмотр списка заказов
 
-## <a name="installationAndLaunch">Установка и запуск</a>
+## <a name="installation">Установка и запуск</a>
 
 ### Требования
 - Docker
