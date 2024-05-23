@@ -24,7 +24,7 @@ public interface UserRepository extends JpaRepository<Users, UUID> {
      */
     Optional<Users> findByLogin(String login);
 
-    Optional<Users> findById(UUID aLong);
+    Optional<Users> findById(UUID id);
 
     @Query("select (count(u) > 0) from Users u where u.login = ?1")
     boolean existsByLogin(String login);
@@ -33,6 +33,6 @@ public interface UserRepository extends JpaRepository<Users, UUID> {
     boolean existsByEmail(String email);
 
 
-    void deleteById(UUID aLong);
+    void deleteById(UUID id);
 
 }

@@ -74,7 +74,7 @@ public class PromotionController {
         promotion.setDateOfEnd(promotionCreateRequest.getDateOfEnd());
         promotion.setTitle(promotionCreateRequest.getTitle());
 
-        final String path = "/app/images/";
+        final String path = "/app/images/promo/";
         final String imageName = path + promotion.getTitle().replace(' ', '-') + "-" + images.getOriginalFilename();
 
         try {

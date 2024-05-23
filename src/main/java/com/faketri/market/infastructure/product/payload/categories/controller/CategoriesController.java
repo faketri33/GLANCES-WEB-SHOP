@@ -51,7 +51,7 @@ public class CategoriesController {
     public Categories save(@RequestPart("categories") final CategoriesRequest categoriesRequest,
                            @RequestPart("images") final MultipartFile images) {
 
-        final String path = "/app/images/";
+        final String path = "/app/images/categories/";
         final String imageName = path + categoriesRequest.getName() + "-" + images.getOriginalFilename();
         System.out.println(imageName);
         try {

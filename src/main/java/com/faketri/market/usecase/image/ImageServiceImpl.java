@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,7 +48,17 @@ public class ImageServiceImpl implements ImageService {
     }
 
     public void delete(Image entity) {
-        imageImpl.delete(entity);
+        System.out.println(entity.getId());
+        File file = new File(entity.getPath());
+
+        if (file.exists()) file.delete();
+
+        imageImpl.deleteById(entity.getId());
+    }
+
+    public void delete(UUID entity) {
+        System.out.println(entity);
+        imageImpl.deleteById(entity);
     }
 
 }

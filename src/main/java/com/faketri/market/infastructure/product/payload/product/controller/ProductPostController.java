@@ -51,7 +51,7 @@ public class ProductPostController {
         product.setNameModel(productCreateRequest.getNameModel());
 
         int iterator = 0;
-        final String path = "/app/images/";
+        final String path = "/app/images/product/";
         final String name = product.getNameModel().replace(' ', '-');
 
         for (MultipartFile image : images) {

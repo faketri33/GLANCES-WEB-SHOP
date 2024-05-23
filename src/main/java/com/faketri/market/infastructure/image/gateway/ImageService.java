@@ -20,5 +20,6 @@ public interface ImageService {
     Boolean update(Image entity);
 
     void delete(Image entity);
+    void delete(UUID entity);
 
 }
