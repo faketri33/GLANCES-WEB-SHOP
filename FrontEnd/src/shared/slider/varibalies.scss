@@ -1,0 +1,20 @@
+// Background
+$background-color: #ffff;
+
+// Hamburger icon colors
+$menu-icon-color: #ff0000;
+
+// Menu colors
+$menu-background: #3b889a;
+$menu-text: #ffff;
+$menu-text-hover: #e0e0e0;
+
+// Export Styles
+:export {
+  background: {
+    color: $background-color;
+  }
+  menu: {
+    icon-color: $menu-icon-color;
+  }
+}
