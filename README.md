@@ -7,12 +7,12 @@
 1. [Описание проекта](#description)
 2. [Стек технологий](#technology)
 3. [Возможности](#opportunities)
-4. [Установка и запуск](#InstallationAndLaunch)
-5. [Структура проекта](#ProjectStruct)
-6. [Скрипты npm](#Scripts)
-7. [Вклад в проект](#Contribution)
-8. [Лицензия](#License)
-9. [Примечания](#Notes)
+4. [Установка и запуск](#installationAndLaunch)
+5. [Структура проекта](#projectStruct)
+6. [Скрипты npm](#scripts)
+7. [Вклад в проект](#contribution)
+8. [Лицензия](#license)
+9. [Примечания](#notes)
 
 
 ## <a name="description">Описание проекта</a>
@@ -56,7 +56,7 @@
 - Создание и управление акциями и скидками
 - Просмотр списка заказов
 
-## <a name="InstallationAndLaunch">Установка и запуск</a>
+## <a name="installationAndLaunch">Установка и запуск</a>
 
 ### Требования
 - Docker
@@ -95,7 +95,7 @@
    - Frontend: `http://localhost:8080`
    - Backend API: `http://localhost:9000/api`
 
-### <a name="ProjectStruct">Структура проекта</a>
+### <a name="projectStruct">Структура проекта</a>
 
 ```
 OnlineMarket/
@@ -132,7 +132,7 @@ OnlineMarket/
 ├── Dockerfile
 ```
 
-### <a name="Scripts">Скрипты npm</a>
+### <a name="scripts">Скрипты npm</a>
 
 - `npm install` - Установка зависимостей
 - `npm run serve` - Запуск фронтенда в режиме разработки
@@ -142,13 +142,13 @@ OnlineMarket/
 
 Если вы хотите внести вклад в этот проект, пожалуйста, создайте форк репозитория, внесите свои изменения и отправьте pull request. Мы рассмотрим его в ближайшее время.
 
-## <a name="License">Лицензия</a>
+## <a name="license">Лицензия</a>
 
 Этот проект лицензирован под лицензией MIT. Подробности см. в файле <a href="https://github.com/faketri/OnlineMarket/blob/master/LICENSE">LICENSE</a>.
 
 ---
 
-### <a name="Notes">Примечания</a>
+### <a name="notes">Примечания</a>
 
 - Убедитесь, что вы установили все необходимые зависимости и настроили окружение перед запуском проекта.
 - Для корректной работы JWT, настройте секретный ключ в переменных окружения.
