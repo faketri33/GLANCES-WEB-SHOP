@@ -63,7 +63,7 @@ export const UserActions = {
   },
 
   async addRating(productId: string, rating: object) {
-    return await $axios.post("/rating/" + productId, rating);
+    return (await $axios.post("/rating/" + productId, rating)).data;
   },
 
   additionDataToStore(response: any): User {

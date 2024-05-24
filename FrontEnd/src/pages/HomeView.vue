@@ -1,6 +1,6 @@
 <template>
   <main class="container">
-    <div v-if="!dataLoading" class="promo">
+    <div v-if="promotionData" class="promo">
       <swiper class="mt-2 rounded-2" :navigation="true" :modules="modules">
         <swiper-slide v-for="promo in promotionData" :key="promo.id">
           <router-link :to="'/promotion/' + promo.id">
@@ -14,7 +14,7 @@
       </swiper>
     </div>
     <h2 style="">Категории</h2>
-    <div v-if="!dataLoading" class="categories">
+    <div v-if="categoriesData" class="categories">
       <swiper
         :breakpoints="breakpoints"
         :navigation="true"
@@ -26,13 +26,39 @@
         </swiper-slide>
       </swiper>
     </div>
-    <h2>Акции</h2>
-    <div v-if="!dataLoading" class="product row justify-content-center">
+    <div
+      v-if="productPromotion?.content.length"
+      class="product row justify-content-center"
+    >
+      <h2>Акции</h2>
       <swiper :breakpoints="breakpoints" :navigation="true" :modules="modules">
         <swiper-slide
           :slidesPerView="'auto'"
           :centeredSlides="true"
-          v-for="product in productData?.content"
+          v-for="product in productPromotion?.content"
+          :key="product.id"
+        >
+          <ProductCard
+            v-bind:product="product"
+            v-bind:typeCard="false"
+            v-bind:likes="userStore.isLikedProduct(product.id)"
+            v-bind:isBasketItem="userStore.isInBasketProduct(product.id)"
+            v-on:addToFavorite="userStore.toFavorite(product)"
+            v-on:toBasket="userStore.toBasket(product)"
+          />
+        </swiper-slide>
+      </swiper>
+    </div>
+    <div
+      v-if="productTopSales?.content.length"
+      class="product row justify-content-center"
+    >
+      <h2>Самые продоваемые товары</h2>
+      <swiper :breakpoints="breakpoints" :navigation="true" :modules="modules">
+        <swiper-slide
+          :slidesPerView="'auto'"
+          :centeredSlides="true"
+          v-for="product in productTopSales?.content"
           :key="product.id"
         >
           <ProductCard
@@ -90,20 +116,19 @@ const breakpoints = {
   },
 };
 
-const dataLoading = ref(true);
-
-const productData = ref<PageableType<Product>>();
+const productPromotion = ref<PageableType<Product>>();
+const productTopSales = ref<PageableType<Product>>();
 const categoriesData = ref<Categories[]>();
 const promotionData = ref<Promotion[]>();
 
 const userStore = userStoreModule();
 
 onMounted(async () => {
-  productData.value = await ProductActions.loadProduct(0, 10);
+  productPromotion.value = await ProductActions.loadProductInPromotion(0, 10);
+  productTopSales.value = await ProductActions.loadTopSales(0, 10);
   categoriesData.value = await CategoriesAction.loadCategories();
   promotionData.value = await PromotionAction.loadPromo();
 
-  dataLoading.value = false;
-  return { productData, categoriesData };
+  return { productPromotion, categoriesData, productTopSales, promotionData };
 });
 </script>

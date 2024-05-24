@@ -39,16 +39,28 @@ export const ProductActions = {
     pageNumber: number,
     pageSize: number
   ): Promise<PageableType<Product>> {
-    return new Promise<PageableType<Product>>((resolve) =>
+    return new Promise<PageableType<Product>>((resolve, reject) =>
       $axios
         .get("/product/promotion/", {
           params: { number: pageNumber, size: pageSize },
         })
         .then((data) => resolve(data.data))
-        .catch((err) => new Error(err.message))
+        .catch((err) => reject(err.message))
     );
   },
-
+  loadTopSales(
+    pageNumber: number,
+    pageSize: number
+  ): Promise<PageableType<Product>> {
+    return new Promise<PageableType<Product>>((resolve, reject) =>
+      $axios
+        .get("/product/top-selling", {
+          params: { number: pageNumber, size: pageSize },
+        })
+        .then((data) => resolve(data.data))
+        .catch((err) => reject(err.message))
+    );
+  },
   loadProductById(id: string): Promise<Product> {
     return new Promise<Product>((resolve, reject) =>
       $axios

@@ -138,8 +138,8 @@ export const userStoreModule = defineStore("user", {
       } else alert("Вы не авторизованы");
     },
 
-    addRating(productId: string, rating: object) {
-      UserActions.addRating(productId, rating);
+    async addRating(productId: string, rating: object) {
+      return await UserActions.addRating(productId, rating);
     },
 
     updateUser(response: User) {

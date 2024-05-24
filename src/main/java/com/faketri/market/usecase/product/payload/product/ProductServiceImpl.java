@@ -107,8 +107,7 @@ public class ProductServiceImpl implements ProductService {
     public Page<Product> findTopSelling(Pageable pageable) {
         return productImpl.findAll(PageRequest.of(pageable.getPageNumber(),
                 pageable.getPageSize(),
-                Sort.by("quantitySold")
-                        .ascending()
+                Sort.by("quantitySold").descending()
         ));
     }
 

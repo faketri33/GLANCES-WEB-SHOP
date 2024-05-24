@@ -65,7 +65,7 @@
         <div class="actions w-100 d-flex">
           <button
             class="btn shadow me-2"
-            @click="userStore.toFavorite(product!)"
+            @click="userStore.toFavorite(product)"
           >
             <img
               :src="
@@ -77,7 +77,7 @@
             />
           </button>
           <button
-            @click="userStore.toBasket(product!)"
+            @click="userStore.toBasket(product)"
             class="btn btn-primary w-100"
           >
             {{
@@ -130,9 +130,9 @@
                 </ModelView>
               </div>
             </div>
-            <div v-if="productRating?.content" class="wrapper">
+            <div v-if="productRating[ratingPage]" class="wrapper">
               <RatingComp
-                v-for="(item, index) in productRating.content"
+                v-for="(item, index) in productRating[ratingPage].content"
                 :key="index"
                 v-bind:rating="item"
               />
@@ -144,15 +144,12 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { Product } from "@/entities/product/model/Product";
-import { Rating } from "@/entities/rating/model";
+<script setup>
 import { onMounted, ref, watch } from "vue";
 import { ProductActions } from "@/entities/product/api/model/Actions";
 import { useRoute } from "vue-router";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { FreeMode, Pagination, Navigation, Thumbs } from "swiper/modules";
-import { Swiper as SwiperClass } from "swiper/types";
 import CharacteristicsToProductPage from "@/entities/characteristics/ui/CharacteristicsToProductPage.vue";
 import RatingComp from "@/entities/rating/ui/RatingComp.vue";
 import { RatingAction } from "@/entities/rating/api/actions";
@@ -162,18 +159,18 @@ import ModelView from "@/widgets/ModelView.vue";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import "swiper/css";
-import { PageableType } from "@/shared/pageable/pageableType";
 
 const route = useRoute();
 const userStore = userStoreModule();
 
 const dataLoading = ref(true);
-const product = ref<Product>();
-const productRating = ref<PageableType<Rating>>();
+const product = ref(null);
+const productRating = ref([]);
+const ratingPage = 0;
 
-const thumbsSwiper = ref<SwiperClass>();
+const thumbsSwiper = ref();
 
-const setThumbsSwiper = (swiper: SwiperClass) => {
+const setThumbsSwiper = (swiper) => {
   thumbsSwiper.value = swiper;
 };
 
@@ -182,8 +179,8 @@ const modules = [FreeMode, Navigation, Thumbs, Pagination];
 const showModal = ref(false);
 
 const review = ref({
-  grade: 1,
-  description: "ы",
+  grade: 0,
+  description: "",
 });
 
 watch(
@@ -197,17 +194,30 @@ watch(
 const loadProduct = async () => {
   const productId = route.params.id.toString();
   product.value = await ProductActions.loadProductById(productId);
-  productRating.value = await RatingAction.loadByProductId(productId);
+  productRating.value = [];
   dataLoading.value = false;
 };
 
-const addRating = () => {
+const loadRating = async () => {
   const productId = route.params.id.toString();
-  userStore.addRating(productId, review.value);
+  const response = await RatingAction.loadByProductId(
+    ratingPage,
+    20,
+    productId
+  );
+  productRating.value[ratingPage] = response;
+};
+
+const addRating = async () => {
+  const productId = route.params.id.toString();
+  const response = await userStore.addRating(productId, review.value);
+  if (productRating.value) productRating.value[0] = { content: [] };
+  productRating.value[ratingPage].content.push(response);
 };
 
 onMounted(async () => {
   await loadProduct();
+  await loadRating();
 });
 </script>
 

@@ -81,4 +81,7 @@ INSERT INTO image (id, path) VALUES
 -- Iphone SE
 ('550e8400-e29b-41d4-a716-446655440067', '/app/images/product/Sony-0-Viao-Z.png'),
 ('550e8400-e29b-41d4-a716-446655440068', '/app/images/product/Sony-1-Viao-Z.png'),
-('550e8400-e29b-41d4-a716-446655440069', '/app/images/product/Sony-2-Viao-Z.png');
+('550e8400-e29b-41d4-a716-446655440069', '/app/images/product/Sony-2-Viao-Z.png'),
+-- Promotion banner
+('550e8400-e29b-41d4-a716-446655440070','/app/images/promotion/promotion_banner_summber.png'),
+('550e8400-e29b-41d4-a716-446655440071','/app/images/promotion/promo_banner_sales.png');

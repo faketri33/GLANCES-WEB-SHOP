@@ -130,7 +130,8 @@ create table promotion (
     date_of_start date,
     banner_id uuid unique,
     id uuid not null,
-    description varchar(3000),
+    description varchar(255),
+    conditions varchar(1024)
     title varchar(255),
     primary key (id)
 );

@@ -11,31 +11,7 @@
           >
         </div>
         <div class="header__item col-xl-6 col-md-4 col-sm-9">
-          <!-- Строка поиска -->
-          <input
-            type="text"
-            class="form-control"
-            v-model="searchQuery"
-            @input="fetchOptions"
-          />
-
-          <!-- Список вариантов -->
-          <ul
-            v-if="options.length"
-            class="list-group position-absolute mt-2"
-            style="z-index: 999"
-          >
-            <li
-              v-for="option in options"
-              :key="option.id"
-              class="list-group-item"
-              @click="selectOption(option)"
-            >
-              <router-link :to="'/product/' + option.id">
-                {{ option.nameModel }}
-              </router-link>
-            </li>
-          </ul>
+          <search-component class="w-100"></search-component>
         </div>
         <div
           class="tab__bar col-xl-3 col-md-5 col-lg-4 col-xs-9 col-sm-9 mt-2 row"
@@ -70,37 +46,13 @@
 </template>
 
 <script setup>
+import SearchComponent from "./SearchComponent.vue";
 import { ProductActions } from "@/entities/product/api/model/Actions";
-import { ref, defineProps } from "vue";
+import { defineProps } from "vue";
 
 defineProps({
   isLogin: Boolean,
 });
-
-const searchQuery = ref("");
-const options = ref([]);
-
-const fetchOptions = async () => {
-  if (searchQuery.value.length < 3) return;
-  try {
-    const response = await ProductActions.searchProduct(
-      0,
-      10,
-      null,
-      null,
-      searchQuery.value
-    );
-    options.value = response.content;
-  } catch (error) {
-    console.error("Ошибка при загрузке вариантов:", error);
-  }
-};
-
-const selectOption = (option) => {
-  console.log("Выбран вариант:", option);
-  options.value = [];
-  // Дополнительные действия при выборе варианта
-};
 </script>
 
 <style lang="scss" scoped>

@@ -72,7 +72,7 @@ public class ProductGetController {
      * @param pageSize   the page size
      * @return the promotion product
      */
-    @RequestMapping("/promotion/")
+    @RequestMapping("/promotion")
     public Page<Product> getPromotionProduct(
             @RequestParam(name = "number", required = true,
                     defaultValue = "1") Integer pageNumber,
