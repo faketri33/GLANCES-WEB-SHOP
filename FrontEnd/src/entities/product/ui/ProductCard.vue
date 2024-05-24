@@ -6,7 +6,8 @@
   >
     <div
       class="img"
-      :class="typeCard ? 'col-12 col-sm-6 col-md-5 col-lg-5' : ''"
+      :class="typeCard ? 'col-12 col-sm-6 col-md-6 col-lg-5' : ''"
+      style="height: 220px"
     >
       <swiper
         :slides-per-view="1"
@@ -18,7 +19,7 @@
           <img
             :src="'http://localhost:9000/api/image/' + image.id"
             alt=""
-            style="max-width: 220px"
+            style="max-width: 220px; max-height: 220px"
           />
         </swiper-slide>
       </swiper>
@@ -31,7 +32,7 @@
         class="text-decoration-none text-black"
         :to="'/product/' + product.id"
       >
-        <h5 class="card-title mb-2 cut-text">
+        <h5 class="card-title mb-2 cut-text" style="height: 48px">
           {{ getFullName }}
         </h5>
       </router-link>

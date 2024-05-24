@@ -2,10 +2,8 @@
   <div class="container">
     <h1 class="mt-5 mb-5">Каталог</h1>
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-12 col-lg-4">
         <div id="filterMenu" class="shadow p-3 rounded">
-          <!-- Фильтры товаров -->
-          <h4>Фильтр</h4>
           <CharacteristicsList
             v-if="characteristics"
             v-bind:characteristics="characteristics"
@@ -13,7 +11,7 @@
           />
         </div>
       </div>
-      <div class="col-lg-9" v-if="pages[currentPages]">
+      <div class="col-lg-8" v-if="pages[currentPages]">
         <ProductCard
           v-for="product in pages[currentPages].content"
           v-bind:product="product"
@@ -71,7 +69,7 @@ const userStore = userStoreModule();
 const pages = ref<PageableType<Product>[]>([]);
 const characteristics = ref<Characteristics[]>();
 
-const filter = ref<Characteristics[]>([]);
+const characteristicsForFilter = ref<Characteristics[]>([]);
 
 const changePages = async (pageIndex: number) => {
   currentPages.value = pageIndex;
@@ -83,26 +81,21 @@ const changePages = async (pageIndex: number) => {
 };
 
 const useFiltered = async (selectedValues: Characteristics[]) => {
-  filter.value = selectedValues;
+  characteristicsForFilter.value = selectedValues;
   pages.value = [];
   const res = await loadPages();
   pages.value.push(res);
 };
 
 const loadPages = async (): Promise<PageableType<Product>> => {
-  console.log(filter.value);
-  return filter.value.length > 0
-    ? await ProductActions.loadProductByCategories(
-        currentPages.value,
-        pageSize,
-        categoriesId,
-        filter.value
-      )
-    : await ProductActions.loadProductByCategories(
-        currentPages.value,
-        pageSize,
-        categoriesId
-      );
+  console.log(characteristicsForFilter.value);
+  return await ProductActions.searchProduct(
+    currentPages.value,
+    pageSize,
+    categoriesId,
+    characteristicsForFilter.value,
+    ""
+  );
 };
 
 onMounted(async () => {

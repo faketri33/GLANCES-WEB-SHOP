@@ -23,7 +23,7 @@ public class ProductCreateRequest {
     @NotNull
     @Min(value = 1, message = "Количетсво не может быть меньше 1")
     private Integer quantity;
-
+    @NotNull
     private Set<CharacteristicsRequest> characteristicsRequestSet = new HashSet<>();
 
     public ProductCreateRequest() {

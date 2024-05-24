@@ -84,6 +84,8 @@ const fetchOptions = async () => {
   if (searchQuery.value.length < 3) return;
   try {
     const response = await ProductActions.searchProduct(
+      0,
+      10,
       null,
       null,
       searchQuery.value

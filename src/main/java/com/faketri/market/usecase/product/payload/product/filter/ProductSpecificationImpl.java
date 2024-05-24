@@ -67,9 +67,10 @@ public class ProductSpecificationImpl implements ProductSpecification {
     public Specification<Product> likeByNameModelOrBrandName(String name) {
         return (root, query, criteriaBuilder) -> {
             Join<Brand, Product> brandProductJoin = root.join("brand");
-            final String likeName = "%" + name + "%";
-            return criteriaBuilder.or(criteriaBuilder.like(root.get("nameModel"), likeName),
-                    criteriaBuilder.like(brandProductJoin.get("name"), likeName)
+            final String likeName = "%" + name.toLowerCase().trim() + "%";
+            return criteriaBuilder.or(
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("nameModel")), likeName),
+                    criteriaBuilder.like(criteriaBuilder.lower(brandProductJoin.get("name")), likeName)
             );
         };
     }

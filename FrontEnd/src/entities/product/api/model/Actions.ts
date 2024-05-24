@@ -16,34 +16,20 @@ export const ProductActions = {
         .then((data) => resolve(data.data))
     );
   },
-
-  loadProductByCategories(
-    pageNumber: number,
+  async searchProduct(
+    pageNum: number,
     pageSize: number,
     categoriesId: string,
-    filter?: Characteristics[]
-  ): Promise<PageableType<Product>> {
-    return new Promise<PageableType<Product>>((resolve) =>
-      !filter
-        ? $axios
-            .get("/product/categories/" + categoriesId, {
-              params: { number: pageNumber, size: pageSize },
-            })
-            .then((data) => resolve(data.data))
-            .catch((err) => new Error(err.message))
-        : $axios
-            .post("/product/categories/" + categoriesId, filter, {
-              params: { number: pageNumber, size: pageSize },
-            })
-            .then((data) => resolve(data.data))
-            .catch((err) => new Error(err.message))
-    );
-  },
-
-  async searchProduct(categoriesId: string, characteristics: [], name: string) {
+    characteristics: Characteristics[],
+    name: string
+  ) {
     const response = await $axios.get("/product/search", {
       params: {
+        number: pageNum,
+        size: pageSize,
+        categories: categoriesId,
         name: name,
+        characteristics: characteristics?.map((c) => c.id).join(",") || null,
       },
     });
     return response.data;

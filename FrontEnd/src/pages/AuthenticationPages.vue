@@ -88,11 +88,13 @@
 import { ref } from "vue";
 import { userStoreModule } from "@/entities/user/api/index.js";
 import { User } from "@/entities/user/model/User";
+import { LoginException } from "@/entities/user/model/LoginException";
 
 const user = {} as User;
 
 const isSingIn = ref(true);
 const userStore = userStoreModule();
+userStore.errorMessage = {} as LoginException;
 
 const auth = () => {
   try {

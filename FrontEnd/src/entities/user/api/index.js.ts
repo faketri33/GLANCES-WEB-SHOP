@@ -59,7 +59,7 @@ export const userStoreModule = defineStore("user", {
           this.updateUser(r);
         })
         .catch((err) => {
-          this.updateErrorMessage(err);
+          this.updateErrorMessage(err.response.data);
         });
       this.isLoading = false;
     },
@@ -149,7 +149,7 @@ export const userStoreModule = defineStore("user", {
       this.isLoading = false;
     },
 
-    updateErrorMessage(response: LoginException) {
+    updateErrorMessage(response: any) {
       this.errorMessage = response;
     },
   },

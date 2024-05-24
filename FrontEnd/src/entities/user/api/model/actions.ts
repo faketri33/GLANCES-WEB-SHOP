@@ -18,9 +18,7 @@ export const UserActions = {
       email: params.email,
       password: params.password,
     });
-    return response.status === 200
-      ? Promise.resolve(this.additionDataToStore(response.data))
-      : Promise.reject(response.data);
+    return Promise.resolve(this.additionDataToStore(response.data));
   },
   async loadUser(): Promise<User> {
     const response = await $axios.get("/user/");
