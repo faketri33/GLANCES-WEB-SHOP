@@ -38,12 +38,12 @@
       </router-link>
       <p class="card-price text-center">
         {{ product.price }} ₽
-        <span v-if="product.isPromoActive" class="original-price">{{
+        <span v-if="product.promoItem" class="original-price">{{
           product.promoPrice
         }}</span>
       </p>
-      <div v-if="product.isPromoActive" class="discount-tag">
-        {{ product.discount }}
+      <div v-if="product.promoItem" class="discount-tag" style="z-index: 1">
+        -{{ product.discount }}%
       </div>
       <div
         class="option d-flex justify-content-between align-items-center mb-3"
@@ -54,7 +54,7 @@
         </button>
       </div>
       <div class="text-center w-100">
-        <button @click="addToBasket" class="btn btn-primary w-100">
+        <button @click="basket" class="btn btn-primary w-100">
           {{ isBasketItem ? "Удалить из корзины" : "В корзину" }}
         </button>
       </div>
@@ -89,6 +89,7 @@ export default {
   data() {
     return {
       mutateLikes: this.likes,
+      mutateIsBasketItem: this.isBasketItem,
     };
   },
   setup() {
@@ -106,9 +107,15 @@ export default {
       this.mutateLikes = !this.mutateLikes;
       this.$emit("addToFavorite", this.product, this.mutateLikes);
     },
+    basket() {
+      if (this.isBasketItem) this.removeFromBasket();
+      else this.addToBasket();
+    },
     addToBasket() {
-      this.mutateIsBasketItem = !this.mutateIsBasketItem;
-      this.$emit("toBasket", this.product);
+      this.$emit("addToBasket", this.product.id, 1);
+    },
+    removeFromBasket() {
+      this.$emit("removeFromBasket", this.product.id, 1);
     },
   },
 };

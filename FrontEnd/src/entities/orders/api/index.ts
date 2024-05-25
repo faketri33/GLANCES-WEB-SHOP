@@ -1,7 +1,17 @@
+import { ProductItem } from "@/entities/product/model/ProductItem";
 import { $axios } from "@/shared/client/AxiosClient";
+import { Orders } from "../model";
 
 export const OrdersActions = {
-  async loadOrderById(id: string) {
+  async createOrder(product: Array<ProductItem>) {
+    return (await $axios.post("/orders/create", product)).data;
+  },
+  async loadByUserId(userId: string, page: number, size: number) {
+    return await $axios.get("/orders/user/" + userId, {
+      params: { page: page, size: size },
+    });
+  },
+  async loadOrderById(id: string): Promise<Orders[]> {
     const response = await $axios.get("/orders/id/" + id);
 
     return response.data;

@@ -25,10 +25,16 @@ public class OrdersGetController {
         this.orderService = orderService;
     }
 
+    @RequestMapping("/user/{id}")
+    public Page<OrdersDto> findByUser(@PathVariable("id") UUID id,
+                                 @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                 @RequestParam(name = "size", defaultValue = "20") Integer size) {
+        return orderService.findByUser(id, PageRequest.of(page, size)).map(OrderMapper::toDto);
+    }
+
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping("/id/{id}")
     public OrdersDto findAll(@PathVariable("id") UUID id) {
-        System.out.println("HELLO");
         return OrderMapper.toDto(orderService.findById(id));
     }
 

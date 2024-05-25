@@ -34,7 +34,7 @@ services:
   spring:
     container_name: glances_back
     environment:
-      DB_CONNECT: ${DB_CONNECT}
+      DB_CONNECT: ${DB_CONNECT_DOCKER}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       JWT_ACCESS_KEY: ${JWT_ACCESS_KEY}

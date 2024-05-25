@@ -9,4 +9,8 @@ public interface BasketService {
     Basket findById(UUID uuid);
 
     Basket save(Basket basket);
+
+    Basket addProductToBasket(UUID basketId, UUID productId, int quantity);
+
+    void removeFromBasket(UUID basketId, UUID productId, int quantity);
 }

@@ -146,7 +146,7 @@ public class Product {
     }
 
     public Integer getPrice() {
-        return discount == 0 ? price : getPromoPrice();
+        return this.isPromoItem ? getPromoPrice() : this.price;
     }
 
     public void setPrice(Integer price) {

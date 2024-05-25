@@ -4,5 +4,4 @@ export type ProductItem = {
   id: string;
   product: Product;
   quantity: number;
-  price: number;
 };

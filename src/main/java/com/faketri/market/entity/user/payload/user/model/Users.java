@@ -61,9 +61,6 @@ public class Users {
             joinColumns = @JoinColumn(name = "users_id"))
     private Set<ERole> role = new HashSet<>();
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Orders> orders = new HashSet<>();
-
     @ManyToMany
     private Set<Product> favoriteProduct = new HashSet<>();
 
@@ -194,14 +191,6 @@ public class Users {
 
     public void setRole(Set<ERole> role) {
         this.role = role;
-    }
-
-    public Set<Orders> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<Orders> orders) {
-        this.orders = orders;
     }
 
     public Set<Product> getFavoriteProduct() {

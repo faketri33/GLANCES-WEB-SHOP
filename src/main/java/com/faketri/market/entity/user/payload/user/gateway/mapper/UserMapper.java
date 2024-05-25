@@ -19,7 +19,6 @@ public interface UserMapper {
         userResponse.setDateOfCreate(user.getDateOfCreate());
         userResponse.setRole(user.getRole());
         userResponse.setBasket(user.getBasket());
-        userResponse.setOrders(user.getOrders());
         userResponse.setFavoriteProduct(user.getFavoriteProduct());
 
         return userResponse;
@@ -38,7 +37,6 @@ public interface UserMapper {
         user.setDateOfCreate(userResponse.getDateOfCreate());
         user.setRole(userResponse.getRole());
         user.setBasket(userResponse.getBasket());
-        user.setOrders(userResponse.getOrders());
         user.setFavoriteProduct(userResponse.getFavoriteProduct());
 
         return user;

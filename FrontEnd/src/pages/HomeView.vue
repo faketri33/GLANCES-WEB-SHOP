@@ -44,7 +44,8 @@
             v-bind:likes="userStore.isLikedProduct(product.id)"
             v-bind:isBasketItem="userStore.isInBasketProduct(product.id)"
             v-on:addToFavorite="userStore.toFavorite(product)"
-            v-on:toBasket="userStore.toBasket(product)"
+            v-on:removeFromBasket="userStore.removeBasket"
+            v-on:addToBasket="userStore.addBasket"
           />
         </swiper-slide>
       </swiper>
@@ -67,7 +68,8 @@
             v-bind:likes="userStore.isLikedProduct(product.id)"
             v-bind:isBasketItem="userStore.isInBasketProduct(product.id)"
             v-on:addToFavorite="userStore.toFavorite(product)"
-            v-on:toBasket="userStore.toBasket(product)"
+            v-on:removeFromBasket="userStore.removeBasket"
+            v-on:addToBasket="userStore.addBasket"
           />
         </swiper-slide>
       </swiper>
@@ -77,6 +79,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { BasketAction } from "@/entities/basket/api";
 import CategoriesCard from "@/entities/categories/ui/CategoriesCard.vue";
 import { ProductActions } from "@/entities/product/api/model/Actions";
 import { CategoriesAction } from "@/entities/categories/api/model/actions";

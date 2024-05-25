@@ -65,8 +65,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsServer.loadUserByUsername(username);
 
-                SecurityContext context =
-                        SecurityContextHolder.createEmptyContext();
+                SecurityContext context = SecurityContextHolder.createEmptyContext();
+
                 var authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -77,7 +77,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 context.setAuthentication(authToken);
                 SecurityContextHolder.setContext(context);
                 log.info("User with login - " + username + " authorization");
-
             }
         } catch (RuntimeException ex) {
             log.error(ex.getMessage());

@@ -50,18 +50,6 @@ export const UserActions = {
     return await $axios.post("/user/dislike/product", product);
   },
 
-  async addToBasket(product: ProductItem) {
-    return await $axios.post("/user/basket/add", product);
-  },
-
-  async removeFromBasket(product: Product) {
-    return await $axios.post("/user/basket/remove", product);
-  },
-
-  async createOrder(product: Array<ProductItem>) {
-    return await $axios.post("/user/order/create", product);
-  },
-
   async addRating(productId: string, rating: object) {
     return (await $axios.post("/rating/" + productId, rating)).data;
   },

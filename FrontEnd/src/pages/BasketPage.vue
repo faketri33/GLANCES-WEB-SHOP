@@ -13,7 +13,8 @@
               userStore.isInBasketProduct(productItem.product.id)
             "
             v-on:addToFavorite="userStore.toFavorite(productItem.product)"
-            v-on:toBasket="userStore.toBasket(productItem.product)"
+            v-on:removeFromBasket="userStore.removeBasket"
+            v-on:addToBasket="userStore.addBasket"
           />
         </div>
       </div>
@@ -28,7 +29,9 @@
           </p>
           <button
             class="btn btn-success"
-            @click="userStore.createOrder(userStore.getUser.basket.products)"
+            @click="
+              OrdersActions.createOrder(userStore.getUser.basket.products)
+            "
           >
             Оформить заказ
           </button>
@@ -41,6 +44,8 @@
 <script setup lang="ts">
 import ProductCard from "@/entities/product/ui/ProductCard.vue";
 import { userStoreModule } from "@/entities/user/api/index.js";
+import { OrdersActions } from "@/entities/orders/api";
+import { BasketAction } from "@/entities/basket/api";
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";
 

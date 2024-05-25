@@ -131,7 +131,7 @@ create table promotion (
     banner_id uuid unique,
     id uuid not null,
     description varchar(255),
-    conditions varchar(1024)
+    conditions varchar(2048),
     title varchar(255),
     primary key (id)
 );
@@ -168,6 +168,12 @@ create table users (
     name varchar(255),
     password varchar(255),
     surname varchar(255),
+    primary key (id)
+);
+
+create table shop (
+    id uuid not null,
+    address varchar(255) not null unique,
     primary key (id)
 );
 

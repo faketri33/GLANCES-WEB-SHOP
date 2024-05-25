@@ -77,7 +77,11 @@
             />
           </button>
           <button
-            @click="userStore.toBasket(product)"
+            @click="
+              userStore.isInBasketProduct(product.id)
+                ? BasketAction.removeFromBasket(product)
+                : BasketAction.addProductBasket(product)
+            "
             class="btn btn-primary w-100"
           >
             {{
@@ -145,6 +149,7 @@
 </template>
 
 <script setup>
+import { BasketAction } from "@/entities/basket/api";
 import { onMounted, ref, watch } from "vue";
 import { ProductActions } from "@/entities/product/api/model/Actions";
 import { useRoute } from "vue-router";

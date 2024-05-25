@@ -18,7 +18,8 @@
           v-bind:likes="userStore.isLikedProduct(product.id)"
           v-bind:isBasketItem="userStore.isInBasketProduct(product.id)"
           v-on:addToFavorite="userStore.toFavorite"
-          v-on:toBasket="userStore.addToBasket(product)"
+          v-on:removeFromBasket="userStore.removeBasket"
+          v-on:addToBasket="userStore.addBasket"
           :key="product.id"
         ></ProductCard>
         <div class="row">
@@ -48,6 +49,7 @@
 </template>
 
 <script setup lang="ts">
+import { BasketAction } from "@/entities/basket/api";
 import { onMounted, ref } from "vue";
 import { ProductActions } from "@/entities/product/api/model/Actions";
 import { useRoute } from "vue-router";

@@ -1,4 +1,4 @@
-insert into promontion(date_of_start, date_of_end, banner_id, id, description, conditions, title) values
+insert into promotion(date_of_start, date_of_end, banner_id, id, description, conditions, title) values
 (
     NOW(),
     (NOW() + INTERVAL '2 weeks'),
@@ -19,7 +19,7 @@ insert into promontion(date_of_start, date_of_end, banner_id, id, description, c
     'Встречай лето!'
 );
 
-insert into promontion(date_of_start, date_of_end, banner_id, id, description, conditions, title) values
+insert into promotion(date_of_start, date_of_end, banner_id, id, description, conditions, title) values
 (
     NOW() + INTERVAL '1 day',
     (NOW() + INTERVAL '2 weeks'),

@@ -12,12 +12,12 @@ import java.util.UUID;
 @Entity
 @Table
 public class Basket {
-    @OneToMany(cascade = CascadeType.ALL)
-    List<ProductItem> products = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
+    @OneToMany(cascade = CascadeType.ALL)
+    List<ProductItem> products = new ArrayList<>();
     @Column
     private Long price;
 
@@ -32,8 +32,11 @@ public class Basket {
 
     @PrePersist
     @PreUpdate
-    private void updatePrice() {
-        products.forEach(product -> price = price + product.getPrice());
+    public void updatePrice() {
+        this.price = products.stream()
+                .map(productItem -> productItem.getProduct().getPrice())
+                .reduce(0, Integer::sum)
+                .longValue();
     }
 
     public UUID getId() {

@@ -36,8 +36,6 @@ public class UserResponse {
 
     private Set<ERole> role;
 
-    private Set<Orders> orders;
-
     private Set<Product> favoriteProduct;
 
     private LocalDateTime dateOfCreate;
@@ -126,15 +124,6 @@ public class UserResponse {
 
     public void setRole(Set<ERole> role) {
         this.role = role;
-    }
-
-    public Set<Orders> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<Orders> orders
-    ) {
-        this.orders = orders;
     }
 
     public Set<Product> getFavoriteProduct() {

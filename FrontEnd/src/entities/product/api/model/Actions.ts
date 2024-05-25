@@ -41,7 +41,7 @@ export const ProductActions = {
   ): Promise<PageableType<Product>> {
     return new Promise<PageableType<Product>>((resolve, reject) =>
       $axios
-        .get("/product/promotion/", {
+        .get("/product/promotion", {
           params: { number: pageNumber, size: pageSize },
         })
         .then((data) => resolve(data.data))

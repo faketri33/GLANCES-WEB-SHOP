@@ -29,6 +29,7 @@ public class Promotion {
 
     @Column
     private String title;
+    private String conditions;
 
     @Column(length = 3000)
     private String description;
@@ -91,6 +92,14 @@ public class Promotion {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getConditions() {
+        return conditions;
+    }
+
+    public void setConditions(String conditions) {
+        this.conditions = conditions;
     }
 
     public String getDescription() {

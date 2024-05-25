@@ -30,8 +30,8 @@
                       v-bind:isBasketItem="
                         userStore.isInBasketProduct(product.id)
                       "
-                      v-on:addToFavorite="userStore.toFavorite(product)"
-                      v-on:toBasket="userStore.toBasket(product)"
+                      v-on:removeFromBasket="userStore.addBasket"
+                      v-on:addToBasket="userStore.removeBasket"
                     />
                   </swiper-slide>
                 </swiper>

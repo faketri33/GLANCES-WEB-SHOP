@@ -22,9 +22,6 @@ public class ProductItem {
     private Product product;
     @Column
     private Integer quantity;
-    @Column
-    private Integer price;
-
     /**
      * Instantiates a new Order item.
      */
@@ -42,12 +39,6 @@ public class ProductItem {
         this.id = id;
         this.product = product;
         this.quantity = quantity;
-        this.price = product.getPrice() * quantity;
-    }
-
-    @PrePersist
-    private void onCreate() {
-        price = product.getPrice() * quantity;
     }
 
     public UUID getId() {
@@ -62,24 +53,16 @@ public class ProductItem {
         return product;
     }
 
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
     public void setProduct(Product product) {
         this.product = product;
     }
 
     public Integer getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
     }
 
     @Override
@@ -114,7 +97,6 @@ public class ProductItem {
                 "id=" + id +
                 ", product=" + product +
                 ", count=" + quantity +
-                ", price=" + price +
                 '}';
     }
 }

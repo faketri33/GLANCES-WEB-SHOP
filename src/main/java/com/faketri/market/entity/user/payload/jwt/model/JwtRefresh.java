@@ -60,6 +60,14 @@ public class JwtRefresh {
         this.token = token;
     }
 
+    public LocalDateTime getDateOfCreate() {
+        return dateOfCreate;
+    }
+
+    public void setDateOfCreate(LocalDateTime dateOfCreate) {
+        this.dateOfCreate = dateOfCreate;
+    }
+
     public LocalDateTime getDateOfExpiration() {
         return dateOfExpiration;
     }
