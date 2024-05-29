@@ -143,23 +143,19 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private JwtAuthenticationResponse generatedJwt(Users user) {
-        final JwtAuthenticationResponse authenticationResponse =
-                jwtService.generateToken(userDetailsServer.generateUserDetails(user));
+        
+        final JwtAuthenticationResponse authenticationResponse = jwtService.generateToken(userDetailsServer.generateUserDetails(user));
         authenticationResponse.setUser(UserMapper.toResponse(user));
-        jwtRefreshService
+        
+        final JwtRefresh jwtRefresh = jwtRefreshService
                 .findByUserLogin(user.getLogin())
-                .ifPresentOrElse(
-                        jwtRefresh -> {
-                            jwtRefresh.setToken(authenticationResponse.getRefreshToken());
-                            jwtRefresh.setDateOfExpiration(authenticationResponse.getExpiration());
-                            jwtRefreshService.save(jwtRefresh);
-                        },
-                        () ->
-                                jwtRefreshService.save(new JwtRefresh(null,
-                                        user,
-                                        authenticationResponse.getRefreshToken(),
-                                        authenticationResponse.getExpiration()))
-                );
+                .orElse(new JwtRefresh());
+        
+        jwtRefresh.setUser(user);
+        jwtRefresh.setToken(authenticationResponse.getRefreshToken());
+        jwtRefresh.setDateOfExpiration(authenticationResponse.getExpiration());
+        jwtRefreshService.save(jwtRefresh);
+        
         return authenticationResponse;
     }
 
