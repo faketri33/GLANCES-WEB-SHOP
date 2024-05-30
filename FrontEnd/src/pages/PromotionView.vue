@@ -5,7 +5,7 @@
         <h1 class="title">{{ promotion?.title }}</h1>
         <img
           :src="'http://localhost:9000/api/image/' + promotion?.banner?.id"
-          style="width: 100%"
+          style="width: 100%; max-height: 512px"
         />
         <div class="content shadow p-5">
           <div class="center--block">
@@ -41,6 +41,7 @@
           <div class="description">
             <h1>Описание</h1>
             <p>{{ promotion?.description }}</p>
+            <p>{{ promotion?.conditions }}</p>
           </div>
           <p>
             Срок проведения акции {{ promotion?.dateOfStart }} по

@@ -6,7 +6,11 @@ export const OrdersActions = {
   async createOrder(product: Array<ProductItem>) {
     return (await $axios.post("/orders/create", product)).data;
   },
-  async loadByUserId(userId: string, page: number, size: number) {
+  async loadByUserId(
+    userId: string,
+    page: number,
+    size: number
+  ): Promise<Orders[]> {
     return await $axios.get("/orders/user/" + userId, {
       params: { page: page, size: size },
     });

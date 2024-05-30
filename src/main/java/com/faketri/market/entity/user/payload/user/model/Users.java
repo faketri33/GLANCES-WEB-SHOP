@@ -7,6 +7,7 @@ import com.faketri.market.entity.user.payload.order.model.Orders;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
@@ -51,7 +52,7 @@ public class Users {
     private Basket basket = new Basket();
 
     @Column
-    private LocalDateTime dateOfBirthday;
+    private LocalDate dateOfBirthday;
 
     @Column
     private String city;
@@ -169,11 +170,11 @@ public class Users {
         this.basket = basket;
     }
 
-    public LocalDateTime getDateOfBirthday() {
+    public LocalDate getDateOfBirthday() {
         return dateOfBirthday;
     }
 
-    public void setDateOfBirthday(LocalDateTime dateOfBirthday) {
+    public void setDateOfBirthday(LocalDate dateOfBirthday) {
         this.dateOfBirthday = dateOfBirthday;
     }
 

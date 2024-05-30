@@ -1,46 +1,56 @@
 package com.faketri.market.infastructure.user.payload.user.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class UserUpdateRequest {
 
-    private String firstName;
-    private String lastName;
-    private LocalDateTime dateOfBirthday;
+    private String name;
+    private String surname;
+    private LocalDate dateOfBirthday;
+    private String city;
     private String email;
 
     public UserUpdateRequest() {
     }
 
-    public UserUpdateRequest(String firstName, String lastName, LocalDateTime dateOfBirthday, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public UserUpdateRequest(String name, String surname, LocalDate dateOfBirthday, String city, String email) {
+        this.name = name;
+        this.surname = surname;
         this.dateOfBirthday = dateOfBirthday;
+        this.city = city;
         this.email = email;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
-    public LocalDateTime getDateOfBirthday() {
+    public LocalDate getDateOfBirthday() {
         return dateOfBirthday;
     }
 
-    public void setDateOfBirthday(LocalDateTime dateOfBirthday) {
+    public void setDateOfBirthday(LocalDate dateOfBirthday) {
         this.dateOfBirthday = dateOfBirthday;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getEmail() {

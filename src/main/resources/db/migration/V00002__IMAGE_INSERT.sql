@@ -2,13 +2,14 @@ INSERT INTO image (id, path) VALUES
 ('550e8400-e29b-41d4-a716-446655440000', '/app/images/categories/electronics.png'),
 ('550e8400-e29b-41d4-a716-446655440001', '/app/images/categories/laptops.png'),
 ('550e8400-e29b-41d4-a716-446655440002', '/app/images/categories/phones.png'),
-('550e8400-e29b-41d4-a716-446655440003', '/app/images/categories/accessories.png'),
+('550e8400-e29b-41d4-a716-446655440003', '/app/images/categories/headphones.png'),
 ('550e8400-e29b-41d4-a716-446655440005', '/app/images/categories/video-card.png'),
 ('550e8400-e29b-41d4-a716-446655440006', '/app/images/categories/processor.png'),
 ('550e8400-e29b-41d4-a716-446655440007', '/app/images/categories/fridge.png'),
 ('550e8400-e29b-41d4-a716-446655440008', '/app/images/categories/nuke.png'),
 ('550e8400-e29b-41d4-a716-446655440009', '/app/images/categories/power-supply-units.png'),
-('550e8400-e29b-41d4-a716-446655440010', '/app/images/categories/audio-speakers.png');
+('550e8400-e29b-41d4-a716-446655440010', '/app/images/categories/audio-speakers.png'),
+('550e8400-e29b-41d4-a716-446655450011', '/app/images/categories/watch.png');
 
 
 INSERT INTO image (id, path) VALUES

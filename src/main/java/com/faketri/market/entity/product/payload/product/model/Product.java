@@ -51,23 +51,9 @@ public class Product {
     @Column
     private int quantitySold = 0;
 
-    /**
-     * Instantiates a new Product.
-     */
     public Product() {
     }
 
-    /**
-     * Instantiates a new Product.
-     *
-     * @param id           the id
-     * @param brand        the brand
-     * @param nameModel    the name model
-     * @param categories   the categories
-     * @param price        the price
-     * @param quantity     the quantity
-     * @param quantitySold the quantity sold
-     */
     public Product(UUID id, Brand brand, String nameModel,
                    Categories categories, Integer price, int quantity,
                    int quantitySold
@@ -146,7 +132,7 @@ public class Product {
     }
 
     public Integer getPrice() {
-        return this.isPromoItem ? getPromoPrice() : this.price;
+        return this.price;
     }
 
     public void setPrice(Integer price) {
@@ -170,11 +156,11 @@ public class Product {
     }
 
     public void setDiscount(Short discount) {
-        if (discount > 0 && discount < 99)
-            promoPrice = price - (price / 100) * discount;
-        else promoPrice = price;
-
-        this.discount = discount;
+        if (discount > 0 && discount < 99) {
+            this.discount = discount;
+            this.promoPrice = price - ((price / 100) * discount);
+        }
+        else this.promoPrice = price;
     }
 
     public int getQuantity() {

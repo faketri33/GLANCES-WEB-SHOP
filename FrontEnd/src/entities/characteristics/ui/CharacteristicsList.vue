@@ -22,11 +22,11 @@
         />
       </div>
       <div class="row mt-3">
-        <div class="col-6">
+        <div class="col-12 col-md-6 col-sm-6">
           <span class="d-flex justify-content-center align-items-center">
             От
             <input
-              style="width: 65px"
+              style="width: 95px"
               class="input form-control border rounded shadow m-2"
               type="number"
               v-model="minPrice"
@@ -35,11 +35,11 @@
             />руб.
           </span>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-md-6 col-sm-6">
           <span class="d-flex justify-content-center align-items-center">
             От
             <input
-              style="width: 65px"
+              style="width: 95px"
               class="input form-control border rounded shadow m-2"
               type="number"
               v-model="maxPrice"
@@ -92,15 +92,19 @@ export default {
   name: "CharacteristicsList",
   props: {
     characteristics: [],
+    maxPriceFinal: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
       mutableCharacteristics: ref([]),
       selectedValues: [],
       minPrice: 100,
-      maxPrice: 500000,
+      maxPrice: this.maxPriceFinal,
       min: 0,
-      max: 500000,
+      max: this.maxPriceFinal,
     };
   },
   created() {
@@ -172,7 +176,12 @@ export default {
       }
     },
     getSelectedValues() {
-      this.$emit("useFiltered", this.selectedValues);
+      this.$emit(
+        "useFiltered",
+        this.selectedValues,
+        this.minPrice,
+        this.maxPrice
+      );
     },
     showMore(key, type) {
       this.getCharacteristics[key].isOpen = type;

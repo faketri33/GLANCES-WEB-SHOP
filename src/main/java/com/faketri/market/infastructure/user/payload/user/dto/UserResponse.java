@@ -6,6 +6,7 @@ import com.faketri.market.entity.user.payload.basket.model.Basket;
 import com.faketri.market.entity.user.payload.order.model.Orders;
 import com.faketri.market.entity.user.payload.user.model.ERole;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
@@ -40,7 +41,7 @@ public class UserResponse {
 
     private LocalDateTime dateOfCreate;
 
-    private LocalDateTime dateOfBirthday;
+    private LocalDate dateOfBirthday;
 
     public UserResponse() {
     }
@@ -143,11 +144,11 @@ public class UserResponse {
         this.dateOfCreate = dateOfCreate;
     }
 
-    public LocalDateTime getDateOfBirthday() {
+    public LocalDate getDateOfBirthday() {
         return dateOfBirthday;
     }
 
-    public void setDateOfBirthday(LocalDateTime dateOfBirthday) {
+    public void setDateOfBirthday(LocalDate dateOfBirthday) {
         this.dateOfBirthday = dateOfBirthday;
     }
 

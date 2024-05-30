@@ -47,24 +47,31 @@
         <input
           class="input-group-text"
           :placeholder="userStore.getUser.name || 'Имя'"
+          v-model="userStore.user.name"
         />
         <input
           class="input-group-text"
           :placeholder="userStore.getUser.surname || 'Фамилия'"
+          v-model="userStore.user.surname"
         />
         <input
           class="input-group-text"
           :placeholder="userStore.getUser.dateOfBirthday || 'День рождения'"
+          v-model="userStore.user.dateOfBirthday"
         />
         <input
           class="input-group-text"
           :placeholder="userStore.getUser.city || 'Город'"
+          v-model="userStore.user.city"
         />
         <input
           class="input-group-text"
           :placeholder="userStore.getUser.email"
+          v-model="userStore.user.email"
         />
-        <button class="btn btn-success">Сохранить</button>
+        <button @click="userStore.uploadProfileData()" class="btn btn-success">
+          Сохранить
+        </button>
       </form>
 
       <div class="oredrs shadow p-3 m-2">
@@ -90,10 +97,13 @@
 import { userStoreModule } from "@/entities/user/api/index.js";
 import { useRouter } from "vue-router";
 import { onMounted, ref } from "vue";
+import { OrdersActions } from "@/entities/orders/api";
+import { Orders } from "@/entities/orders/model";
 
 const router = useRouter();
 const userStore = userStoreModule();
 const fileInput = ref<HTMLInputElement | null>(null);
+const orders = ref<Orders[]>([]);
 
 const triggerFileInput = () => {
   if (fileInput.value) fileInput.value.click();
@@ -111,7 +121,21 @@ const userLogout = () => {
   userStore.logout();
   router.push("/");
 };
-onMounted(() => {
+
+const loadOrders = async () => {
+  console.log("LOAD ORDER ", await userStore.user);
+  if (!userStore.user) {
+    const response = await OrdersActions.loadByUserId(
+      userStore.getUser.id,
+      0,
+      5
+    );
+    orders.value = response;
+    return { orders };
+  }
+};
+
+onMounted(async () => {
   if (!userStore.isLogin) router.push("/auth");
 });
 </script>

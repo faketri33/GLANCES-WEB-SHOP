@@ -55,8 +55,9 @@
         type="text"
         placeholder="Количество"
       />
-      <label for="quantity">Описание</label>
+      <label for="description">Описание</label>
       <input
+        v-model="product.description"
         class="input-group-text shadow"
         id="description"
         name="description"
@@ -105,7 +106,7 @@ const characteristics = ref([
   },
 ]);
 
-var selectedFiles = null;
+var selectedFiles = [];
 const categories = ref([]);
 const brands = ref([]);
 const brandSelect = ref("Выберите бренд");
@@ -115,8 +116,10 @@ const product = {
   brand: null,
   nameModel: "",
   categories: null,
+  description: "",
   price: 0,
   quantity: 0,
+  characteristicsRequestSet: characteristics.value,
 };
 
 const click = () => {

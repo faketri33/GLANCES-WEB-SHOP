@@ -43,67 +43,32 @@ public class ProductServiceImpl implements ProductService {
         this.productSpecification = productSpecification;
     }
 
-    @Autowired
-
-
     public List<Product> findAll() {
         return productImpl.findAll();
     }
 
-    /**
-     * Find all page.
-     *
-     * @param pageable the pageable
-     * @return the page
-     */
     public Page<Product> findAll(Pageable pageable) {
         return productImpl.findAll(pageable);
     }
 
-    /**
-     * Find by id product.
-     *
-     * @param id the id
-     * @return the product
-     */
     public Product findById(UUID id) {
         return productImpl.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Product with id " + id + " not found"));
     }
 
-
-    /**
-     * Find by categories page.
-     *
-     * @param categoriesId the categories id
-     * @param pageable     the pageable
-     * @return the page
-     */
     public Page<Product> findByCategories(UUID categoriesId, Pageable pageable
     ) {
         return productImpl.findAll(productSpecification.hasCategories(
                 categoriesId), pageable);
     }
 
-    /**
-     * Find promotion product page.
-     *
-     * @param pageable the pageable
-     * @return the page
-     */
     public Page<Product> findPromotionProduct(Pageable pageable) {
         return productImpl.findAll(productSpecification.isPromoItem(),
                 pageable
         );
     }
 
-    /**
-     * Find top-selling page.
-     *
-     * @param pageable the pageable
-     * @return the page
-     */
     public Page<Product> findTopSelling(Pageable pageable) {
         return productImpl.findAll(PageRequest.of(pageable.getPageNumber(),
                 pageable.getPageSize(),
@@ -111,14 +76,6 @@ public class ProductServiceImpl implements ProductService {
         ));
     }
 
-    /**
-     * Find by categories filtered characteristics page.
-     *
-     * @param pageable        the pageable
-     * @param categoriesId    the categories id
-     * @param characteristics the characteristics
-     * @return the page
-     */
     public Page<Product> findByCategoriesFilteredCharacteristics(
             Pageable pageable, UUID categoriesId,
             List<Characteristics> characteristics
@@ -128,7 +85,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> findBySearchParam(Pageable pageable, String name, List<UUID> characteristics, UUID categoriesId) {
+    public Page<Product> findBySearchParam(Pageable pageable, Integer minPrice, Integer maxPrice, String name, List<UUID> characteristics, UUID categoriesId) {
 
         Specification<Product> specification = productSpecification.likeByNameModelOrBrandName(name);
 
@@ -136,16 +93,16 @@ public class ProductServiceImpl implements ProductService {
             specification = specification.and(productSpecification.hasCharacteristicsByUUID(characteristics));
         if (categoriesId != null) specification = specification.and(productSpecification.hasCategories(categoriesId));
 
+        specification.and(productSpecification.priceBetween(minPrice, maxPrice));
+
         return productImpl.findAll(specification, pageable);
     }
 
+    @Override
+    public Integer findMaxPrice() {
+        return productImpl.findMaxPrice();
+    }
 
-    /**
-     * Save product.
-     *
-     * @param product the product
-     * @return the product
-     */
     @Transactional
     public Product save(Product product) {
         product.setCharacteristics(
@@ -165,29 +122,14 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Update int.
-     *
-     * @param product the product
-     */
     public void update(Product product) {
         productImpl.save(product);
     }
 
-    /**
-     * Update.
-     *
-     * @param products the products
-     */
     public void update(List<Product> products) {
         products.forEach(productImpl::save);
     }
 
-    /**
-     * Delete.
-     *
-     * @param product the product
-     */
     public void delete(Product product) {
         productImpl.delete(product);
     }

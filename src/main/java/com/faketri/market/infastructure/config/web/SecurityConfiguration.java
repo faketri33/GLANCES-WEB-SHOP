@@ -22,11 +22,6 @@ import java.util.List;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-/**
- * The type Security configuration.
- *
- * @author Dmitriy Faketri
- */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -41,17 +36,10 @@ public class SecurityConfiguration {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    /**
-     * Filter chain security filter chain.
-     *
-     * @param http the http
-     * @return the security filter chain
-     * @throws Exception the exception
-     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(request -> corsConfiguration()))
+                .cors(cors -> cors.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()))
                 .authorizeHttpRequests((requests) ->
                         requests
                                 .requestMatchers(HttpMethod.POST, "/api/product/categories/*").permitAll()
@@ -74,11 +62,6 @@ public class SecurityConfiguration {
                 .build();
     }
 
-    /**
-     * Dao's authentication provider dao authentication provider.
-     *
-     * @return the dao authentication provider
-     */
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider =
@@ -88,33 +71,16 @@ public class SecurityConfiguration {
         return daoAuthenticationProvider;
     }
 
-    /**
-     * Password encoder b crypt password encoder.
-     *
-     * @return the b crypt password encoder
-     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(5);
     }
 
-    /**
-     * Custom user details service user details service.
-     *
-     * @return the user details service
-     */
     @Bean
     public UserDetailsService customUserDetailsService() {
         return userDetailsServiceImpl;
     }
 
-    /**
-     * Authentication manager.
-     *
-     * @param config the config
-     * @return the authentication manager
-     * @throws Exception the exception
-     */
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config

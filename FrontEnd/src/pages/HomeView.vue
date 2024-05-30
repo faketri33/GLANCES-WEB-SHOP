@@ -5,9 +5,9 @@
         <swiper-slide v-for="promo in promotionData" :key="promo.id">
           <router-link :to="'/promotion/' + promo.id">
             <img
-              src="@/app/assets/img/promo-cover_L.png"
+              :src="'http://localhost:9000/api/image/' + promo.banner.id"
               alt=""
-              style="width: 100%"
+              style="width: 100%; max-height: 512px"
             />
           </router-link>
         </swiper-slide>
@@ -79,7 +79,6 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { BasketAction } from "@/entities/basket/api";
 import CategoriesCard from "@/entities/categories/ui/CategoriesCard.vue";
 import { ProductActions } from "@/entities/product/api/model/Actions";
 import { CategoriesAction } from "@/entities/categories/api/model/actions";

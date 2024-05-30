@@ -15,15 +15,15 @@ RUN chmod -R 755 /app/images/user/profile
 RUN mkdir -p /app/images/product
 RUN chmod -R 755 /app/images/product
 
-RUN mkdir -p /app/images/promo
-RUN chmod -R 755 /app/images/promo
+RUN mkdir -p /app/images/promotion
+RUN chmod -R 755 /app/images/promotion
 
 RUN mkdir -p /app/images/categories
 RUN chmod -R 755 /app/images/categories
 
 COPY assets/image/product/*.png /app/images/product/
 COPY assets/image/categories/*.png /app/images/categories/
-COPY assets/image/promotion/*.png /app/images/promo/
+COPY assets/image/promotion/*.png /app/images/promotion/
 
 COPY --from=builder /app/target/*.jar /app/OnlineMarket.jar
 ENTRYPOINT ["java", "-jar", "/app/OnlineMarket.jar"]

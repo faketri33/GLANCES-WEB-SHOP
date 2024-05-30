@@ -10,7 +10,7 @@
           >Заказ номер - {{ order.id }}</RouterLink
         >
       </h4>
-      <p>Какая то информация</p>
+      <p>Статус заказ - {{ order.statusOrder }}</p>
     </div>
     <div class="col-12">
       <nav aria-label="Page navigation">

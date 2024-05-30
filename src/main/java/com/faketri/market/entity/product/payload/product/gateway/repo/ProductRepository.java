@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -31,6 +32,9 @@ public interface ProductRepository
     Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 
     List<Product> findAll(Specification<Product> spec, Sort sort);
+
+    @Query(value = "SELECT MAX(p.price) FROM Product p", nativeQuery = true)
+    Integer findMaxPrice();
 
     long count(Specification<Product> spec);
 

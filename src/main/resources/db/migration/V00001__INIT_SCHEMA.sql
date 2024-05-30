@@ -118,7 +118,6 @@ create table product_image (
 );
 
 create table product_item (
-    price integer,
     quantity integer,
     id uuid not null,
     product_id uuid,
@@ -157,7 +156,7 @@ create table user_role (
 );
 
 create table users (
-    date_of_birthday timestamp(6),
+    date_of_birthday date,
     date_of_create timestamp(6) DEFAULT NOW(),
     basket_id uuid unique,
     id uuid not null,

@@ -1,7 +1,6 @@
 import { User } from "@/entities/user/model/User";
 import { $axios } from "@/shared/client/AxiosClient";
 import { Product } from "@/entities/product/model/Product";
-import { ProductItem } from "@/entities/product/model/ProductItem";
 import { Image } from "@/entities/image/model/Image";
 
 export const UserActions = {
@@ -25,6 +24,15 @@ export const UserActions = {
     return response.status === 200
       ? Promise.resolve(response.data)
       : Promise.reject(response.data);
+  },
+  async updateProfile(profile: User) {
+    await $axios.post("/user/profile/update", {
+      name: profile.name,
+      surname: profile.surname,
+      email: profile.email,
+      city: profile.city,
+      dateOfBirthday: profile.dateOfBirthday,
+    });
   },
   async uploadProfileImage(image: File): Promise<Image> {
     const formData = new FormData();

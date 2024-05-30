@@ -72,7 +72,11 @@ public class Orders {
     public void onCreate() {
         dateOfCreate = LocalDateTime.now();
         dateOfRelease = LocalDateTime.now().plusDays(5);
-        this.price = products.stream().map(p -> p.getProduct().getPrice()).reduce(0, Integer::sum);
+        this.price = products
+                .stream()
+                .map(ProductItem::getProduct)
+                .map(p -> p.isPromoItem() ? p.getPromoPrice() :  p.getPrice())
+                .reduce(0, Integer::sum);
     }
 
     public UUID getId() {

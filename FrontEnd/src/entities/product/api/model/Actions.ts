@@ -4,6 +4,9 @@ import { PageableType } from "@/shared/pageable/pageableType";
 import { Characteristics } from "@/entities/characteristics/model/Characteristics";
 
 export const ProductActions = {
+  async findMaxPrice(): Promise<number> {
+    return (await $axios.get("/product/max-price")).data;
+  },
   loadProduct(
     pageNumber: number,
     pageSize: number

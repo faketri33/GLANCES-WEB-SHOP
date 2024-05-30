@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController()
 @CrossOrigin({"http://localhost:8081", "http://192.168.1.106:8081/"})
@@ -44,12 +45,10 @@ public class OrdersPostController {
         Orders orders = new Orders();
 
         orders.setUsers(user);
-        orders.getProducts().addAll(product);
+        orders.getProducts().addAll(product.stream().map(p -> new ProductItem(null, p.getProduct(), p.getQuantity())).toList());
         orders.setUsers(user);
 
-        orderService.save(orders);
-
-        return OrderMapper.toDto(orders);
+        return OrderMapper.toDto(orderService.save(orders));
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")

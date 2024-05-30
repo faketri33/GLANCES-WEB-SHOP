@@ -6,7 +6,9 @@
       <p>Стоимость заказа {{ order.price }}руб.</p>
       <p>Оплата - {{ order.payment.paymentStatus }}</p>
       <p>Статус заказа - {{ order.statusOrder }}</p>
-      <button class="btn btn-success">Выдать заказ</button>
+      <button class="btn btn-success m-2">Выдать заказ</button>
+      <button class="btn btn-success m-2">Заказ оплачен</button>
+      <button class="btn btn-success m-2">Изменить статус заказ</button>
       <div class="product-list">
         <div class="wrap" v-for="product in order.products" :key="product.id">
           <ProductCard

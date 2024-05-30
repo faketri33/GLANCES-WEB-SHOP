@@ -23,4 +23,6 @@ public interface ProductSpecification {
 
     Specification<Product> isPromoItem();
 
+    Specification<Product> priceBetween(Integer minPrice, Integer maxPrice);
+
 }

@@ -37,9 +37,9 @@
         </h5>
       </router-link>
       <p class="card-price text-center">
-        {{ product.price }} ₽
+        {{ product.promoItem ? product.promoPrice : product.price }} ₽
         <span v-if="product.promoItem" class="original-price">{{
-          product.promoPrice
+          product.price
         }}</span>
       </p>
       <div v-if="product.promoItem" class="discount-tag" style="z-index: 1">

@@ -37,13 +37,15 @@ export const userStoreModule = defineStore("user", {
         (data) => (this.user.profileImage = data)
       );
     },
+    async uploadProfileData() {
+      await UserActions.updateProfile(this.user);
+    },
     signIn(params: User) {
       this.isLoading = true;
       UserActions.signIn(params)
         .then((user) => this.updateUser(user))
         .catch((err) => {
-          console.log(err);
-          throw err;
+          this.updateErrorMessage(err.response.data);
         });
       this.isLoading = false;
     },

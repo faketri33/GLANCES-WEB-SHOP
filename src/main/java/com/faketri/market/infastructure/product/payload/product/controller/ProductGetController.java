@@ -34,24 +34,18 @@ public class ProductGetController {
         this.productService = productService;
     }
 
-    /**
-     * REST get all product
-     *
-     * @return Collection of product
-     */
     @RequestMapping("/")
     public List<Product> getAll() {
+        log.info("getAll");
         return productService.findAll();
     }
 
-    /**
-     * REST service endpoint - '/categories/{categoriesId}?number=1&size=20'
-     *
-     * @param categoriesId id categories,
-     * @param pageNumber   number of page product
-     * @param pageSize     count item on page
-     * @return Page products in categories
-     */
+    @RequestMapping("/max-price")
+    public Integer findMaxPrice() {
+        log.info("max-price");
+        return productService.findMaxPrice();
+    }
+
     @RequestMapping("/categories/{categoriesId}")
     public Page<Product> getByCategories(
             @PathVariable(value = "categoriesId") final UUID categoriesId,
@@ -65,13 +59,6 @@ public class ProductGetController {
         );
     }
 
-    /**
-     * Gets promotion product.
-     *
-     * @param pageNumber the page number
-     * @param pageSize   the page size
-     * @return the promotion product
-     */
     @RequestMapping("/promotion")
     public Page<Product> getPromotionProduct(
             @RequestParam(name = "number", required = true,
@@ -82,13 +69,6 @@ public class ProductGetController {
         return productService.findPromotionProduct(PageRequest.of(pageNumber, pageSize));
     }
 
-    /**
-     * REST service endpoint - '/product?number=1&size=20'
-     *
-     * @param pageNumber number of page product
-     * @param pageSize   count item on page
-     * @return Page Product
-     */
     @RequestMapping("/product")
     public Page<Product> getAll(
             @RequestParam(name = "number", required = true,
@@ -99,12 +79,6 @@ public class ProductGetController {
         return productService.findAll(PageRequest.of(pageNumber, pageSize));
     }
 
-    /**
-     * REST service endpoint
-     *
-     * @param productId id product
-     * @return product with productId
-     */
     @RequestMapping("/{productId}")
     public Product getProduct(
             @PathVariable(value = "productId") final UUID productId
@@ -112,13 +86,6 @@ public class ProductGetController {
         return productService.findById(productId);
     }
 
-    /**
-     * REST service endpoint
-     *
-     * @param pageNumber number of page
-     * @param pageSize   count item on page
-     * @return top-selling product
-     */
     @RequestMapping(path = "/top-selling")
     public Page<Product> getTopSelling(
             @RequestParam(name = "number", required = true,
@@ -129,26 +96,20 @@ public class ProductGetController {
         return productService.findTopSelling(PageRequest.of(pageNumber, pageSize));
     }
 
-    /**
-     * Gets by filter.
-     *
-     * @param pageNumber the page number
-     * @param pageSize   the page size
-     * @param filter     the filter
-     * @return the by filter
-     */
     @RequestMapping("/search")
     public Page<Product> findBySearchParam(
             @RequestParam(name = "number", required = true,
                     defaultValue = "0") final Integer pageNumber,
             @RequestParam(name = "size", required = true,
                     defaultValue = "20") final Integer pageSize,
+            @RequestParam(value = "minPrice", required = false) final Integer minPrice,
+            @RequestParam(value = "maxPrice", required = false) final Integer maxPrice,
             @RequestParam(value = "name", required = false) final String name,
             @RequestParam(value = "categories", required = false) final UUID categoriesId,
             @RequestParam(value = "characteristics", required = false) final List<UUID> filter
     ) {
         log.info("getByFilter: " + String.format("Name product - %s , categories id - %s", name, categoriesId));
-        return productService.findBySearchParam(PageRequest.of(pageNumber, pageSize), name, filter, categoriesId);
+        return productService.findBySearchParam(PageRequest.of(pageNumber, pageSize), minPrice, maxPrice, name, filter, categoriesId);
 
     }
 

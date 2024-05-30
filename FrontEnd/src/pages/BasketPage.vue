@@ -20,21 +20,18 @@
       </div>
       <div class="col-12 col-md-4">
         <h1>Оплата</h1>
-        <form>
+        <form
+          @submit.prevent="
+            OrdersActions.createOrder(userStore.getUser.basket.products)
+          "
+        >
           <p>
             К оплате -
             <span style="font-weight: 700"
               >{{ userStore?.getBasketPrice }} руб</span
             >
           </p>
-          <button
-            class="btn btn-success"
-            @click="
-              OrdersActions.createOrder(userStore.getUser.basket.products)
-            "
-          >
-            Оформить заказ
-          </button>
+          <button class="btn btn-success">Оформить заказ</button>
         </form>
       </div>
     </div>

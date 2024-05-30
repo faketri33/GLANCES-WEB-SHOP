@@ -1,6 +1,5 @@
 package com.faketri.market.infastructure.config.web;
 
-import jakarta.servlet.MultipartConfigElement;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,15 +13,8 @@ public class MultipartConfig {
         return new StandardServletMultipartResolver();
     }
 
-    @Bean
-    public MultipartConfigElement multipartConfigElement() {
+    /*@Bean
+    public jakarta.servlet.MultipartConfigElement multipartConfigElement() {
         return new MultipartConfigFactory().createMultipartConfig();
-    }
-
- /*   @Bean
-    public MappingJackson2HttpMessageConverter octetStreamJsonConverter() {
-        MappingJackson2HttpMessageConverter converter = new MultipartJackson2HttpMessageConverter();
-        converter.setSupportedMediaTypes(List.of(new MediaType("application", "octet-stream")));
-        return converter;
     }*/
 }

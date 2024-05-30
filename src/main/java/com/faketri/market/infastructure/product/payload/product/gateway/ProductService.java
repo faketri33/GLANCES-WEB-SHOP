@@ -27,7 +27,9 @@ public interface ProductService {
                                                           List<Characteristics> characteristics
     );
 
-    Page<Product> findBySearchParam(Pageable pageable, String name, List<UUID> characteristics, UUID categoriesId);
+    Page<Product> findBySearchParam(Pageable pageable, Integer minPrice, Integer maxPrice, String name, List<UUID> characteristics, UUID categoriesId);
+
+    Integer findMaxPrice();
 
     Product save(Product product);
 

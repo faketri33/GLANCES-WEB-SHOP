@@ -16,7 +16,7 @@ public class Basket {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     List<ProductItem> products = new ArrayList<>();
     @Column
     private Long price;
@@ -34,7 +34,8 @@ public class Basket {
     @PreUpdate
     public void updatePrice() {
         this.price = products.stream()
-                .map(productItem -> productItem.getProduct().getPrice())
+                .map(ProductItem::getProduct)
+                .map(p -> p.isPromoItem() ? p.getPromoPrice() : p.getPrice())
                 .reduce(0, Integer::sum)
                 .longValue();
     }

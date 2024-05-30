@@ -5,8 +5,9 @@
       <div class="col-md-12 col-lg-4">
         <div id="filterMenu" class="shadow p-3 rounded">
           <CharacteristicsList
-            v-if="characteristics"
+            v-if="characteristics && maxPrice"
             v-bind:characteristics="characteristics"
+            v-bind:maxPriceFinal="maxPrice"
             v-on:useFiltered="useFiltered"
           />
         </div>
@@ -49,7 +50,6 @@
 </template>
 
 <script setup lang="ts">
-import { BasketAction } from "@/entities/basket/api";
 import { onMounted, ref } from "vue";
 import { ProductActions } from "@/entities/product/api/model/Actions";
 import { useRoute } from "vue-router";
@@ -67,6 +67,7 @@ const currentPages = ref(0);
 const pageSize = 20;
 const categoriesId: string = route.params.id.toString();
 const userStore = userStoreModule();
+const maxPrice = ref(null);
 
 const pages = ref<PageableType<Product>[]>([]);
 const characteristics = ref<Characteristics[]>();
@@ -107,7 +108,9 @@ onMounted(async () => {
       categoriesId
     );
   pages.value.push(res);
-  return { pages, characteristics };
+  maxPrice.value = await ProductActions.findMaxPrice();
+  console.log(maxPrice.value);
+  return { pages, characteristics, maxPrice };
 });
 </script>
 

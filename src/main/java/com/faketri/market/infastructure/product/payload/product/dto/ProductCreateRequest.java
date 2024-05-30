@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ProductCreateRequest {
@@ -18,13 +19,15 @@ public class ProductCreateRequest {
     @NotNull
     private Categories categories;
     @NotNull
+    private String description;
+    @NotNull
     @Min(value = 100, message = "Цена не может быть меньше 100")
     private Integer price;
     @NotNull
     @Min(value = 1, message = "Количетсво не может быть меньше 1")
     private Integer quantity;
     @NotNull
-    private Set<CharacteristicsRequest> characteristicsRequestSet = new HashSet<>();
+    private List<CharacteristicsRequest> characteristicsRequestSet;
 
     public ProductCreateRequest() {
     }
@@ -69,6 +72,14 @@ public class ProductCreateRequest {
         this.price = price;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Integer getQuantity() {
         return quantity;
     }
@@ -77,11 +88,11 @@ public class ProductCreateRequest {
         this.quantity = quantity;
     }
 
-    public Set<CharacteristicsRequest> getCharacteristicsRequestSet() {
+    public List<CharacteristicsRequest> getCharacteristicsRequestSet() {
         return characteristicsRequestSet;
     }
 
-    public void setCharacteristicsRequestSet(Set<CharacteristicsRequest> characteristicsRequestSet) {
+    public void setCharacteristicsRequestSet(List<CharacteristicsRequest> characteristicsRequestSet) {
         this.characteristicsRequestSet = characteristicsRequestSet;
     }
 

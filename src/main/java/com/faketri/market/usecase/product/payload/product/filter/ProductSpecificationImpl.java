@@ -79,4 +79,17 @@ public class ProductSpecificationImpl implements ProductSpecification {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("isPromoItem"), true);
     }
 
+    public Specification<Product> priceBetween(Integer minPrice, Integer maxPrice) {
+        return (root, query, criteriaBuilder) -> {
+            if (minPrice != null && maxPrice != null) {
+                return criteriaBuilder.between(root.get("price"), minPrice, maxPrice);
+            } else if (minPrice != null) {
+                return criteriaBuilder.greaterThanOrEqualTo(root.get("price"), minPrice);
+            } else if (maxPrice != null) {
+                return criteriaBuilder.lessThanOrEqualTo(root.get("price"), maxPrice);
+            } else {
+                return criteriaBuilder.conjunction();
+            }
+        };
+    }
 }

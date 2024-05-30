@@ -73,10 +73,11 @@ public class UserPostController {
     public void updateUserData(@RequestBody final UserUpdateRequest userUpdateRequest) {
         final Users user = userService.getCurrentUser();
 
-        user.setName(userUpdateRequest.getFirstName());
-        user.setSurname(userUpdateRequest.getLastName());
+        user.setName(userUpdateRequest.getName());
+        user.setSurname(userUpdateRequest.getSurname());
         user.setDateOfBirthday(userUpdateRequest.getDateOfBirthday());
         user.setEmail(userUpdateRequest.getEmail());
+        user.setCity(userUpdateRequest.getCity());
 
         userService.save(user);
     }

@@ -7,6 +7,7 @@ export type Promotion = {
   title: string;
   description: Date;
   dateOfStart: Date;
+  conditions: string;
   dateOfEnd: Date;
   promotionProductItems: Array<Product>;
 };
