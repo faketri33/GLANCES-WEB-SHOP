@@ -34,33 +34,14 @@ public class ProductGetController {
         this.productService = productService;
     }
 
-    @RequestMapping("/")
-    public List<Product> getAll() {
-        log.info("getAll");
-        return productService.findAll();
-    }
-
     @RequestMapping("/max-price")
     public Integer findMaxPrice() {
         log.info("max-price");
         return productService.findMaxPrice();
     }
 
-    @RequestMapping("/categories/{categoriesId}")
-    public Page<Product> getByCategories(
-            @PathVariable(value = "categoriesId") final UUID categoriesId,
-            @RequestParam(name = "number", required = true,
-                    defaultValue = "1") final Integer pageNumber,
-            @RequestParam(name = "size", required = true,
-                    defaultValue = "20") final Integer pageSize
-    ) {
-        return productService.findByCategories(categoriesId,
-                PageRequest.of(pageNumber, pageSize)
-        );
-    }
-
     @RequestMapping("/promotion")
-    public Page<Product> getPromotionProduct(
+    public Page<Product> findPromotionProduct(
             @RequestParam(name = "number", required = true,
                     defaultValue = "1") final Integer pageNumber,
             @RequestParam(name = "size", required = true,
@@ -70,7 +51,7 @@ public class ProductGetController {
     }
 
     @RequestMapping("/product")
-    public Page<Product> getAll(
+    public Page<Product> findAll(
             @RequestParam(name = "number", required = true,
                     defaultValue = "1") final Integer pageNumber,
             @RequestParam(name = "size", required = true,
@@ -80,14 +61,14 @@ public class ProductGetController {
     }
 
     @RequestMapping("/{productId}")
-    public Product getProduct(
+    public Product findProductById(
             @PathVariable(value = "productId") final UUID productId
     ) {
         return productService.findById(productId);
     }
 
     @RequestMapping(path = "/top-selling")
-    public Page<Product> getTopSelling(
+    public Page<Product> findTopSelling(
             @RequestParam(name = "number", required = true,
                     defaultValue = "1") final Integer pageNumber,
             @RequestParam(name = "size", required = true,

@@ -3,6 +3,7 @@ package com.faketri.market.infastructure.user.payload.order.dto;
 import com.faketri.market.entity.product.payload.product.model.ProductItem;
 import com.faketri.market.entity.user.payload.order.model.EStatusOrder;
 import com.faketri.market.entity.user.payload.payment.model.Payment;
+import com.faketri.market.infastructure.user.payload.payment.dto.PaymentResponse;
 import com.faketri.market.infastructure.user.payload.user.dto.UserSmallDataResponse;
 
 import java.time.LocalDateTime;
@@ -24,9 +25,9 @@ public class OrdersDto {
 
     private Integer price;
 
-    private Payment payment = new Payment();
+    private PaymentResponse payment;
 
-    private EStatusOrder statusOrder = EStatusOrder.IN_DELIVERING;
+    private String statusOrder = EStatusOrder.IN_DELIVERING.getStatus();
 
     public OrdersDto() {
     }
@@ -39,8 +40,8 @@ public class OrdersDto {
         this.dateOfCreate = dateOfCreate;
         this.dateOfRelease = dateOfRelease;
         this.price = price;
-        this.payment = payment;
-        this.statusOrder = statusOrder;
+        this.payment = new PaymentResponse(payment.getId(), payment.getPaymentStatus(), payment.getDateOfCreate(), payment.getDateOfPayment());
+        this.statusOrder = statusOrder.getStatus();
     }
 
     public UUID getId() {
@@ -91,19 +92,19 @@ public class OrdersDto {
         this.price = price;
     }
 
-    public Payment getPayment() {
+    public PaymentResponse getPayment() {
         return payment;
     }
 
-    public void setPayment(Payment payment) {
+    public void setPayment(PaymentResponse payment) {
         this.payment = payment;
     }
 
-    public EStatusOrder getStatusOrder() {
+    public String getStatusOrder() {
         return statusOrder;
     }
 
     public void setStatusOrder(EStatusOrder statusOrder) {
-        this.statusOrder = statusOrder;
+        this.statusOrder = statusOrder.getStatus();
     }
 }

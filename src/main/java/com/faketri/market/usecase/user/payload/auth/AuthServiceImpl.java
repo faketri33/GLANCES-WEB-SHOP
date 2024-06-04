@@ -56,12 +56,6 @@ public class AuthServiceImpl implements AuthService {
         this.SALT = salt;
     }
 
-    /**
-     * Register user and inserting data in database
-     *
-     * @param signUpRequest login, email, password from body request
-     * @return JwtAuthenticationResponse jwt authentication response
-     */
     public JwtAuthenticationResponse signUp(SignUpRequest signUpRequest) {
 
         if (userDetailsServer.getUserService().existsByLogin(signUpRequest.getLogin()))
@@ -82,12 +76,6 @@ public class AuthServiceImpl implements AuthService {
         return generatedJwt(user);
     }
 
-    /**
-     * Authorization user, generate jwt token.
-     *
-     * @param signInRequest login, password from body request
-     * @return JwtAuthenticationResponse jwt authentication response
-     */
     public JwtAuthenticationResponse signIn(SignInRequest signInRequest) {
 
         try {

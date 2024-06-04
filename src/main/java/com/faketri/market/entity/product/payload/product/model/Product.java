@@ -67,6 +67,22 @@ public class Product {
         this.quantitySold = quantitySold;
     }
 
+    public Product(UUID id, Brand brand, String nameModel, Categories categories, String description, Set<Image> image, Set<Characteristics> characteristics, Integer price, Integer promoPrice, Boolean isPromoItem, Short discount, int quantity, int quantitySold) {
+        this.id = id;
+        this.brand = brand;
+        this.nameModel = nameModel;
+        this.categories = categories;
+        this.description = description;
+        this.image = image;
+        this.characteristics = characteristics;
+        this.price = price;
+        this.promoPrice = promoPrice;
+        this.isPromoItem = isPromoItem;
+        this.discount = discount;
+        this.quantity = quantity;
+        this.quantitySold = quantitySold;
+    }
+
     public UUID getId() {
         return id;
     }

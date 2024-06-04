@@ -1,15 +1,18 @@
 package com.faketri.market.usecase.product.payload.product;
 
 import com.faketri.market.entity.exception.ResourceNotFoundException;
+import com.faketri.market.entity.image.model.Image;
 import com.faketri.market.entity.product.payload.characteristics.model.Characteristics;
+import com.faketri.market.entity.product.payload.product.exception.NotEnoughProductException;
 import com.faketri.market.entity.product.payload.product.gateway.repo.ProductRepository;
 import com.faketri.market.entity.product.payload.product.model.Product;
+import com.faketri.market.entity.product.payload.product.model.ProductItem;
 import com.faketri.market.infastructure.product.payload.characteristics.gateway.CharacteristicsService;
+import com.faketri.market.infastructure.product.payload.product.dto.ProductCreateRequest;
 import com.faketri.market.infastructure.product.payload.product.gateway.ProductService;
 import com.faketri.market.infastructure.product.payload.product.gateway.filter.ProductSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +20,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -57,6 +64,11 @@ public class ProductServiceImpl implements ProductService {
                         "Product with id " + id + " not found"));
     }
 
+    @Override
+    public List<Product> findById(List<UUID> id) {
+        return productImpl.findAll(productSpecification.hasId(id));
+    }
+
     public Page<Product> findByCategories(UUID categoriesId, Pageable pageable
     ) {
         return productImpl.findAll(productSpecification.hasCategories(
@@ -74,6 +86,34 @@ public class ProductServiceImpl implements ProductService {
                 pageable.getPageSize(),
                 Sort.by("quantitySold").descending()
         ));
+    }
+
+    @Override
+    public void updateQuantityAndQuantitySold(List<ProductItem> productItems) {
+
+        List<UUID> productIds = productItems.stream()
+                .map(p -> p.getProduct().getId())
+                .collect(Collectors.toList());
+        List<Product> products = findById(productIds);
+
+        Map<UUID, ProductItem> productItemMap = productItems.stream()
+                .collect(Collectors.toMap(
+                        p -> p.getProduct().getId(),
+                        p -> p));
+
+        products.forEach(product -> {
+            ProductItem forOrder = productItemMap.get(product.getId());
+            if (forOrder == null) {
+                throw new ResourceNotFoundException("Продукт не найден: " + product.getId());
+            }
+            int quantityToBuy = forOrder.getQuantity();
+            product.setQuantity(product.getQuantity() - quantityToBuy);
+            product.setQuantitySold(product.getQuantitySold() + quantityToBuy);
+
+            if(product.getQuantity() < 0) throw new NotEnoughProductException("Недостаточно товара на складе.");
+        });
+
+        save(products);
     }
 
     public Page<Product> findByCategoriesFilteredCharacteristics(
@@ -105,13 +145,51 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     public Product save(Product product) {
-        product.setCharacteristics(
-                product.getCharacteristics()
+        if (!product.getCharacteristics().isEmpty())
+            product.setCharacteristics(
+                    product.getCharacteristics()
+                            .stream()
+                            .map(characteristicsService::save)
+                            .collect(Collectors.toSet())
+            );
+        return productImpl.save(product);
+    }
+
+    @Override
+    public void save(ProductCreateRequest productCreateRequest, List<MultipartFile> images) {
+        Product product = new Product();
+
+        product.setBrand(productCreateRequest.getBrand());
+        product.setCategories(productCreateRequest.getCategories());
+        product.setPrice(productCreateRequest.getPrice());
+        product.setQuantity(productCreateRequest.getQuantity());
+        product.setNameModel(productCreateRequest.getNameModel());
+        product.setDescription(productCreateRequest.getDescription());
+
+        product.getCharacteristics().addAll(
+                productCreateRequest
+                        .getCharacteristicsRequestSet()
                         .stream()
-                        .map(characteristicsService::save)
+                        .map(c -> new Characteristics(null, c.getName(), c.getValue()))
                         .collect(Collectors.toSet())
         );
-        return productImpl.save(product);
+
+        int iterator = 0;
+        final String path = "/app/images/product/";
+        final String name = product.getNameModel().replace(' ', '-');
+
+        for (MultipartFile image : images) {
+            final String imageName = path + name + "-" + iterator++ + "-" + image.getOriginalFilename();
+            System.out.println(imageName);
+            try {
+                image.transferTo(Paths.get(imageName));
+            } catch (IOException e) {
+                log.error(e.getMessage());
+            }
+            product.getImage().add(new Image(null, imageName));
+        }
+
+        save(product);
     }
 
     @Override

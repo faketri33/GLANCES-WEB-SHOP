@@ -11,7 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController()
 @CrossOrigin({"http://localhost:8081", "http://192.168.1.106:8081/"})
@@ -32,9 +33,13 @@ public class OrdersGetController {
         return orderService.findByUser(id, PageRequest.of(page, size)).map(OrderMapper::toDto);
     }
 
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    @RequestMapping("/get-all-status")
+    public Map<EStatusOrder, String> getAllStatus() {
+        return Arrays.stream(EStatusOrder.values()).collect(Collectors.toMap((e) -> e, EStatusOrder::getStatus));
+    }
+
     @RequestMapping("/id/{id}")
-    public OrdersDto findAll(@PathVariable("id") UUID id) {
+    public OrdersDto findById(@PathVariable("id") UUID id) {
         return OrderMapper.toDto(orderService.findById(id));
     }
 

@@ -1,6 +1,7 @@
 package com.faketri.market.infastructure.config.exception;
 
 import com.faketri.market.entity.exception.ResourceNotFoundException;
+import com.faketri.market.entity.product.payload.product.exception.NotEnoughProductException;
 import com.faketri.market.entity.user.payload.user.exception.PasswordNotValidException;
 import com.faketri.market.entity.user.payload.user.exception.UserAlreadyExistsException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -26,12 +27,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /**
-     * Handle exception response entity.
-     *
-     * @param e the e
-     * @return the response entity
-     */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<AppError> handleException(ResourceNotFoundException e
     ) {
@@ -41,12 +36,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    /**
-     * Handle exception response entity.
-     *
-     * @param e the e
-     * @return the response entity
-     */
     @ExceptionHandler(PasswordNotValidException.class)
     public ResponseEntity<AppErrorArray> handleException(
             PasswordNotValidException e
@@ -58,12 +47,6 @@ public class GlobalExceptionHandler {
         ), HttpStatus.UNAUTHORIZED);
     }
 
-    /**
-     * Handle exception response entity.
-     *
-     * @param e the e
-     * @return the response entity
-     */
     @ExceptionHandler(ChangeSetPersister.NotFoundException.class)
     public ResponseEntity<AppError> handleException(
             ChangeSetPersister.NotFoundException e
@@ -74,12 +57,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    /**
-     * Handle exception response entity.
-     *
-     * @param e the
-     * @return the response entity
-     */
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseEntity<AppError> handleException(
             EmptyResultDataAccessException e
@@ -90,12 +67,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    /**
-     * Handle exception response entity.
-     *
-     * @param e the e
-     * @return the response entity
-     */
     @ExceptionHandler(JwtValidException.class)
     public ResponseEntity<AppError> handleException(JwtValidException e) {
         System.out.println("OBRABOTAL");
@@ -114,12 +85,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    /**
-     * Handle exception response entity.
-     *
-     * @param e the e
-     * @return the response entity
-     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<AppErrorArray> handleException(
             MethodArgumentNotValidException e
@@ -140,5 +105,10 @@ public class GlobalExceptionHandler {
     ) {
         return new ResponseEntity<>(new AppErrorArray(HttpStatus.BAD_REQUEST.value(),
                 Map.of("login", e.getMessage())), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotEnoughProductException.class)
+    public ResponseEntity<AppError> handleException( NotEnoughProductException e ){
+        return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

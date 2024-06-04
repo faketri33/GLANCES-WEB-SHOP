@@ -34,8 +34,9 @@ public class Basket {
     @PreUpdate
     public void updatePrice() {
         this.price = products.stream()
-                .map(ProductItem::getProduct)
-                .map(p -> p.isPromoItem() ? p.getPromoPrice() : p.getPrice())
+                .map(p -> p.getProduct().isPromoItem() ?
+                        p.getProduct().getPromoPrice() * p.getQuantity()
+                        : p.getProduct().getPrice() * p.getQuantity())
                 .reduce(0, Integer::sum)
                 .longValue();
     }

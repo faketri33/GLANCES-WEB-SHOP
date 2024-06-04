@@ -15,6 +15,11 @@ import java.util.UUID;
 @Component
 public class ProductSpecificationImpl implements ProductSpecification {
 
+    @Override
+    public Specification<Product> hasId(List<UUID> UUID) {
+        return (root, query, criteriaBuilder) -> root.get("id").in(UUID);
+    }
+
     public Specification<Product> hasCharacteristics(
             Characteristics characteristics
     ) {

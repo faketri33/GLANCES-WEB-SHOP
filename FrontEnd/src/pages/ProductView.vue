@@ -214,10 +214,19 @@ const loadRating = async () => {
 };
 
 const addRating = async () => {
-  const productId = route.params.id.toString();
-  const response = await userStore.addRating(productId, review.value);
-  if (productRating.value) productRating.value[0] = { content: [] };
-  productRating.value[ratingPage].content.push(response);
+  try {
+    if (!userStore.isLogin) {
+      alert("Вы не авторизованы.");
+      return;
+    }
+    const productId = route.params.id.toString();
+    const response = await userStore.addRating(productId, review.value);
+    if (productRating.value) productRating.value[0] = { content: [] };
+    productRating.value[ratingPage].content.push(response);
+  } catch (err) {
+    alert("Неудалось добавить отзыв.");
+    console.log(err.message);
+  }
 };
 
 onMounted(async () => {

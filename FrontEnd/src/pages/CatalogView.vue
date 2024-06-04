@@ -67,7 +67,7 @@ const currentPages = ref(0);
 const pageSize = 20;
 const categoriesId: string = route.params.id.toString();
 const userStore = userStoreModule();
-const maxPrice = ref(null);
+const maxPrice = ref(0);
 
 const pages = ref<PageableType<Product>[]>([]);
 const characteristics = ref<Characteristics[]>();
@@ -77,7 +77,6 @@ const characteristicsForFilter = ref<Characteristics[]>([]);
 const changePages = async (pageIndex: number) => {
   currentPages.value = pageIndex;
   if (!pages.value[pageIndex]) {
-    console.log("ГРУЗИМ");
     const resp = await loadPages();
     pages.value[pageIndex] = resp;
   }
@@ -91,7 +90,6 @@ const useFiltered = async (selectedValues: Characteristics[]) => {
 };
 
 const loadPages = async (): Promise<PageableType<Product>> => {
-  console.log(characteristicsForFilter.value);
   return await ProductActions.searchProduct(
     currentPages.value,
     pageSize,

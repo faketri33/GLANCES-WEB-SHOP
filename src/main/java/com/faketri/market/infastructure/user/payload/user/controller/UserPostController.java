@@ -45,6 +45,9 @@ public class UserPostController {
 
     @RequestMapping(value = "/profile/image/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Image updateUserImage(@RequestBody final MultipartFile image) {
+
+        log.info(image.getContentType());
+
         final Users user = userService.getCurrentUser();
 
         final String path = "/app/images/user/profile/";

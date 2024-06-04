@@ -2,6 +2,9 @@ import { User } from "@/entities/user/model/User";
 import { $axios } from "@/shared/client/AxiosClient";
 import { Product } from "@/entities/product/model/Product";
 import { Image } from "@/entities/image/model/Image";
+import { ProductItem } from "@/entities/product/model/ProductItem";
+import { Basket } from "@/entities/basket/model/basket";
+import axios from "axios";
 
 export const UserActions = {
   async signIn(params: User): Promise<User> {

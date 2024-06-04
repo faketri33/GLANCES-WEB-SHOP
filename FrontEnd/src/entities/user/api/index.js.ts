@@ -5,6 +5,7 @@ import { $axios } from "@/shared/client/AxiosClient";
 import { Product } from "@/entities/product/model/Product";
 import { LoginException } from "@/entities/user/model/LoginException";
 import { BasketAction } from "@/entities/basket/api";
+import { ProductItem } from "@/entities/product/model/ProductItem";
 
 export const userStoreModule = defineStore("user", {
   state: () => ({
@@ -32,13 +33,20 @@ export const userStoreModule = defineStore("user", {
     getBasketPrice: (state) => state?.user?.basket?.price,
   },
   actions: {
+    updateQuantity(productItem: ProductItem) {
+      BasketAction.updateQunatity(productItem, this.user.basket.id)
+        .then((basket) => (this.user.basket.price = basket.price))
+        .catch((err) => alert(err.message));
+    },
     uploadProfileImage(image: any) {
-      UserActions.uploadProfileImage(image).then(
-        (data) => (this.user.profileImage = data)
-      );
+      UserActions.uploadProfileImage(image)
+        .then((data) => (this.user.profileImage = data))
+        .catch((err) => alert(err.message));
     },
     async uploadProfileData() {
-      await UserActions.updateProfile(this.user);
+      await UserActions.updateProfile(this.user).catch(() =>
+        alert("Неполучилось обновить данные.")
+      );
     },
     signIn(params: User) {
       this.isLoading = true;
@@ -88,24 +96,22 @@ export const userStoreModule = defineStore("user", {
       } else alert("Вы не авторизованы");
     },
 
-    addBasket(product: string, quantity: number) {
+    addBasket(product: string) {
       if (this.isLogin) {
-        BasketAction.addProductBasket(
-          this.user.basket.id,
-          product,
-          quantity
-        ).then((bakset) => (this.user.basket = bakset));
+        BasketAction.addProductBasket(this.user.basket.id, product).then(
+          (bakset) => (this.user.basket = bakset)
+        );
       } else alert("Вы не авторизованы");
     },
 
-    removeBasket(product: string, quantity: number) {
+    removeBasket(product: string) {
       if (this.isLogin) {
         const index = this.user.basket.products.findIndex((productItem) => {
           return productItem.product.id === product;
         }, 0);
         if (index > -1) {
           this.user.basket.products.splice(index, 1);
-          BasketAction.removeFromBasket(this.user.basket.id, product, quantity);
+          BasketAction.removeFromBasket(this.user.basket.id, product);
         }
       } else alert("Вы не авторизованы");
     },

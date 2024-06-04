@@ -11,6 +11,8 @@ import java.util.UUID;
 @Component
 public interface ProductSpecification {
 
+    Specification<Product> hasId(List<UUID> UUID);
+
     Specification<Product> hasCharacteristics(Characteristics characteristics);
 
     Specification<Product> hasCharacteristics(List<Characteristics> characteristics);

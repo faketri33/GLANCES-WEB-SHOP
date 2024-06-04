@@ -1,12 +1,12 @@
 <template>
-  <div class="root">
+  <div class="root container mt-4" v-if="orders[currentPage]">
     <div
       class="wrap"
       v-for="order in orders[currentPage]?.content"
       :key="order.id"
     >
       <h4>
-        <RouterLink :to="'/user/workspace/orders/about/' + order.id"
+        <RouterLink :to="'/user/' + order.id + '/orders/about/'"
           >Заказ номер - {{ order.id }}</RouterLink
         >
       </h4>
@@ -29,20 +29,21 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { onMounted, ref } from "vue";
-import { OrdersActions } from "../api";
+import { OrdersActions } from "@/entities/orders/api/";
+import { useRoute } from "vue-router";
 
 const currentPage = 0;
 const sizePage = 20;
+const route = useRoute();
 
 const orders = ref([]);
 
 onMounted(async () => {
-  orders.value[currentPage] = await OrdersActions.loadOrders(
-    currentPage,
-    sizePage
-  );
+  const userId = route.params.id;
+  orders.value[currentPage] = await OrdersActions.loadByUserId(userId);
   return orders;
 });
 </script>

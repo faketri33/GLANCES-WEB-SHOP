@@ -7,7 +7,7 @@
             <img
               :src="'http://localhost:9000/api/image/' + promo.banner.id"
               alt=""
-              style="width: 100%; max-height: 512px"
+              style="width: 100%; height: 455px"
             />
           </router-link>
         </swiper-slide>

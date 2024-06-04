@@ -24,13 +24,10 @@ import java.util.UUID;
 public class RatingController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final RatingService ratingService;
-    private final UserService userService;
-    private final ProductService productService;
 
-    public RatingController(RatingService ratingService, UserService userService, ProductService productService) {
+
+    public RatingController(RatingService ratingService) {
         this.ratingService = ratingService;
-        this.userService = userService;
-        this.productService = productService;
     }
 
     @RequestMapping(value = "/{productId}", method = RequestMethod.GET)
@@ -50,24 +47,7 @@ public class RatingController {
 
     @RequestMapping(value = "/{productId}", method = RequestMethod.POST)
     public RatingDtoResponse save(@RequestBody RatingDto ratingDto, @PathVariable("productId") UUID productId) {
-        Rating rating = new Rating();
-
-        rating.setUsers(userService.getCurrentUser());
-        rating.setProduct(productService.findById(productId));
-        rating.setDescription(ratingDto.getDescription());
-        rating.setGrade(ratingDto.getGrade());
-
-        log.info("ADD RATING TO PROD " + productId);
-        log.info("USER ADD RATING - " + rating.getUsers().getId());
-
-        rating = ratingService.save(rating);
-        return new RatingDtoResponse(
-                rating.getId(),
-                rating.getDescription(),
-                rating.getGrade(),
-                rating.getUsers().getProfileImage(),
-                rating.getUsers().getLogin()
-        );
+        return ratingService.create(ratingDto, productId);
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")

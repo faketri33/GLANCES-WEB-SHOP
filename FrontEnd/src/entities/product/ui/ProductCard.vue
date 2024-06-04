@@ -15,7 +15,11 @@
         :modules="modules"
         style="max-width: 220px"
       >
-        <swiper-slide v-for="image in product.image" :key="image.id">
+        <swiper-slide
+          style="text-align: center"
+          v-for="image in product.image"
+          :key="image.id"
+        >
           <img
             :src="'http://localhost:9000/api/image/' + image.id"
             alt=""
@@ -71,6 +75,7 @@ import { Pagination } from "swiper/modules";
 import "swiper/css/pagination";
 // Import Swiper styles
 import "swiper/css";
+import { userStoreModule } from "@/entities/user/api/index.js";
 
 export default {
   components: {
@@ -85,11 +90,13 @@ export default {
       type: Boolean,
       default: true,
     },
+    quantity: Number,
   },
   data() {
     return {
       mutateLikes: this.likes,
       mutateIsBasketItem: this.isBasketItem,
+      userStoreModule: userStoreModule(),
     };
   },
   setup() {

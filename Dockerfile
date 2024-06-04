@@ -1,8 +1,3 @@
-FROM maven:3.8.4-openjdk-17 as builder
-WORKDIR /app
-COPY . /app/.
-RUN mvn -f /app/pom.xml clean package
-
 FROM amazoncorretto:17
 WORKDIR /app
 
@@ -25,5 +20,5 @@ COPY assets/image/product/*.png /app/images/product/
 COPY assets/image/categories/*.png /app/images/categories/
 COPY assets/image/promotion/*.png /app/images/promotion/
 
-COPY --from=builder /app/target/*.jar /app/OnlineMarket.jar
+COPY /target/*.jar /app/OnlineMarket.jar
 ENTRYPOINT ["java", "-jar", "/app/OnlineMarket.jar"]

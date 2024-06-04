@@ -39,7 +39,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()))
+                .cors(cors -> cors.configurationSource(request -> corsConfiguration()))
                 .authorizeHttpRequests((requests) ->
                         requests
                                 .requestMatchers(HttpMethod.POST, "/api/product/categories/*").permitAll()

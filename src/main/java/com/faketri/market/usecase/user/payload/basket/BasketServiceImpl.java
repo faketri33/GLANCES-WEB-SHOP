@@ -10,6 +10,7 @@ import com.faketri.market.infastructure.user.payload.basket.gateway.BasketServic
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -36,35 +37,61 @@ public class BasketServiceImpl implements BasketService {
     }
 
     @Override
-    public Basket addProductToBasket(final UUID basketId, final UUID productId, final int quantity) {
+    public Basket addProductToBasket(final UUID basketId, final UUID productId) {
         final Basket basket = findById(basketId);
 
-        for (ProductItem item : basket.getProducts())
-            if (item.getProduct().getId().equals(productId)) {
-                item.setQuantity(item.getQuantity() + quantity);
-                return save(basket);
-            }
+        final boolean productNotExists = basket.getProducts()
+                .stream()
+                .map(p -> p.getProduct().getId())
+                .anyMatch(id -> id.equals(productId));
+
+        if(productNotExists)
+            return basket;
 
         final Product product = productService.findById(productId);
         final ProductItem newItem = new ProductItem();
         newItem.setProduct(product);
-        newItem.setQuantity(quantity);
+        newItem.setQuantity(1);
         basket.getProducts().add(newItem);
 
         return save(basket);
     }
 
     @Override
-    public void removeFromBasket(UUID basketId, UUID productId, int quantity) {
+    public Basket updateQuantity(final UUID basketId, final UUID productItemId, final Integer quantity) {
+        Basket basket = findById(basketId);
+
+        if (basket == null) throw new RuntimeException("Коризна не найдена.");
+
+        Optional<ProductItem> productItems = basket.getProducts()
+                .stream()
+                .filter(productItem -> productItem.getId().equals(productItemId))
+                .findFirst();
+
+        if(productItems.isEmpty()) throw new RuntimeException("Продукт не найден.");
+
+        if(quantity < 0) throw new RuntimeException("Количество не может быть меньше нуля.");
+
+        productItems.get().setQuantity(quantity);
+
+        basket.updatePrice();
+
+        return basketRepository.save(basket);
+    }
+
+    @Override
+    public void removeFromBasket(UUID basketId, UUID productId) {
         final Basket basket = findById(basketId);
+        ProductItem productItemToRemove = null;
         for (ProductItem item : basket.getProducts())
             if (item.getProduct().getId().equals(productId)) {
-                item.setQuantity(item.getQuantity() - quantity);
-                System.out.println("QUANTITY " +item.getQuantity());
-                if (item.getQuantity() == 0) basket.getProducts().remove(item);
-                save(basket);
-                return;
+                productItemToRemove = item;
+                break;
             }
+        if(productItemToRemove != null)
+            basket.getProducts().remove(productItemToRemove);
+
+        save(basket);
     }
 
 }

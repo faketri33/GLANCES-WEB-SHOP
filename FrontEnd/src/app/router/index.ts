@@ -14,6 +14,7 @@ import OrdersList from "@/entities/orders/ui/OrdersList.vue";
 import OrderAbout from "@/entities/orders/ui/OrderAbout.vue";
 import BrandCreate from "@/entities/brand/ui/BrandCreate.vue";
 import CategoriesCreate from "@/entities/categories/ui/CategoriesCreate.vue";
+import UserOrders from "@/pages/UserOrders.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -55,6 +56,16 @@ const routes: Array<RouteRecordRaw> = [
     path: "/promotion/:id",
     name: "promotion",
     component: PromotionView,
+  },
+  {
+    path: "/user/:id/orders/",
+    name: "UsersOrders",
+    component: UserOrders,
+  },
+  {
+    path: "/user/:id/orders/about/",
+    name: "UsersOrdersAbout",
+    component: OrderAbout,
   },
   {
     path: "/user/workspace",

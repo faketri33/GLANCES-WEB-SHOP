@@ -45,41 +45,7 @@ public class ProductPostController {
     public void save(
             @Valid @RequestPart("product") final ProductCreateRequest productCreateRequest,
             @RequestPart("images") final List<MultipartFile> images) {
-        Product product = new Product();
-
-        product.setBrand(productCreateRequest.getBrand());
-        product.setCategories(productCreateRequest.getCategories());
-        product.setPrice(productCreateRequest.getPrice());
-        product.setQuantity(productCreateRequest.getQuantity());
-        product.setNameModel(productCreateRequest.getNameModel());
-        product.setDescription(productCreateRequest.getDescription());
-        System.out.println(productCreateRequest.getCharacteristicsRequestSet());
-        product.getCharacteristics().addAll(
-                productCreateRequest
-                .getCharacteristicsRequestSet()
-                .stream()
-                .map(c -> new Characteristics(null, c.getName(), c.getValue()))
-                .collect(Collectors.toSet())
-        );
-
-        System.out.println(product.getCharacteristics());
-
-        int iterator = 0;
-        final String path = "/app/images/product/";
-        final String name = product.getNameModel().replace(' ', '-');
-
-        for (MultipartFile image : images) {
-            final String imageName = path + name + "-" + iterator++ + "-" + image.getOriginalFilename();
-            System.out.println(imageName);
-            try {
-                image.transferTo(Paths.get(imageName));
-            } catch (IOException e) {
-                log.error(e.getMessage());
-            }
-            product.getImage().add(new Image(null, imageName));
-        }
-
-        productService.save(product);
+        productService.save(productCreateRequest, images);
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")

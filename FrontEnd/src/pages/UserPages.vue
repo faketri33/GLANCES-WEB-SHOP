@@ -42,7 +42,7 @@
       <h1 class="mt-3">Данные пользователя</h1>
       <form
         class="d-flex border p-3 flex-column col-12 col-sm-9 col-md-6 gap-3 mt-5"
-        action=""
+        @submit.prevent="userStore.uploadProfileData()"
       >
         <input
           class="input-group-text"
@@ -69,25 +69,14 @@
           :placeholder="userStore.getUser.email"
           v-model="userStore.user.email"
         />
-        <button @click="userStore.uploadProfileData()" class="btn btn-success">
-          Сохранить
-        </button>
+        <button class="btn btn-success">Сохранить</button>
       </form>
 
-      <div class="oredrs shadow p-3 m-2">
-        <h2>Заказы - {{ userStore.getUser.orders?.length || 0 }}</h2>
-        <div
-          v-for="(order, index) in userStore.getUser.orders"
-          :key="index"
-          class="content"
+      <div class="">
+        <RouterLink :to="'/user/' + userStore?.user?.id + '/orders/'"
+          >Заказы</RouterLink
         >
-          <p>
-            {{ index + 1 }}) Номер заказа - {{ order.id }}, цена -
-            {{ order.price }}, статус - {{ order.statusOrder }}
-          </p>
-        </div>
       </div>
-
       <button class="btn btn-light" @click="userLogout">Выйти</button>
     </div>
   </div>
@@ -96,7 +85,7 @@
 <script setup lang="ts">
 import { userStoreModule } from "@/entities/user/api/index.js";
 import { useRouter } from "vue-router";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { OrdersActions } from "@/entities/orders/api";
 import { Orders } from "@/entities/orders/model";
 
@@ -108,12 +97,11 @@ const orders = ref<Orders[]>([]);
 const triggerFileInput = () => {
   if (fileInput.value) fileInput.value.click();
 };
+
 const handleFileChange = (event: any) => {
   const file = event.target.files[0];
   if (file) {
-    // Обработка файла, например, отправка на сервер или обновление изображения
     userStore.uploadProfileImage(file);
-    console.log(file);
   }
 };
 
@@ -123,10 +111,9 @@ const userLogout = () => {
 };
 
 const loadOrders = async () => {
-  console.log("LOAD ORDER ", await userStore.user);
   if (!userStore.user) {
     const response = await OrdersActions.loadByUserId(
-      userStore.getUser.id,
+      await userStore.getUser.id,
       0,
       5
     );
@@ -135,8 +122,19 @@ const loadOrders = async () => {
   }
 };
 
+watch(
+  () => userStore.user?.id,
+  async (id) => {
+    if (id) {
+      await loadOrders();
+    }
+  },
+  { immediate: true }
+);
+
 onMounted(async () => {
   if (!userStore.isLogin) router.push("/auth");
+  await loadOrders();
 });
 </script>
 
