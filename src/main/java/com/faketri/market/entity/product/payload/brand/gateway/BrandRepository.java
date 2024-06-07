@@ -1,7 +1,6 @@
 package com.faketri.market.entity.product.payload.brand.gateway;
 
 import com.faketri.market.entity.product.payload.brand.model.Brand;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

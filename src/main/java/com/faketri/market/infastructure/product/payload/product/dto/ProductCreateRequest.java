@@ -6,9 +6,7 @@ import com.faketri.market.infastructure.product.payload.characteristics.dto.Char
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ProductCreateRequest {
 

@@ -3,7 +3,6 @@ package com.faketri.market.infastructure.user.payload.order.gateway;
 import com.faketri.market.entity.product.payload.product.model.ProductItem;
 import com.faketri.market.entity.user.payload.order.model.EStatusOrder;
 import com.faketri.market.entity.user.payload.order.model.Orders;
-import com.faketri.market.infastructure.user.payload.order.dto.OrdersDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -20,7 +19,9 @@ public interface OrderService {
 
     Page<Orders> findByUser(UUID uuidUser, Pageable pageable);
 
-    OrdersDto create(final List<ProductItem> product);
+    Orders create(final List<ProductItem> product);
+
+    Orders changeStatus(final UUID id, final EStatusOrder eStatusOrder);
 
     Orders save(Orders orders);
 }

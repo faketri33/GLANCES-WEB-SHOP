@@ -1,15 +1,14 @@
 package com.faketri.market.usecase.user.payload.order;
 
 import com.faketri.market.entity.exception.ResourceNotFoundException;
-import com.faketri.market.entity.product.payload.product.model.Product;
 import com.faketri.market.entity.product.payload.product.model.ProductItem;
+import com.faketri.market.entity.user.payload.order.exception.OrderStatusException;
 import com.faketri.market.entity.user.payload.order.gateway.OrderRepository;
-import com.faketri.market.entity.user.payload.order.gateway.mapper.OrderMapper;
 import com.faketri.market.entity.user.payload.order.model.EStatusOrder;
 import com.faketri.market.entity.user.payload.order.model.Orders;
+import com.faketri.market.entity.user.payload.payment.model.PaymentStatus;
 import com.faketri.market.entity.user.payload.user.model.Users;
 import com.faketri.market.infastructure.product.payload.product.gateway.ProductService;
-import com.faketri.market.infastructure.user.payload.order.dto.OrdersDto;
 import com.faketri.market.infastructure.user.payload.order.gateway.OrderService;
 import com.faketri.market.infastructure.user.payload.user.gateway.UserService;
 import org.slf4j.Logger;
@@ -19,10 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class OrdersServiceImpl implements OrderService {
@@ -60,7 +56,7 @@ public class OrdersServiceImpl implements OrderService {
     }
 
     @Override
-    public OrdersDto create(List<ProductItem> productsItems) {
+    public Orders create(List<ProductItem> productsItems) {
         final Users user = userService.getCurrentUser();
         log.info("CREATE ORDER: user id - " + user.getId());
 
@@ -75,7 +71,22 @@ public class OrdersServiceImpl implements OrderService {
                         .toList()
         );
 
-        return OrderMapper.toDto(orderRepository.save(orders));
+        return save(orders);
+    }
+
+    @Override
+    public Orders changeStatus(UUID id, EStatusOrder eStatusOrder) {
+        Orders orders = findById(id);
+
+        boolean statusReceivedAndOrderNotPaid = eStatusOrder.equals(EStatusOrder.RECEIVED)
+                && orders.getPayment().getPaymentStatus().equals(PaymentStatus.AWAITING_PAID);
+
+        if (statusReceivedAndOrderNotPaid)
+            throw new OrderStatusException("Нельзя выдать неоплаченный заказ.");
+
+        orders.setStatusOrder(eStatusOrder);
+
+        return save(orders);
     }
 
     @Override

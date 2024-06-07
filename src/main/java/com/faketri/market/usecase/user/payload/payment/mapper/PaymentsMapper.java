@@ -6,11 +6,11 @@ import com.faketri.market.infastructure.user.payload.payment.dto.PaymentResponse
 
 public class PaymentsMapper {
 
-    public static PaymentResponse toDto(Payment payment){
+    public static PaymentResponse toDto(Payment payment) {
         return new PaymentResponse(payment.getId(), payment.getPaymentStatus(), payment.getDateOfCreate(), payment.getDateOfPayment());
     }
 
-    public static PaymentResponse toObj(PaymentResponse payment){
+    public static PaymentResponse toObj(PaymentResponse payment) {
         return new PaymentResponse(payment.getId(), PaymentStatus.valueOf(payment.getPaymentStatus()), payment.getDateOfCreate(), payment.getDateOfPayment());
     }
 }

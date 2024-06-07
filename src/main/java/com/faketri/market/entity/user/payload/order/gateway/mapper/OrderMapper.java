@@ -40,9 +40,9 @@ public class OrderMapper {
                 new Payment(
                         ordersDto.getPayment().getId(),
                         new Users(ordersDto.getUsers().getId(),
-                        ordersDto.getUsers().getProfileImage(),
-                        ordersDto.getUsers().getLogin(),
-                        ordersDto.getUsers().getCity()
+                                ordersDto.getUsers().getProfileImage(),
+                                ordersDto.getUsers().getLogin(),
+                                ordersDto.getUsers().getCity()
                         ),
                         PaymentStatus.valueOf(ordersDto.getPayment().getPaymentStatus()),
                         ordersDto.getPayment().getDateOfCreate(),

@@ -11,7 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController()
@@ -28,8 +30,8 @@ public class OrdersGetController {
 
     @RequestMapping("/user/{id}")
     public Page<OrdersDto> findByUser(@PathVariable("id") UUID id,
-                                 @RequestParam(name = "page", defaultValue = "0") Integer page,
-                                 @RequestParam(name = "size", defaultValue = "20") Integer size) {
+                                      @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                      @RequestParam(name = "size", defaultValue = "20") Integer size) {
         return orderService.findByUser(id, PageRequest.of(page, size)).map(OrderMapper::toDto);
     }
 

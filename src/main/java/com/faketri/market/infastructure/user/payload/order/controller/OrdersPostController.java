@@ -1,6 +1,7 @@
 package com.faketri.market.infastructure.user.payload.order.controller;
 
 import com.faketri.market.entity.product.payload.product.model.ProductItem;
+import com.faketri.market.entity.user.payload.order.exception.OrderStatusException;
 import com.faketri.market.entity.user.payload.order.gateway.mapper.OrderMapper;
 import com.faketri.market.entity.user.payload.order.model.EStatusOrder;
 import com.faketri.market.entity.user.payload.order.model.Orders;
@@ -35,7 +36,7 @@ public class OrdersPostController {
 
     @RequestMapping("/create")
     public OrdersDto createOrder(@RequestBody final List<ProductItem> product) {
-        return orderService.create(product);
+        return OrderMapper.toDto(orderService.create(product));
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
@@ -43,11 +44,10 @@ public class OrdersPostController {
     public OrdersDto changeStatus(@PathVariable("id") UUID uuid,
                                   @RequestBody ChangeStatusRequest statusOrder) {
         log.info("changeStatus: order - " + uuid + " status - " + statusOrder.getStatus());
-        Orders orders = orderService.findById(uuid);
 
-        if (statusOrder.getStatus() == null) throw new RuntimeException("Статус заказа не может быть пустым");
+        if (statusOrder.getStatus() == null)
+            throw new OrderStatusException("Статус заказа не может быть пустым.");
 
-        orders.setStatusOrder(EStatusOrder.valueOf(statusOrder.getStatus()));
-        return OrderMapper.toDto(orderService.save(orders));
+        return OrderMapper.toDto(orderService.changeStatus(uuid, EStatusOrder.valueOf(statusOrder.getStatus())));
     }
 }

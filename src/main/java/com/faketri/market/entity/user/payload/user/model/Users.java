@@ -3,7 +3,6 @@ package com.faketri.market.entity.user.payload.user.model;
 import com.faketri.market.entity.image.model.Image;
 import com.faketri.market.entity.product.payload.product.model.Product;
 import com.faketri.market.entity.user.payload.basket.model.Basket;
-import com.faketri.market.entity.user.payload.order.model.Orders;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 

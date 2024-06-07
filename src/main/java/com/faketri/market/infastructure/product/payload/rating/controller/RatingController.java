@@ -1,11 +1,8 @@
 package com.faketri.market.infastructure.product.payload.rating.controller;
 
-import com.faketri.market.entity.product.payload.rating.model.Rating;
-import com.faketri.market.infastructure.product.payload.product.gateway.ProductService;
 import com.faketri.market.infastructure.product.payload.rating.dto.RatingDto;
 import com.faketri.market.infastructure.product.payload.rating.dto.RatingDtoResponse;
 import com.faketri.market.infastructure.product.payload.rating.gateway.RatingService;
-import com.faketri.market.infastructure.user.payload.user.gateway.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,5 @@
 package com.faketri.market.infastructure.user.payload.payment.controller;
 
-import com.faketri.market.entity.user.payload.payment.model.Payment;
 import com.faketri.market.entity.user.payload.payment.model.PaymentStatus;
 import com.faketri.market.infastructure.user.payload.payment.dto.PaymentResponse;
 import com.faketri.market.infastructure.user.payload.payment.gateway.PaymentService;
@@ -26,7 +25,7 @@ public class PaymentController {
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/{id}/status/paid", method = RequestMethod.GET)
-    public PaymentResponse updateStatus(@PathVariable("id") final UUID paymentId){
+    public PaymentResponse updateStatus(@PathVariable("id") final UUID paymentId) {
         log.info("updateStatus: id - " + paymentId);
         return PaymentsMapper.toDto(paymentService.updateStatus(paymentId, PaymentStatus.PAID));
     }

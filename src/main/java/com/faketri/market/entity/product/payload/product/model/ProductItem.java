@@ -22,6 +22,7 @@ public class ProductItem {
     private Product product;
     @Column
     private Integer quantity;
+
     /**
      * Instantiates a new Order item.
      */
@@ -53,16 +54,16 @@ public class ProductItem {
         return product;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
     public void setProduct(Product product) {
         this.product = product;
     }
 
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.faketri.market.infastructure.product.payload.promotion.controller;
 
 
-import com.faketri.market.entity.image.model.Image;
 import com.faketri.market.entity.product.payload.promotion.model.Promotion;
 import com.faketri.market.infastructure.product.payload.promotion.gateway.PromotionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,8 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,22 +37,11 @@ public class PromotionController {
         this.promotionService = promotionService;
     }
 
-    /**
-     * Gets all.
-     *
-     * @return the all
-     */
     @RequestMapping("/")
     public List<Promotion> getAll() {
         return promotionService.findAll();
     }
 
-    /**
-     * Find by id promotion.
-     *
-     * @param id the id
-     * @return the promotion
-     */
     @RequestMapping("/{id}")
     public Promotion findById(@PathVariable("id") UUID id) {
         return promotionService.findById(id);
@@ -64,28 +50,23 @@ public class PromotionController {
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Promotion save(
-            @Valid @RequestPart("promo") final Promotion promotionCreateRequest,
+            @Valid @RequestPart("promo") final Promotion promotion,
             @RequestPart("images") final MultipartFile images) {
-        Promotion promotion = new Promotion();
+        return promotionService.create(promotion, images);
+    }
 
-        promotion.setDescription(promotionCreateRequest.getDescription());
-        promotion.setPromotionProductItems(promotionCreateRequest.getPromotionProductItems());
-        promotion.setDateOfStart(promotionCreateRequest.getDateOfStart());
-        promotion.setDateOfEnd(promotionCreateRequest.getDateOfEnd());
-        promotion.setTitle(promotionCreateRequest.getTitle());
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    @RequestMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Promotion update(
+            @Valid @RequestPart("promo") final Promotion promotion,
+            @RequestPart(value = "images", required = false) final MultipartFile images) {
+        return promotionService.create(promotion, images);
+    }
 
-        final String path = "/app/images/promo/";
-        final String imageName = path + promotion.getTitle().replace(' ', '-') + "-" + images.getOriginalFilename();
-
-        try {
-            images.transferTo(Paths.get(imageName));
-        } catch (IOException e) {
-            log.error(this.getClass() + " " + e.getMessage());
-        }
-        promotion.setBanner(new Image(null, imageName));
-
-
-        return promotionService.save(promotion);
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void delete(@PathVariable("id") UUID id) {
+        promotionService.deleteById(id);
     }
 
 }

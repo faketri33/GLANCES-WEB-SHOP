@@ -26,7 +26,7 @@ public class BasketController {
 
     @RequestMapping(value = "/update-quantity/{basketId}/{productItemId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Basket updateQuantity(@PathVariable final UUID basketId,
-                                 @RequestBody final UpdateQuantityRequest updateQuantityRequest){
+                                 @RequestBody final UpdateQuantityRequest updateQuantityRequest) {
         log.info("updateQuantity: basketId - "
                 + basketId + " productItemId - "
                 + updateQuantityRequest.getProductItemId() + " quantity - "

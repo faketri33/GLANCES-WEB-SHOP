@@ -1,13 +1,10 @@
 package com.faketri.market.infastructure.product.payload.product.controller;
 
-import com.faketri.market.entity.image.model.Image;
-import com.faketri.market.entity.product.payload.characteristics.model.Characteristics;
 import com.faketri.market.entity.product.payload.product.model.Product;
 import com.faketri.market.infastructure.product.payload.product.dto.ProductCreateRequest;
 import com.faketri.market.infastructure.product.payload.product.gateway.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.flywaydb.core.internal.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -16,10 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * The type Product controller.

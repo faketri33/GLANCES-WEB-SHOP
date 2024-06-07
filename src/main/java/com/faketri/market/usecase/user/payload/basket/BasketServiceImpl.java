@@ -45,7 +45,7 @@ public class BasketServiceImpl implements BasketService {
                 .map(p -> p.getProduct().getId())
                 .anyMatch(id -> id.equals(productId));
 
-        if(productNotExists)
+        if (productNotExists)
             return basket;
 
         final Product product = productService.findById(productId);
@@ -68,9 +68,9 @@ public class BasketServiceImpl implements BasketService {
                 .filter(productItem -> productItem.getId().equals(productItemId))
                 .findFirst();
 
-        if(productItems.isEmpty()) throw new RuntimeException("Продукт не найден.");
+        if (productItems.isEmpty()) throw new RuntimeException("Продукт не найден.");
 
-        if(quantity < 0) throw new RuntimeException("Количество не может быть меньше нуля.");
+        if (quantity < 0) throw new RuntimeException("Количество не может быть меньше нуля.");
 
         productItems.get().setQuantity(quantity);
 
@@ -88,7 +88,7 @@ public class BasketServiceImpl implements BasketService {
                 productItemToRemove = item;
                 break;
             }
-        if(productItemToRemove != null)
+        if (productItemToRemove != null)
             basket.getProducts().remove(productItemToRemove);
 
         save(basket);

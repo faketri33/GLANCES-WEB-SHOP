@@ -175,8 +175,7 @@ public class Product {
         if (discount > 0 && discount < 99) {
             this.discount = discount;
             this.promoPrice = price - ((price / 100) * discount);
-        }
-        else this.promoPrice = price;
+        } else this.promoPrice = price;
     }
 
     public int getQuantity() {

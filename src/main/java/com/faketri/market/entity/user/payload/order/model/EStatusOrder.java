@@ -16,7 +16,7 @@ public enum EStatusOrder {
         this.status = s;
     }
 
-    public String getStatus(){
+    public String getStatus() {
         return status;
     }
 }

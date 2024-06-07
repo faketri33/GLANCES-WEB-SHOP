@@ -1,5 +1,6 @@
 package com.faketri.market.usecase.product.payload.product;
 
+import com.faketri.market.entity.exception.ImageFormatException;
 import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.image.model.Image;
 import com.faketri.market.entity.product.payload.characteristics.model.Characteristics;
@@ -11,6 +12,7 @@ import com.faketri.market.infastructure.product.payload.characteristics.gateway.
 import com.faketri.market.infastructure.product.payload.product.dto.ProductCreateRequest;
 import com.faketri.market.infastructure.product.payload.product.gateway.ProductService;
 import com.faketri.market.infastructure.product.payload.product.gateway.filter.ProductSpecification;
+import com.faketri.market.usecase.file.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -41,13 +43,15 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productImpl;
     private final CharacteristicsService characteristicsService;
     private final ProductSpecification productSpecification;
+    private final FileService fileService;
 
     public ProductServiceImpl(ProductRepository productImpl,
                               CharacteristicsService characteristicsService,
-                              ProductSpecification productSpecification) {
+                              ProductSpecification productSpecification, FileService fileService) {
         this.productImpl = productImpl;
         this.characteristicsService = characteristicsService;
         this.productSpecification = productSpecification;
+        this.fileService = fileService;
     }
 
     public List<Product> findAll() {
@@ -110,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
             product.setQuantity(product.getQuantity() - quantityToBuy);
             product.setQuantitySold(product.getQuantitySold() + quantityToBuy);
 
-            if(product.getQuantity() < 0) throw new NotEnoughProductException("Недостаточно товара на складе.");
+            if (product.getQuantity() < 0) throw new NotEnoughProductException("Недостаточно товара на складе.");
         });
 
         save(products);
@@ -174,19 +178,27 @@ public class ProductServiceImpl implements ProductService {
                         .collect(Collectors.toSet())
         );
 
-        int iterator = 0;
-        final String path = "/app/images/product/";
-        final String name = product.getNameModel().replace(' ', '-');
+        try {
+            int iterator = 0;
+            final String path = "/app/images/product/";
+            final String name = product.getNameModel().replace(' ', '-');
 
-        for (MultipartFile image : images) {
-            final String imageName = path + name + "-" + iterator++ + "-" + image.getOriginalFilename();
-            System.out.println(imageName);
-            try {
-                image.transferTo(Paths.get(imageName));
-            } catch (IOException e) {
-                log.error(e.getMessage());
+            for (MultipartFile image : images) {
+
+                if (!fileService.isImageFile(image))
+                    throw new ImageFormatException("Не подходящий формат изображения.");
+
+                final String imageName = path + name + "-" + iterator++ + "-" + image.getOriginalFilename();
+                System.out.println(imageName);
+                try {
+                    image.transferTo(Paths.get(imageName));
+                } catch (IOException e) {
+                    log.error(e.getMessage());
+                }
+                product.getImage().add(new Image(null, imageName));
             }
-            product.getImage().add(new Image(null, imageName));
+        } catch (Exception exception) {
+            log.error("save: " + exception.getMessage());
         }
 
         save(product);

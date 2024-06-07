@@ -2,8 +2,10 @@ package com.faketri.market.infastructure.user.payload.payment.gateway;
 
 import com.faketri.market.entity.user.payload.payment.model.Payment;
 import com.faketri.market.entity.user.payload.payment.model.PaymentStatus;
-;
+
 import java.util.UUID;
+
+;
 
 public interface PaymentService {
 
