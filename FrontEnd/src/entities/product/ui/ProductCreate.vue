@@ -56,14 +56,11 @@
         placeholder="Количество"
       />
       <label for="description">Описание</label>
-      <input
-        v-model="product.description"
-        class="input-group-text shadow"
+      <textarea
         id="description"
-        name="description"
-        type="text"
-        placeholder="Описание"
-      />
+        class="form-control"
+        v-model="product.description"
+      ></textarea>
       <p>Характеристики</p>
       <div class="characteristics">
         <div

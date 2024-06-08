@@ -41,7 +41,7 @@ export const userStoreModule = defineStore("user", {
     uploadProfileImage(image: any) {
       UserActions.uploadProfileImage(image)
         .then((data) => (this.user.profileImage = data))
-        .catch((err) => alert(err.message));
+        .catch((err) => alert(err.response.data.message));
     },
     async uploadProfileData() {
       await UserActions.updateProfile(this.user).catch(() =>

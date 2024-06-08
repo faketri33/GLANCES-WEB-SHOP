@@ -12,7 +12,7 @@ import com.faketri.market.infastructure.product.payload.characteristics.gateway.
 import com.faketri.market.infastructure.product.payload.product.dto.ProductCreateRequest;
 import com.faketri.market.infastructure.product.payload.product.gateway.ProductService;
 import com.faketri.market.infastructure.product.payload.product.gateway.filter.ProductSpecification;
-import com.faketri.market.usecase.file.FileService;
+import com.faketri.market.usecase.file.FileUploadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -43,11 +43,11 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productImpl;
     private final CharacteristicsService characteristicsService;
     private final ProductSpecification productSpecification;
-    private final FileService fileService;
+    private final FileUploadService fileService;
 
     public ProductServiceImpl(ProductRepository productImpl,
                               CharacteristicsService characteristicsService,
-                              ProductSpecification productSpecification, FileService fileService) {
+                              ProductSpecification productSpecification, FileUploadService fileService) {
         this.productImpl = productImpl;
         this.characteristicsService = characteristicsService;
         this.productSpecification = productSpecification;
@@ -178,29 +178,14 @@ public class ProductServiceImpl implements ProductService {
                         .collect(Collectors.toSet())
         );
 
-        try {
-            int iterator = 0;
-            final String path = "/app/images/product/";
-            final String name = product.getNameModel().replace(' ', '-');
+        product.getImage().addAll(fileService.saveImages(FileUploadService.PRODUCT_PATH, product.getNameModel(), images));
 
-            for (MultipartFile image : images) {
+        save(product);
+    }
 
-                if (!fileService.isImageFile(image))
-                    throw new ImageFormatException("Не подходящий формат изображения.");
-
-                final String imageName = path + name + "-" + iterator++ + "-" + image.getOriginalFilename();
-                System.out.println(imageName);
-                try {
-                    image.transferTo(Paths.get(imageName));
-                } catch (IOException e) {
-                    log.error(e.getMessage());
-                }
-                product.getImage().add(new Image(null, imageName));
-            }
-        } catch (Exception exception) {
-            log.error("save: " + exception.getMessage());
-        }
-
+    @Override
+    public void update(Product product, List<MultipartFile> images) {
+        product.getImage().addAll(fileService.saveImages(FileUploadService.PRODUCT_PATH, product.getNameModel(), images));
         save(product);
     }
 
@@ -222,6 +207,11 @@ public class ProductServiceImpl implements ProductService {
 
     public void delete(Product product) {
         productImpl.delete(product);
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        productImpl.deleteById(id);
     }
 
 }

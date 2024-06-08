@@ -1,6 +1,5 @@
 package com.faketri.market.usecase.user.payload.user;
 
-import com.faketri.market.entity.exception.ImageFormatException;
 import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.image.model.Image;
 import com.faketri.market.entity.product.payload.product.model.Product;
@@ -9,7 +8,7 @@ import com.faketri.market.entity.user.payload.user.model.Users;
 import com.faketri.market.infastructure.image.gateway.ImageService;
 import com.faketri.market.infastructure.user.payload.user.dto.UserUpdateRequest;
 import com.faketri.market.infastructure.user.payload.user.gateway.UserService;
-import com.faketri.market.usecase.file.FileService;
+import com.faketri.market.usecase.file.FileUploadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -34,10 +30,10 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userImpl;
     private final ImageService imageService;
-    private final FileService fileService;
+    private final FileUploadService fileService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userImpl, ImageService imageService, FileService fileService) {
+    public UserServiceImpl(UserRepository userImpl, ImageService imageService, FileUploadService fileService) {
         this.userImpl = userImpl;
         this.imageService = imageService;
         this.fileService = fileService;
@@ -61,24 +57,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Image updateUserImage(MultipartFile image) {
-        if (!fileService.isImageFile(image)) throw new ImageFormatException("Неверный формат изображения.");
-
-        final Users user = getCurrentUser();
+       final Users user = getCurrentUser();
 
         log.info("updateUserImage: user id - " + user.getId());
 
-        final String path = "/app/images/user/profile/";
-        final String name = user.getLogin().replace(' ', '-');
-
-        final String imageName = path + name + "-" + Objects.requireNonNull(image.getOriginalFilename()).replace(' ', '-').toLowerCase();
-        System.out.println(imageName);
-        try {
-            image.transferTo(Paths.get(imageName));
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
         final Image deleteImage = user.getProfileImage();
-        user.setProfileImage(new Image(null, imageName));
+        user.setProfileImage(fileService.saveImage(FileUploadService.USER_PATH, user.getLogin(), image));
 
         final Users savedUser = save(user);
         final Image returnedImage = savedUser.getProfileImage();
@@ -90,17 +74,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserData(UserUpdateRequest userUpdateRequest) {
+        final Users user = getCurrentUser();
 
+        user.setName(userUpdateRequest.getName());
+        user.setSurname(userUpdateRequest.getSurname());
+        user.setDateOfBirthday(userUpdateRequest.getDateOfBirthday());
+        user.setEmail(userUpdateRequest.getEmail());
+        user.setCity(userUpdateRequest.getCity());
+
+        save(user);
     }
 
     @Override
     public void likeProduct(Product product) {
-
+        log.info("LIKE PROD " + product.getId());
+        Users user = getCurrentUser();
+        user.getFavoriteProduct().add(product);
+        save(user);
     }
 
     @Override
     public void dislikeProduct(Product product) {
-
+        log.info("DISLIKE PROD " + product.getId());
+        Users user = getCurrentUser();
+        user.getFavoriteProduct().remove(product);
+        save(user);
     }
 
     public Users findById(UUID id) {
@@ -110,7 +108,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public Users getCurrentUser() {
-        // Получение имени пользователя из контекста Spring Security
         var username = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();

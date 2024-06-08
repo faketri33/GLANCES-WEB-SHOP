@@ -5,9 +5,9 @@
         <SliderVue style="height: 100%">
           <RouterLink
             class="text-decoration-none border-bottom"
-            to="/user/workspace/product/create"
+            to="/user/workspace/product/"
             style="margin-left: 5px; font-size: 26px"
-            >Добавить продукт</RouterLink
+            >Управление продуктами</RouterLink
           >
           <RouterLink
             class="text-decoration-none border-bottom"

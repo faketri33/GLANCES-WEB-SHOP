@@ -38,30 +38,16 @@ public class UserPostController {
 
     @RequestMapping("/profile/update")
     public void updateUserData(@RequestBody final UserUpdateRequest userUpdateRequest) {
-        final Users user = userService.getCurrentUser();
-
-        user.setName(userUpdateRequest.getName());
-        user.setSurname(userUpdateRequest.getSurname());
-        user.setDateOfBirthday(userUpdateRequest.getDateOfBirthday());
-        user.setEmail(userUpdateRequest.getEmail());
-        user.setCity(userUpdateRequest.getCity());
-
-        userService.save(user);
+        userService.updateUserData(userUpdateRequest);
     }
 
     @RequestMapping("/like/product")
     public void likeProduct(@RequestBody final Product product) {
-        log.info("LIKE PROD " + product.getId());
-        Users user = userService.getCurrentUser();
-        user.getFavoriteProduct().add(product);
-        userService.save(user);
+        userService.likeProduct(product);
     }
 
     @RequestMapping("/dislike/product")
     public void dislikeProduct(@RequestBody final Product product) {
-        log.info("DISLIKE PROD " + product.getId());
-        Users user = userService.getCurrentUser();
-        user.getFavoriteProduct().remove(product);
-        userService.save(user);
+        userService.dislikeProduct(product);
     }
 }

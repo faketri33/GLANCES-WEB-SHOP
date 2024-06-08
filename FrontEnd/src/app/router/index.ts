@@ -10,6 +10,8 @@ import PromotionView from "@/pages/PromotionView.vue";
 import WorkSpace from "@/pages/employee/WorkSpace.vue";
 import OrdersPages from "@/pages/employee/OrdersPages.vue";
 import ProductCreate from "@/entities/product/ui/ProductCreate.vue";
+import ProductPages from "@/pages/employee/ProductPages.vue";
+import ProductUpdate from "@/entities/product/ui/ProductUpdate.vue";
 import OrdersList from "@/entities/orders/ui/OrdersList.vue";
 import OrderAbout from "@/entities/orders/ui/OrderAbout.vue";
 import BrandCreate from "@/entities/brand/ui/BrandCreate.vue";
@@ -73,9 +75,21 @@ const routes: Array<RouteRecordRaw> = [
     component: WorkSpace,
     children: [
       {
-        path: "/user/workspace/product/create",
-        name: "ProductCreate",
-        component: ProductCreate,
+        path: "/user/workspace/product/",
+        name: "ProductPages",
+        component: ProductPages,
+        children: [
+          {
+            path: "/user/workspace/product/create",
+            name: "ProductCreate",
+            component: ProductCreate,
+          },
+          {
+            path: "/user/workspace/product/update",
+            name: "ProductUpdate",
+            component: ProductUpdate,
+          },
+        ],
       },
       {
         path: "/user/workspace/brand/create",

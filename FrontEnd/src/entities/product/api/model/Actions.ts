@@ -31,7 +31,7 @@ export const ProductActions = {
         number: pageNum,
         size: pageSize,
         categories: categoriesId,
-        name: name,
+        name: encodeURIComponent(name),
         characteristics: characteristics?.map((c) => c.id).join(",") || null,
       },
     });

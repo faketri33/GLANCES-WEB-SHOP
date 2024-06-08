@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Product controller.
@@ -44,20 +45,15 @@ public class ProductPostController {
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping("/update")
-    public void update(@RequestBody Product product) {
-        productService.save(product);
+    public void update(@Valid @RequestPart("product") final Product product,
+                       @RequestPart(value = "images", required = false) final List<MultipartFile> images) {
+        productService.update(product, images);
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
-    @RequestMapping("/update-list")
-    public void update(@RequestBody List<Product> product) {
-        productService.save(product);
-    }
-
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
-    @RequestMapping("/delete")
-    public void delete(@RequestBody Product product) {
-        productService.delete(product);
+    @RequestMapping("/delete/{id}")
+    public void delete(@PathVariable("id")UUID id) {
+        productService.deleteById(id);
     }
 
 }

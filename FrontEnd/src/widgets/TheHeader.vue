@@ -11,7 +11,36 @@
           >
         </div>
         <div class="header__item col-xl-6 col-md-4 col-sm-9">
-          <search-component class="w-100"></search-component>
+          <search-component
+            v-model:searchQuery="searchQuery"
+            :results="products.content"
+            class="w-100"
+          >
+            <template v-slot:default="{ results }">
+              <ul>
+                <li
+                  class="list-group-item"
+                  v-for="product in results"
+                  :key="product.id"
+                >
+                  <router-link :to="'/product/' + product.id">
+                    <div class="wrap d-flex">
+                      <img
+                        :src="
+                          'http://localhost:9000/api/image/' +
+                          product?.image[0]?.id
+                        "
+                        :alt="product.nameModel"
+                        style="width: 50px; height: 50px"
+                        class="mx-2"
+                      />
+                      {{ product.brand.name }} {{ product.nameModel }}
+                    </div>
+                  </router-link>
+                </li>
+              </ul>
+            </template>
+          </search-component>
         </div>
         <div
           class="tab__bar col-xl-3 col-md-5 col-lg-4 col-xs-9 col-sm-9 mt-2 row"
@@ -48,10 +77,33 @@
 <script setup>
 import SearchComponent from "./SearchComponent.vue";
 import { ProductActions } from "@/entities/product/api/model/Actions";
-import { defineProps } from "vue";
+import { defineProps, ref, watch } from "vue";
 
 defineProps({
   isLogin: Boolean,
+});
+
+const products = ref([]);
+const searchQuery = ref("");
+
+const loadProduct = async (searchQuery) => {
+  console.log(searchQuery);
+  if (searchQuery.trim() !== "" && searchQuery.length >= 3)
+    products.value = await ProductActions.searchProduct(
+      0,
+      10,
+      null,
+      null,
+      searchQuery
+    );
+};
+
+watch(searchQuery, (newQuery) => {
+  if (newQuery) {
+    loadProduct(newQuery);
+  } else {
+    products.value = [];
+  }
 });
 </script>
 

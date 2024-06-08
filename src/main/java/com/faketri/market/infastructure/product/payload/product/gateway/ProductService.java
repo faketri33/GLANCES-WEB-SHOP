@@ -42,8 +42,12 @@ public interface ProductService {
 
     void save(ProductCreateRequest productCreateRequest, List<MultipartFile> images);
 
+    void update(Product product, List<MultipartFile> images);
+
     List<Product> save(List<Product> product);
 
     void delete(Product product);
+
+    void deleteById(UUID id);
 
 }
