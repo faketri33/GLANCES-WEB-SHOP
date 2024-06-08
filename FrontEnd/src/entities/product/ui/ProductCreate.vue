@@ -76,7 +76,11 @@
             />
           </div>
         </div>
-        <button type="button" @click="addInputs" class="btn btn-success mt-2">
+        <button
+          type="button"
+          @click="addInputs"
+          class="btn btn-success me-2 mt-2"
+        >
           +
         </button>
         <button type="button" @click="delInputs" class="btn btn-success mt-2">

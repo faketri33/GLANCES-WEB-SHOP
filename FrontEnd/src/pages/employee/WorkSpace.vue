@@ -11,6 +11,12 @@
           >
           <RouterLink
             class="text-decoration-none border-bottom"
+            to="/user/workspace/promo/"
+            style="margin-left: 5px; font-size: 26px"
+            >Управление акциями</RouterLink
+          >
+          <RouterLink
+            class="text-decoration-none border-bottom"
             to="/user/workspace/brand/create"
             style="margin-left: 5px; font-size: 26px"
             >Добавить бренд</RouterLink

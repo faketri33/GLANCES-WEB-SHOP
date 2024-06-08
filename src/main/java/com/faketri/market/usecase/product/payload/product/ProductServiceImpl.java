@@ -24,11 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -185,7 +181,23 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void update(Product product, List<MultipartFile> images) {
-        product.getImage().addAll(fileService.saveImages(FileUploadService.PRODUCT_PATH, product.getNameModel(), images));
+        log.info("update: " + product.toString());
+        log.info("update: characteristics: " + product.getCharacteristics());
+
+        product.setCharacteristics(
+                product.getCharacteristics()
+                        .stream()
+                        .map(charact -> charact.getId() == null ? characteristicsService.save(charact) : charact)
+                        .collect(Collectors.toSet())
+        );
+
+        final List<Image> image = fileService.saveImages(
+                FileUploadService.PRODUCT_PATH,
+                product.getNameModel(),
+                images
+        );
+
+        if (image != null) product.getImage().addAll(image);
         save(product);
     }
 

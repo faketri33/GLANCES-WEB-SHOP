@@ -1,6 +1,6 @@
 package com.faketri.market.infastructure.product.payload.categories.controller;
 
-import com.faketri.market.entity.image.model.Image;
+
 import com.faketri.market.entity.product.payload.categories.model.Categories;
 import com.faketri.market.infastructure.product.payload.categories.dto.CategoriesRequest;
 import com.faketri.market.infastructure.product.payload.categories.gateway.CategoriesService;
@@ -13,8 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Paths;
+
 import java.util.List;
 
 /**
@@ -36,11 +35,6 @@ public class CategoriesController {
         this.categoriesService = categoriesService;
     }
 
-    /**
-     * Gets all.
-     *
-     * @return the all
-     */
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Categories> getAll() {
         return categoriesService.findAll();
@@ -50,21 +44,7 @@ public class CategoriesController {
     @RequestMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, method = RequestMethod.POST)
     public Categories save(@RequestPart("categories") final CategoriesRequest categoriesRequest,
                            @RequestPart("images") final MultipartFile images) {
-
-        final String path = "/app/images/categories/";
-        final String imageName = path + categoriesRequest.getName() + "-" + images.getOriginalFilename();
-        System.out.println(imageName);
-        try {
-            images.transferTo(Paths.get(imageName));
-        } catch (IOException e) {
-            log.error(this.getClass() + " " + e.getMessage());
-        }
-        Categories categories = new Categories();
-        categories.setName(categoriesRequest.getName());
-        categories.setImage(new Image(null, imageName));
-
-
-        return categoriesService.save(categories);
+        return categoriesService.create(categoriesRequest, images);
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")

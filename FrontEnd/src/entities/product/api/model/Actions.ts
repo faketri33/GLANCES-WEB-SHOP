@@ -19,6 +19,9 @@ export const ProductActions = {
         .then((data) => resolve(data.data))
     );
   },
+  async deleteProduct(id: string) {
+    return await $axios.post(`/product/delete/${id}`);
+  },
   async searchProduct(
     pageNum: number,
     pageSize: number,
@@ -73,6 +76,33 @@ export const ProductActions = {
         })
         .catch((err) => reject(err.message))
     );
+  },
+
+  updateProduct(product: any, images: any) {
+    const formData = new FormData();
+    formData.append("product", JSON.stringify(product));
+
+    for (let i = 0; i < images.length; i++) {
+      console.log(images);
+      formData.append("images", images[i]);
+    }
+
+    $axios({
+      method: "post",
+      url: "/product/update",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        // Обработка успешного ответа
+      })
+      .catch((error) => {
+        console.log(error);
+        // Обработка ошибки
+      });
   },
 
   saveProduct(product: any, images: any) {

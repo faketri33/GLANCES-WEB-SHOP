@@ -40,25 +40,12 @@ public class Promotion {
     @Column
     private LocalDate dateOfEnd;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private List<Product> promotionProductItems = new ArrayList<>();
 
-    /**
-     * Instantiates a new Promotion.
-     */
     public Promotion() {
     }
 
-    /**
-     * Instantiates a new Promotion.
-     *
-     * @param id          the id
-     * @param banner      the banner
-     * @param title       the title
-     * @param description the description
-     * @param dateOfStart the date of start
-     * @param dateOfEnd   the date of end
-     */
     public Promotion(UUID id, Image banner, String title, String description,
                      LocalDate dateOfStart, LocalDate dateOfEnd
     ) {

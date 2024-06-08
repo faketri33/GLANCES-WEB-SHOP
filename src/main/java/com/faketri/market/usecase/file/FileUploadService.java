@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class FileUploadService {
 
     static final Logger log = LoggerFactory.getLogger(FileUploadService.class);
-    private static final List<String> ALLOWED_EXTENSIONS = List.of("jpg", "jpeg", "png");
+    private static final List<String> ALLOWED_EXTENSIONS = List.of("jpg", "jpeg", "png", "image/png", "image/jpg", "image/jpeg");
     public static final String PRODUCT_PATH = "/app/images/product/";
     public static final String CATEGORIES_PATH = "/app/images/categories/";
     public static final String PROMOTION_PATH = "/app/images/promotion/";
@@ -29,10 +29,12 @@ public class FileUploadService {
     }
 
     public List<Image> saveImages(String path, String name, List<MultipartFile> images){
-            AtomicInteger iterator = new AtomicInteger(0);
-            return images.stream()
-                    .map(img -> saveImage(path, name + iterator.getAndIncrement(), img))
-                    .collect(Collectors.toList());
+        if (images == null) return null;
+
+        AtomicInteger iterator = new AtomicInteger(0);
+        return images.stream()
+                .map(img -> saveImage(path, name + iterator.getAndIncrement(), img))
+                .collect(Collectors.toList());
     }
 
     public Image saveImage(String path, String name, MultipartFile image){

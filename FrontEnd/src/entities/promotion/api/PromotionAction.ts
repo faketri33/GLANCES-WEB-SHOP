@@ -14,4 +14,28 @@ export const PromotionAction = {
       ? Promise.resolve(response.data)
       : Promise.reject(response);
   },
+  async createPromotion(promotion: Promotion, images: any) {
+    const formData = new FormData();
+    formData.append("promo", JSON.stringify(promotion));
+    formData.append("images", images);
+
+    $axios({
+      method: "post",
+      url: "/promotion/save",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        alert("Акция создана.");
+        // Обработка успешного ответа
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Ошибка создания, проверьте данные и повторите попытку.");
+        // Обработка ошибки
+      });
+  },
 };

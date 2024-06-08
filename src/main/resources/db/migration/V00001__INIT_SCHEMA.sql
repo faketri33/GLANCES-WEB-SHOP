@@ -136,8 +136,9 @@ create table promotion (
 );
 
 create table promotion_promotion_product_items (
-    promotion_id uuid not null,
-    promotion_product_items_id uuid not null unique
+    promotion_id UUID NOT NULL,
+    promotion_product_items_id UUID NOT NULL,
+    PRIMARY KEY (promotion_id, promotion_product_items_id)
 );
 
 create table rating (
@@ -267,15 +268,15 @@ alter table if exists promotion
    foreign key (banner_id)
    references image;
 
-alter table if exists promotion_promotion_product_items
-   add constraint FK5p4vw8uswjx357kna989lap52
-   foreign key (promotion_product_items_id)
-   references product;
+ALTER TABLE IF EXISTS promotion_promotion_product_items
+    ADD CONSTRAINT FK5p4vw8uswjx357kna989lap52
+    FOREIGN KEY (promotion_product_items_id)
+    REFERENCES product (id);
 
-alter table if exists promotion_promotion_product_items
-   add constraint FKcvore0jon84olyfnfwbwy4nma
-   foreign key (promotion_id)
-   references promotion;
+ALTER TABLE IF EXISTS promotion_promotion_product_items
+    ADD CONSTRAINT FKcvore0jon84olyfnfwbwy4nma
+    FOREIGN KEY (promotion_id)
+    REFERENCES promotion (id);
 
 alter table if exists rating
    add constraint FKlkuwie0au2dru36asng9nywmh

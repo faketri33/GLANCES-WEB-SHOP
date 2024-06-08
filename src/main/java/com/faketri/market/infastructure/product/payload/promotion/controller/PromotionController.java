@@ -48,7 +48,7 @@ public class PromotionController {
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
-    @RequestMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Promotion save(
             @Valid @RequestPart("promo") final Promotion promotion,
             @RequestPart("images") final MultipartFile images) {
@@ -56,7 +56,7 @@ public class PromotionController {
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
-    @RequestMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value = "/update", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Promotion update(
             @Valid @RequestPart("promo") final Promotion promotion,
             @RequestPart(value = "images", required = false) final MultipartFile images) {
