@@ -46,8 +46,8 @@ public class OrdersServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<Orders> findByUuidSuffixAndStatusOrder(String uuidSuffix, Pageable pageable, EStatusOrder statusOrder) {
-        return orderRepository.findByUuidSuffixAndStatusOrder(uuidSuffix, uuidSuffix.length(), pageable, statusOrder);
+    public Page<Orders> findByUuidSuffix(String uuidSuffix, Pageable pageable) {
+        return orderRepository.findByUuidSuffix(uuidSuffix, uuidSuffix.length(), pageable);
     }
 
     @Override

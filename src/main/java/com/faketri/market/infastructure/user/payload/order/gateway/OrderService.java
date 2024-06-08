@@ -15,7 +15,7 @@ public interface OrderService {
 
     Page<Orders> findAll(Pageable pageable);
 
-    Page<Orders> findByUuidSuffixAndStatusOrder(String uuidSuffix, Pageable pageable, EStatusOrder statusOrder);
+    Page<Orders> findByUuidSuffix(String uuidSuffix, Pageable pageable);
 
     Page<Orders> findByUser(UUID uuidUser, Pageable pageable);
 

@@ -62,21 +62,18 @@ export const OrdersActions = {
     return response.data;
   },
   async loadOrders(page: number, size: number) {
-    const response = await $axios.get("/orders/", {
-      params: { page: page, size: size },
-    });
-
-    return response.data;
+    return await $axios
+      .get("/orders/", {
+        params: { page: page, size: size },
+      })
+      .then((response) => response.data);
   },
-  async loadOrdersBySuffixAndStatus(
-    page: number,
-    size: number,
-    siffux: string,
-    status: number
-  ) {
-    const response = await $axios.get("/orders/", {
-      params: { page: page, size: size, siffux: siffux, status: status },
-    });
-    return response.data;
+  async loadOrdersBySuffix(page: number, size: number, suffix: string) {
+    return await $axios
+      .get("/orders/", {
+        params: { page: page, size: size, suffix: suffix },
+      })
+      .then((response) => response.data)
+      .catch((err) => alert("Повторите попытку позже."));
   },
 };

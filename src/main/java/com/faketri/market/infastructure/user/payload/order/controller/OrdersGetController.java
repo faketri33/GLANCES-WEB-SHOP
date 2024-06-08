@@ -50,13 +50,10 @@ public class OrdersGetController {
     public Page<OrdersDto> findAll(
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "20") Integer size,
-            @RequestParam(value = "suffix", required = false) String suffix,
-            @RequestParam(value = "status", required = false) EStatusOrder statusOrder
+            @RequestParam(value = "suffix", required = false) String suffix
     ) {
-        return suffix == null && statusOrder == null ?
-                orderService.findAll(PageRequest.of(page, size)).map(OrderMapper::toDto)
-                : orderService
-                .findByUuidSuffixAndStatusOrder(suffix, PageRequest.of(page, size), statusOrder)
-                .map(OrderMapper::toDto);
+        return suffix == null ?
+                  orderService.findAll(PageRequest.of(page, size)).map(OrderMapper::toDto)
+                : orderService.findByUuidSuffix(suffix, PageRequest.of(page, size)).map(OrderMapper::toDto);
     }
 }

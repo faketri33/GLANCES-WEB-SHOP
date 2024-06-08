@@ -37,7 +37,7 @@ export const ProductActions = {
     if (categoriesId) params.append("categories", String(categoriesId));
     params.append("name", encodeURIComponent(name));
     /* eslint-disable */
-    if (characteristics.length > 0) params.append(
+    if (characteristics) params.append(
       "characteristics",
       characteristics?.map((c) => c.id).join(",")
     );

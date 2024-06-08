@@ -164,7 +164,7 @@ export default {
   padding-top: 55px;
   height: 100%;
   width: 0;
-  position: fixed;
+  position: absolute;
   z-index: 1;
   top: 0;
   background: #ffff;

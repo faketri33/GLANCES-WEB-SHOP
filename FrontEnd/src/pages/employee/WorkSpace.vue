@@ -1,8 +1,8 @@
 <template>
   <div class="root">
-    <div class="row">
-      <div class="col-3 p-5">
-        <SliderVue style="height: 100%">
+    <div class="">
+      <div class="">
+        <SliderVue style="height: 100%; margin-left: 10px">
           <RouterLink
             class="text-decoration-none border-bottom"
             to="/user/workspace/product/"
@@ -35,7 +35,7 @@
           >
         </SliderVue>
       </div>
-      <div class="col mt-5">
+      <div class="container mt-2">
         <RouterView></RouterView>
       </div>
     </div>
