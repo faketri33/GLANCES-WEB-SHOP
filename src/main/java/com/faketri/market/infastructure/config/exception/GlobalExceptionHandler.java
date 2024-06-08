@@ -3,6 +3,7 @@ package com.faketri.market.infastructure.config.exception;
 import com.faketri.market.entity.exception.ImageFormatException;
 import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.product.payload.product.exception.NotEnoughProductException;
+import com.faketri.market.entity.product.payload.promotion.exception.ProductAlreadyParticipatesInPromoException;
 import com.faketri.market.entity.user.payload.user.exception.PasswordNotValidException;
 import com.faketri.market.entity.user.payload.user.exception.UserAlreadyExistsException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -121,6 +122,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ImageFormatException.class)
     public ResponseEntity<AppError> handleException(ImageFormatException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ProductAlreadyParticipatesInPromoException.class)
+    public ResponseEntity<AppError> handleException(ProductAlreadyParticipatesInPromoException e) {
         return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

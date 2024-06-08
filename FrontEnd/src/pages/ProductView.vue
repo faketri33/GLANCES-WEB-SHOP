@@ -3,17 +3,18 @@
     <h1 v-if="product">
       {{ product.brand.name + " " + product.nameModel }}
     </h1>
-    <div v-if="product" class="wrapper row rounded-2 shadow p-3">
-      <div class="col-12 col-sm-8 col-md-5 shadow rounded-2 p-2 img">
+    <div v-if="product" class="wrapper row rounded-2 ps-2 shadow">
+      <div class="col-12 col-sm-6 col-md-5 pt-2 img">
         <swiper
-          :slidesPerView="1"
+          :slides-per-view="1"
           :centered-slides="true"
-          :spaceBetween="10"
+          :space-between="10"
           :thumbs="{ swiper: thumbsSwiper }"
           :modules="modules"
+          class="mainSwiper"
         >
           <swiper-slide
-            class="text-center"
+            class="text-center border"
             v-for="image in product.image"
             :key="image.id"
           >
@@ -26,11 +27,11 @@
         </swiper>
         <swiper
           @swiper="setThumbsSwiper"
-          :spaceBetween="10"
-          :slidesPerView="3"
-          :freeMode="true"
+          :space-between="10"
+          :slides-per-view="3"
+          :free-mode="true"
           :navigation="true"
-          :watchSlidesProgress="true"
+          :watch-slides-progress="true"
           :modules="modules"
           class="mySwiper"
         >
@@ -43,7 +44,7 @@
           </swiper-slide>
         </swiper>
       </div>
-      <div class="characteristics col-12 col-sm-4">
+      <div class="characteristics col-12 col-sm-6 col-md-4 pt-2">
         <div class="characteristics">
           <h4>Характеристики</h4>
           <CharacteristicsToProductPage
@@ -52,12 +53,14 @@
         </div>
       </div>
       <div
-        class="info col-12 col-sm-4 col-md-3 info d-flex flex-column justify-content-center align-items-center"
+        class="info col-11 col-sm-8 col-md-3 col-lg-3 info d-flex flex-column justify-content-center align-items-center"
       >
-        <div class="price d-flex justify-content-around">
-          <h2 v-if="product.isPromoActive">{{ product.promoPrice }} руб.</h2>
+        <div class="price d-flex flex-column justify-content-around">
+          <h2 v-if="product.promoItem">{{ product.promoPrice }} руб.</h2>
           <h2
-            :class="product.isPromoActive ? 'text-decoration-line-through' : ''"
+            :class="
+              product.promoItem ? 'text-decoration-line-through opacity-50' : ''
+            "
           >
             {{ product.price }} руб.
           </h2>
@@ -79,8 +82,8 @@
           <button
             @click="
               userStore.isInBasketProduct(product.id)
-                ? BasketAction.removeFromBasket(product)
-                : BasketAction.addProductBasket(product)
+                ? userStore.removeBasket(product.id)
+                : userStore.addBasket(product.id)
             "
             class="btn btn-primary w-100"
           >
@@ -93,14 +96,14 @@
         </div>
       </div>
       <div class="additional-information mt-5">
-        <div class="additional-information-body">
+        <div class="additional-information-body border-top">
           <div class="description">
             <h1>Описание</h1>
             <p>
               {{ product.description }}
             </p>
           </div>
-          <div class="rating">
+          <div class="rating border-top">
             <h1>Отзывы</h1>
             <div class="rating-add">
               <button
@@ -118,7 +121,13 @@
                     @submit.prevent="addRating"
                   >
                     <label for="grade">Рейтинг</label>
-                    <input type="text" id="grade" v-model="review.grade" />
+                    <input
+                      type="number"
+                      min="1"
+                      max="5"
+                      id="grade"
+                      v-model="review.grade"
+                    />
 
                     <label for="description">Описание</label>
                     <input
@@ -149,7 +158,6 @@
 </template>
 
 <script setup>
-import { BasketAction } from "@/entities/basket/api";
 import { onMounted, ref, watch } from "vue";
 import { ProductActions } from "@/entities/product/api/model/Actions";
 import { useRoute } from "vue-router";
@@ -236,17 +244,71 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-@media screen and (max-width: 570px) {
+.img {
+  position: relative;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.swiper-slide img {
+  height: auto;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  transition: transform 0.3s ease;
+}
+
+.swiper-slide img:hover {
+  transform: scale(1.1);
+}
+
+.mySwiper {
+  margin-top: 20px;
+}
+
+.mySwiper .swiper-slide {
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.mySwiper .swiper-slide-thumb-active {
+  opacity: 1;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #000;
+  transition: color 0.3s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #007bff;
+}
+
+.swiper-pagination-bullet {
+  background: #007bff;
+}
+
+.swiper-pagination-bullet-active {
+  background: #000;
+}
+
+@media screen and (max-width: 768px) {
   .info {
     position: fixed;
     bottom: 60px;
     z-index: 999;
     background-color: white;
-    width: 100%;
+    padding: 0;
   }
   .container {
-    margin: 0 auto;
-    margin: 0 0 150px 0;
+    margin: 0 auto 150px;
   }
 }
 </style>

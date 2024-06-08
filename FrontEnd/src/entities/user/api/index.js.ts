@@ -99,7 +99,7 @@ export const userStoreModule = defineStore("user", {
     addBasket(product: string) {
       if (this.isLogin) {
         BasketAction.addProductBasket(this.user.basket.id, product).then(
-          (bakset) => (this.user.basket = bakset)
+          (response) => (this.user.basket = response.data)
         );
       } else alert("Вы не авторизованы");
     },
@@ -111,7 +111,9 @@ export const userStoreModule = defineStore("user", {
         }, 0);
         if (index > -1) {
           this.user.basket.products.splice(index, 1);
-          BasketAction.removeFromBasket(this.user.basket.id, product);
+          BasketAction.removeFromBasket(this.user.basket.id, product)
+            .then((response) => (this.user.basket = response.data))
+            .catch((err) => alert("Повторите попытку позже."));
         }
       } else alert("Вы не авторизованы");
     },

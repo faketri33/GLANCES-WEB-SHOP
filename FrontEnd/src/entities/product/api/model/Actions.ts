@@ -27,20 +27,29 @@ export const ProductActions = {
     pageSize: number,
     categoriesId: string,
     characteristics: Characteristics[],
+    minPrice: number,
+    maxPrice: number,
     name: string
   ) {
-    const response = await $axios.get("/product/search", {
-      params: {
-        number: pageNum,
-        size: pageSize,
-        categories: categoriesId,
-        name: encodeURIComponent(name),
-        characteristics: characteristics?.map((c) => c.id).join(",") || null,
-      },
-    });
-    return response.data;
+    const params = new URLSearchParams();
+    params.append("number", String(pageNum));
+    params.append("size", String(pageSize));
+    if (categoriesId) params.append("categories", String(categoriesId));
+    params.append("name", encodeURIComponent(name));
+    /* eslint-disable */
+    if (characteristics.length > 0) params.append(
+      "characteristics",
+      characteristics?.map((c) => c.id).join(",")
+    );
+    if (minPrice) params.append("minPrice", String(minPrice));
+    if (maxPrice) params.append("maxPrice", String(maxPrice));
+    return await $axios
+      .get("/product/search", {
+        params,
+      })
+      .then((responseData) => Promise.resolve(responseData.data))
+      .catch((err) => alert("Повторите попытку позже."));
   },
-
   loadProductInPromotion(
     pageNumber: number,
     pageSize: number

@@ -20,6 +20,7 @@ import UserOrders from "@/pages/UserOrders.vue";
 import ProductDelete from "@/entities/product/ui/ProductDelete.vue";
 import PromoPages from "@/pages/employee/PromoPages.vue";
 import PromoCreate from "@/entities/promotion/ui/PromoCreate.vue";
+import PromoUpdate from "@/entities/promotion/ui/PromoUpdate.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -86,6 +87,11 @@ const routes: Array<RouteRecordRaw> = [
             path: "/user/workspace/promo/create",
             name: "PromoCreate",
             component: PromoCreate,
+          },
+          {
+            path: "/user/workspace/promo/update",
+            name: "PromoUpdate",
+            component: PromoUpdate,
           },
         ],
       },

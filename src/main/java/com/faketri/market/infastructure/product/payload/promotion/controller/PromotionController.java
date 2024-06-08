@@ -8,11 +8,15 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,6 +51,17 @@ public class PromotionController {
         return promotionService.findById(id);
     }
 
+    @RequestMapping("/search")
+    public Page<Promotion> likeByName(@RequestParam("name") String name,
+                                      @RequestParam(name = "number", required = true, defaultValue = "0")
+                                final Integer pageNumber,
+                                      @RequestParam(name = "size", required = true, defaultValue = "20")
+                                final Integer pageSize) {
+        name = URLDecoder.decode(name, StandardCharsets.UTF_8);
+        log.info("likeByName: " + name);
+        return promotionService.likeByName(name, PageRequest.of(pageNumber, pageSize));
+    }
+
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Promotion save(
@@ -60,7 +75,7 @@ public class PromotionController {
     public Promotion update(
             @Valid @RequestPart("promo") final Promotion promotion,
             @RequestPart(value = "images", required = false) final MultipartFile images) {
-        return promotionService.create(promotion, images);
+        return promotionService.update(promotion, images);
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")

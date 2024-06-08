@@ -5,7 +5,10 @@ import com.faketri.market.entity.product.payload.categories.model.Categories;
 import com.faketri.market.entity.product.payload.characteristics.model.Characteristics;
 import com.faketri.market.entity.product.payload.product.model.Product;
 import com.faketri.market.infastructure.product.payload.product.gateway.filter.ProductSpecification;
+import com.faketri.market.usecase.product.payload.product.ProductServiceImpl;
 import jakarta.persistence.criteria.Join;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +17,7 @@ import java.util.UUID;
 
 @Component
 public class ProductSpecificationImpl implements ProductSpecification {
+    static final Logger log = LoggerFactory.getLogger(ProductSpecificationImpl.class);
 
     @Override
     public Specification<Product> hasId(List<UUID> UUID) {
@@ -85,6 +89,7 @@ public class ProductSpecificationImpl implements ProductSpecification {
     }
 
     public Specification<Product> priceBetween(Integer minPrice, Integer maxPrice) {
+        log.info("priceBetween: " + minPrice + ", " + maxPrice);
         return (root, query, criteriaBuilder) -> {
             if (minPrice != null && maxPrice != null) {
                 return criteriaBuilder.between(root.get("price"), minPrice, maxPrice);

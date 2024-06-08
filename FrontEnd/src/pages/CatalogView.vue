@@ -69,6 +69,9 @@ const categoriesId: string = route.params.id.toString();
 const userStore = userStoreModule();
 const maxPrice = ref(0);
 
+const filterMaxPrice = ref(0);
+const filterMinPrice = ref(0);
+
 const pages = ref<PageableType<Product>[]>([]);
 const characteristics = ref<Characteristics[]>();
 
@@ -82,7 +85,13 @@ const changePages = async (pageIndex: number) => {
   }
 };
 
-const useFiltered = async (selectedValues: Characteristics[]) => {
+const useFiltered = async (
+  selectedValues: Characteristics[],
+  minPrice: number,
+  maxPrice: number
+) => {
+  filterMaxPrice.value = maxPrice;
+  filterMinPrice.value = minPrice;
   characteristicsForFilter.value = selectedValues;
   pages.value = [];
   const res = await loadPages();
@@ -95,6 +104,8 @@ const loadPages = async (): Promise<PageableType<Product>> => {
     pageSize,
     categoriesId,
     characteristicsForFilter.value,
+    filterMinPrice.value,
+    filterMaxPrice.value,
     ""
   );
 };

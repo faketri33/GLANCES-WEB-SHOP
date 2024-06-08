@@ -94,6 +94,8 @@ const loadProduct = async (searchQuery) => {
       10,
       null,
       null,
+      null,
+      null,
       searchQuery
     );
 };

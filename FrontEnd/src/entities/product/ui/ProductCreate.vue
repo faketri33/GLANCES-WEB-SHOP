@@ -135,14 +135,11 @@ const click = () => {
 };
 
 const handleFileSelect = (event) => {
-  // Получить выбранные файлы
-  const files = event.target.files;
-  // Сохранить файлы в переменной
-  selectedFiles = files;
+  selectedFiles = event.target.files;
 };
 
 const delInputs = () => {
-  if (characteristics.value.length == 1) return;
+  if (characteristics.value.length === 1) return;
   characteristics.value = characteristics.value.slice(
     0,
     characteristics.value.length - 1

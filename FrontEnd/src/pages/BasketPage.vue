@@ -28,6 +28,7 @@
                 type="number"
                 :id="productItem.id"
                 min="1"
+                max="100"
                 v-model="productItem.quantity"
                 @change="updateQuantity(productItem)"
               />
@@ -68,7 +69,11 @@ console.log("BASKET");
 
 const updateQuantity = (productItem) => {
   console.log(productItem);
-  if (productItem.quantity && productItem.quantity > 0)
+  if (
+    productItem.quantity &&
+    productItem.quantity > 0 &&
+    productItem.quantity < 100
+  )
     userStore.updateQuantity(productItem);
   else alert("Некорректное количество товара.");
 };

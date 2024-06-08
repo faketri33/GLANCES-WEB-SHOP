@@ -15,7 +15,11 @@ export const OrdersActions = {
         alert("Попробуйте повторить операцию позже.");
       });
   },
-  async createOrder(product: Array<ProductItem>) {
+  createOrder: async function (product: Array<ProductItem>) {
+    if (product) {
+      alert("Заказ не может быть пустой");
+      return;
+    }
     return await $axios
       .post("/orders/create", product)
       .then(() => alert("Заказ создан!"))

@@ -215,8 +215,7 @@ const selectProduct = (product) => {
 };
 
 const handleFileSelect = (event) => {
-  const files = event.target.files;
-  selectedFiles = files;
+  selectedFiles = event.target.files;
 };
 
 const delInputs = () => {
@@ -244,6 +243,8 @@ const loadProduct = async (searchQuery) => {
     products.value = await ProductActions.searchProduct(
       0,
       10,
+      null,
+      null,
       null,
       null,
       searchQuery

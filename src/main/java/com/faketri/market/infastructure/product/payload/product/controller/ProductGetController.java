@@ -70,7 +70,7 @@ public class ProductGetController {
     @RequestMapping(path = "/top-selling")
     public Page<Product> findTopSelling(
             @RequestParam(name = "number", required = true,
-                    defaultValue = "1") final Integer pageNumber,
+                    defaultValue = "0") final Integer pageNumber,
             @RequestParam(name = "size", required = true,
                     defaultValue = "20") final Integer pageSize
     ) {

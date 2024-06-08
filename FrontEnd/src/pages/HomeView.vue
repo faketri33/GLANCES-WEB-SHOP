@@ -5,7 +5,7 @@
         <swiper-slide v-for="promo in promotionData" :key="promo.id">
           <router-link :to="'/promotion/' + promo.id">
             <img
-              :src="'http://localhost:9000/api/image/' + promo.banner.id"
+              :src="'http://localhost:9000/api/image/' + promo?.banner?.id"
               alt=""
               style="width: 100%; height: 455px"
             />

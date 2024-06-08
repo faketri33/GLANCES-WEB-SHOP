@@ -127,13 +127,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<Product> findBySearchParam(Pageable pageable, Integer minPrice, Integer maxPrice, String name, List<UUID> characteristics, UUID categoriesId) {
 
-        Specification<Product> specification = productSpecification.likeByNameModelOrBrandName(name);
+        Specification<Product> specification = productSpecification.priceBetween(minPrice, maxPrice);
 
+        if (name != null)
+            specification = specification.and(productSpecification.likeByNameModelOrBrandName(name));
         if (characteristics != null)
             specification = specification.and(productSpecification.hasCharacteristicsByUUID(characteristics));
         if (categoriesId != null) specification = specification.and(productSpecification.hasCategories(categoriesId));
-
-        specification.and(productSpecification.priceBetween(minPrice, maxPrice));
 
         return productImpl.findAll(specification, pageable);
     }

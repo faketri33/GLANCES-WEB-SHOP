@@ -147,7 +147,7 @@ export default {
           acc[key].values.push({
             value: obj.value,
             id: obj.id,
-            hidden: acc[key].values.length < 3 ? true : false,
+            hidden: acc[key].values.length < 3,
           });
           return acc;
         },

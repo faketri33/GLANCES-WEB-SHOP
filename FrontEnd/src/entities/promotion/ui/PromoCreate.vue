@@ -36,6 +36,7 @@
           type="text"
           class="form-control"
           id="title"
+          minlength="6"
           v-model="promotion.title"
           required
         />
@@ -56,6 +57,7 @@
         <textarea
           class="form-control"
           id="description"
+          minlength="100"
           v-model="promotion.description"
           rows="3"
           required
@@ -67,6 +69,7 @@
           class="form-control"
           id="conditions"
           v-model="promotion.conditions"
+          minlength="100"
           rows="3"
           required
         ></textarea>
@@ -77,6 +80,7 @@
           type="date"
           class="form-control"
           id="dateOfStart"
+          :min="minStartDay"
           v-model="promotion.dateOfStart"
           required
         />
@@ -87,6 +91,7 @@
           type="date"
           class="form-control"
           id="dateOfEnd"
+          :min="minEndDay"
           v-model="promotion.dateOfEnd"
           required
         />
@@ -107,7 +112,11 @@
             />
             {{ product.brand.name }} {{ product.nameModel }}
           </div>
-          <button type="button" class="btn btn-outline-danger ms-3">
+          <button
+            @click="removeProduct(product)"
+            type="button"
+            class="btn btn-outline-danger ms-3"
+          >
             Удалить
           </button>
           <div class="discount">
@@ -139,6 +148,12 @@ import { PromotionAction } from "@/entities/promotion/api/PromotionAction";
 const products = ref([]);
 const searchQuery = ref("");
 const selectedFiles = ref();
+const todayStart = new Date(Date.now());
+todayStart.setDate(todayStart.getDate() + 1);
+const todayEnd = new Date(Date.now());
+todayEnd.setDate(todayEnd.getDate() + 3);
+const minStartDay = new Date(todayStart).toISOString().split("T")[0];
+const minEndDay = new Date(todayEnd).toISOString().split("T")[0];
 
 const promotion = {
   id: "",
@@ -167,9 +182,17 @@ const loadProduct = async (searchQuery) => {
       10,
       null,
       null,
+      null,
+      null,
       searchQuery
     );
 };
+const removeProduct = (product) => {
+  promotionProductItems.value = promotionProductItems.value.filter(
+    (prod) => prod.id !== product.id
+  );
+};
+
 const submitPromotion = () => {
   console.log(promotion);
   promotion.promotionProductItems = promotionProductItems.value;

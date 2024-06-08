@@ -3,14 +3,12 @@ import { Basket } from "../model/basket";
 import { ProductItem } from "@/entities/product/model/ProductItem";
 
 export const BasketAction = {
-  async addProductBasket(basketId: string, productId: string): Promise<Basket> {
-    return (
-      await $axios.put("/basket/add/" + basketId, null, {
-        params: {
-          productId: productId,
-        },
-      })
-    ).data;
+  async addProductBasket(basketId: string, productId: string) {
+    return await $axios.put("/basket/add/" + basketId, null, {
+      params: {
+        productId: productId,
+      },
+    });
   },
   async updateQunatity(
     productItem: ProductItem,
@@ -27,12 +25,10 @@ export const BasketAction = {
     ).data;
   },
   async removeFromBasket(basketId: string, productId: string) {
-    return (
-      await $axios.delete("/basket/remove/" + basketId, {
-        params: {
-          productId: productId,
-        },
-      })
-    ).data;
+    return await $axios.delete("/basket/remove/" + basketId, {
+      params: {
+        productId: productId,
+      },
+    });
   },
 };

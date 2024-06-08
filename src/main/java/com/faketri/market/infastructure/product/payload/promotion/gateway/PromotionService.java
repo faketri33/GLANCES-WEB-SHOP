@@ -17,9 +17,13 @@ public interface PromotionService {
 
     Page<Promotion> findAll(Pageable pageable);
 
+    Page<Promotion> likeByName(String name, Pageable pageable);
+
     void isPromotionActive(Promotion promotion);
 
     Promotion create(Promotion productCreateRequest, MultipartFile multipartFiles);
+
+    Promotion update(Promotion promotion, MultipartFile multipartFiles);
 
     Promotion save(Promotion promotion);
 

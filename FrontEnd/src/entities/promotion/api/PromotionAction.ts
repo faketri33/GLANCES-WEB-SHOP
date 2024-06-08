@@ -8,6 +8,22 @@ export const PromotionAction = {
       ? Promise.resolve(response.data)
       : Promise.reject(response);
   },
+  async loadPromoByName(
+    name: string,
+    number: number,
+    size: number
+  ): Promise<Promotion[]> {
+    const response = await $axios.get("/promotion/search", {
+      params: {
+        name: name,
+        number: number,
+        size: size,
+      },
+    });
+    return response.status === 200
+      ? Promise.resolve(response.data)
+      : Promise.reject(response);
+  },
   async loadPromoById(id: string): Promise<Promotion> {
     const response = await $axios.get("/promotion/" + id);
     return response.status === 200
@@ -29,12 +45,36 @@ export const PromotionAction = {
     })
       .then((response) => {
         console.log(response);
-        alert("Акция создана.");
         // Обработка успешного ответа
       })
       .catch((error) => {
-        console.log(error);
-        alert("Ошибка создания, проверьте данные и повторите попытку.");
+        alert(
+          "Ошибка создания, проверьте данные и повторите попытку. Возможно товар уже участвует в акции."
+        );
+        // Обработка ошибки
+      });
+  },
+  async updatePromotion(promotion: Promotion, images: any) {
+    const formData = new FormData();
+    formData.append("promo", JSON.stringify(promotion));
+    if (images) formData.append("images", images);
+
+    $axios({
+      method: "post",
+      url: "/promotion/update",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        // Обработка успешного ответа
+      })
+      .catch((error) => {
+        alert(
+          "Ошибка создания, проверьте данные и повторите попытку. Возможно товар уже участвует в акции."
+        );
         // Обработка ошибки
       });
   },
