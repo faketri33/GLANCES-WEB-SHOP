@@ -27,12 +27,6 @@ public class Brand {
     public Brand() {
     }
 
-    /**
-     * Instantiates a new Brand.
-     *
-     * @param id   the id
-     * @param name the name
-     */
     public Brand(UUID id, String name) {
         this.id = id;
         this.name = name;

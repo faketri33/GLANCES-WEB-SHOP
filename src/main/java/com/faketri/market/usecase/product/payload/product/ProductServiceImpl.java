@@ -129,11 +129,12 @@ public class ProductServiceImpl implements ProductService {
 
         Specification<Product> specification = productSpecification.priceBetween(minPrice, maxPrice);
 
-        if (name != null)
+        if (name != null && !name.isEmpty())
             specification = specification.and(productSpecification.likeByNameModelOrBrandName(name));
-        if (characteristics != null)
+        if (characteristics != null && !characteristics.isEmpty())
             specification = specification.and(productSpecification.hasCharacteristicsByUUID(characteristics));
-        if (categoriesId != null) specification = specification.and(productSpecification.hasCategories(categoriesId));
+        if (categoriesId != null)
+            specification = specification.and(productSpecification.hasCategories(categoriesId));
 
         return productImpl.findAll(specification, pageable);
     }

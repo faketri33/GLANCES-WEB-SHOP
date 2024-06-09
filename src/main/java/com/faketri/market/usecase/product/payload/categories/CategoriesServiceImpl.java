@@ -48,12 +48,18 @@ public class CategoriesServiceImpl implements CategoriesService {
     }
 
     @Override
+    public Page<Categories> findByName(String name, Pageable pageable) {
+        return categoriesRepository.findByNameLike('%' + name.toLowerCase().trim() + "%", pageable);
+    }
+
+    @Override
     public Categories create(CategoriesRequest categoriesRequest, MultipartFile images) {
         Categories categories = new Categories();
         categories.setName(categoriesRequest.getName());
-        categories.setImage(
-                fileUploadService.saveImage(FileUploadService.CATEGORIES_PATH, categoriesRequest.getName(), images)
-        );
+        if (images != null)
+            categories.setImage(
+                    fileUploadService.saveImage(FileUploadService.CATEGORIES_PATH, categoriesRequest.getName(), images)
+            );
 
         return save(categories);
     }
@@ -65,5 +71,17 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     public void delete(Categories categories) {
         categoriesRepository.delete(categories);
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        categoriesRepository.deleteById(id);
+    }
+
+    @Override
+    public Categories update(Categories categoriesRequest, MultipartFile images) {
+        if(images != null)
+            categoriesRequest.setImage(fileUploadService.saveImage(FileUploadService.CATEGORIES_PATH, categoriesRequest.getName(), images));
+        return categoriesRepository.save(categoriesRequest);
     }
 }

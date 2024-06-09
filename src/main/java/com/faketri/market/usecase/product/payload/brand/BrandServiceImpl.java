@@ -27,12 +27,6 @@ public class BrandServiceImpl implements BrandService {
         this.brandImpl = brandImpl;
     }
 
-    /**
-     * Find by id brand.
-     *
-     * @param id the id
-     * @return the brand
-     */
     public Brand findById(UUID id) {
         return brandImpl.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -49,15 +43,18 @@ public class BrandServiceImpl implements BrandService {
         return brandImpl.findAll(pageable);
     }
 
-    /**
-     * Save brand.
-     *
-     * @param brand the brand
-     * @return the brand
-     */
+    @Override
+    public Page<Brand> searchByName(String name, Pageable pageable) {
+        return brandImpl.findByNameLike('%' + name.toLowerCase().trim() + '%', pageable);
+    }
+
     public Brand save(Brand brand) {
         return brandImpl.findByName(brand.getName())
                 .orElse(brandImpl.save(brand));
+    }
+
+    public Brand update(Brand brand) {
+        return brandImpl.save(brand);
     }
 
     @Override

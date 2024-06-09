@@ -5,13 +5,13 @@
         <SliderVue style="height: 100%; margin-left: 10px">
           <RouterLink
             class="text-decoration-none border-bottom"
-            to="/user/workspace/product/"
+            to="/user/workspace/product/create"
             style="margin-left: 5px; font-size: 26px"
             >Управление продуктами</RouterLink
           >
           <RouterLink
             class="text-decoration-none border-bottom"
-            to="/user/workspace/promo/"
+            to="/user/workspace/promo/create"
             style="margin-left: 5px; font-size: 26px"
             >Управление акциями</RouterLink
           >
@@ -19,13 +19,13 @@
             class="text-decoration-none border-bottom"
             to="/user/workspace/brand/create"
             style="margin-left: 5px; font-size: 26px"
-            >Добавить бренд</RouterLink
+            >Управление брендами</RouterLink
           >
           <RouterLink
             class="text-decoration-none border-bottom"
             to="/user/workspace/categories/create"
             style="margin-left: 5px; font-size: 26px"
-            >Добавить категорию</RouterLink
+            >Управление категориями</RouterLink
           >
           <RouterLink
             class="text-decoration-none border-bottom"

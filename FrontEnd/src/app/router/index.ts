@@ -21,6 +21,13 @@ import ProductDelete from "@/entities/product/ui/ProductDelete.vue";
 import PromoPages from "@/pages/employee/PromoPages.vue";
 import PromoCreate from "@/entities/promotion/ui/PromoCreate.vue";
 import PromoUpdate from "@/entities/promotion/ui/PromoUpdate.vue";
+import CategoriesPages from "@/pages/employee/CategoriesPages.vue";
+import BrandPages from "@/pages/employee/BrandPages.vue";
+import PromoDelete from "@/entities/promotion/ui/PromoDelete.vue";
+import BrandUpdate from "@/entities/brand/ui/BrandUpdate.vue";
+import BrandDelete from "@/entities/brand/ui/BrandDelete.vue";
+import CategoriesUpdate from "@/entities/categories/ui/CategoriesUpdate.vue";
+import CategoriesDelete from "@/entities/categories/ui/CategoriesDelete.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -93,6 +100,11 @@ const routes: Array<RouteRecordRaw> = [
             name: "PromoUpdate",
             component: PromoUpdate,
           },
+          {
+            path: "/user/workspace/promo/delete",
+            name: "PromoDelete",
+            component: PromoDelete,
+          },
         ],
       },
       {
@@ -118,14 +130,48 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
-        path: "/user/workspace/brand/create",
+        path: "/user/workspace/brand",
         name: "BrandPage",
-        component: BrandCreate,
+        component: BrandPages,
+        children: [
+          {
+            path: "/user/workspace/brand/create",
+            name: "BrandCreate",
+            component: BrandCreate,
+          },
+          {
+            path: "/user/workspace/brand/update",
+            name: "BrandUpdate",
+            component: BrandUpdate,
+          },
+          {
+            path: "/user/workspace/brand/delete",
+            name: "BrandDelete",
+            component: BrandDelete,
+          },
+        ],
       },
       {
-        path: "/user/workspace/categories/create",
-        name: "CategoriesCreate",
-        component: CategoriesCreate,
+        path: "/user/workspace/categories",
+        name: "CategoriesPage",
+        component: CategoriesPages,
+        children: [
+          {
+            path: "/user/workspace/categories/create",
+            name: "CategoriesCreate",
+            component: CategoriesCreate,
+          },
+          {
+            path: "/user/workspace/categories/update",
+            name: "CategoriesUpdate",
+            component: CategoriesUpdate,
+          },
+          {
+            path: "/user/workspace/categories/delete",
+            name: "CategoriesDelete",
+            component: CategoriesDelete,
+          },
+        ],
       },
       {
         path: "/user/workspace/orders",

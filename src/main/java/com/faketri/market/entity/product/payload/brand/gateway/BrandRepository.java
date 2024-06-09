@@ -1,6 +1,8 @@
 package com.faketri.market.entity.product.payload.brand.gateway;
 
 import com.faketri.market.entity.product.payload.brand.model.Brand;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,13 +22,6 @@ import java.util.UUID;
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, UUID> {
 
-    /**
-     * Update name by id int.
-     *
-     * @param name the name
-     * @param id   the id
-     * @return the int
-     */
     @Transactional
     @Modifying
     @Query("update Brand b set b.name = ?1 where b.id = ?2")
@@ -39,12 +34,10 @@ public interface BrandRepository extends JpaRepository<Brand, UUID> {
 
     void deleteById(UUID aLong);
 
-    /**
-     * Find by name optional.
-     *
-     * @param name the name
-     * @return the optional
-     */
     Optional<Brand> findByName(String name);
+
+    @Query("select b from Brand b where LOWER(b.name) like ?1")
+    Page<Brand> findByNameLike(String name, Pageable pageable);
+
 
 }

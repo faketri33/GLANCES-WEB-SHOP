@@ -1,7 +1,10 @@
 package com.faketri.market.entity.product.payload.categories.gateway;
 
 import com.faketri.market.entity.product.payload.categories.model.Categories;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,22 +26,12 @@ public interface CategoriesRepository extends JpaRepository<Categories, UUID> {
     @Override
     List<Categories> findAll();
 
-    /**
-     * Exists by name boolean.
-     *
-     * @param name the name
-     * @return the boolean
-     */
     boolean existsByName(String name);
 
-    /**
-     * Find by name optional.
-     *
-     * @param name the name
-     * @return the optional
-     */
     Optional<Categories> findByName(String name);
 
     Categories save(Categories categories);
 
+    @Query("select c from Categories c where LOWER(c.name) like ?1")
+    Page<Categories> findByNameLike(String name, Pageable pageable);
 }

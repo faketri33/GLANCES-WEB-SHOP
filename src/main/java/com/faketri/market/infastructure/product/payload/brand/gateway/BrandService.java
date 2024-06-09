@@ -15,7 +15,11 @@ public interface BrandService {
 
     Page<Brand> findAll(Pageable pageable);
 
+    Page<Brand> searchByName(String name, Pageable pageable);
+
     Brand save(Brand brand);
+
+    Brand update(Brand brand);
 
     void deleteById(UUID uuid);
 

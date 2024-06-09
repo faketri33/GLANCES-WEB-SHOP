@@ -19,6 +19,7 @@
         type="text"
         class="input-group-text shadow"
         placeholder="Название категории"
+        minlength="3"
       />
       <button class="btn btn-success">Добавить</button>
     </form>
@@ -32,7 +33,9 @@ var selectedFiles = null;
 const name = ref("");
 
 const saveCategories = () => {
-  CategoriesAction.saveCategories(name.value, selectedFiles);
+  if (!selectedFiles || name.value.trim().length === 0) {
+    alert("Заполните все поля.");
+  } else CategoriesAction.saveCategories(name.value, selectedFiles);
 };
 
 const handleFileSelect = (event) => {

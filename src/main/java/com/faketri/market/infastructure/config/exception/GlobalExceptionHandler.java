@@ -8,6 +8,7 @@ import com.faketri.market.entity.user.payload.user.exception.PasswordNotValidExc
 import com.faketri.market.entity.user.payload.user.exception.UserAlreadyExistsException;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.postgresql.util.PSQLException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
@@ -127,6 +128,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProductAlreadyParticipatesInPromoException.class)
     public ResponseEntity<AppError> handleException(ProductAlreadyParticipatesInPromoException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<AppError> handleException(IllegalArgumentException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PSQLException.class)
+    public ResponseEntity<AppError> handlePSQLException(PSQLException e) {
         return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

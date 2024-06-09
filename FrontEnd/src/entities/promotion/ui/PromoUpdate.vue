@@ -1,6 +1,6 @@
 <template>
   <div class="root container">
-    <p>Выберите продукт при помощи поиска</p>
+    <p>Выберите акцию при помощи поиска</p>
     <search-component
       v-model:searchQuery="searchQueryPromo"
       :results="promotions.content"

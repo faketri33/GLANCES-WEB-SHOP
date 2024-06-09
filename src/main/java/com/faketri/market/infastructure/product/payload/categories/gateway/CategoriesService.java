@@ -17,10 +17,14 @@ public interface CategoriesService {
 
     Page<Categories> findAll(Pageable pageable);
 
+    Page<Categories> findByName(String name, Pageable pageable);
+
     Categories create(CategoriesRequest categories, MultipartFile images);
 
     Categories save(Categories categories);
 
     void delete(Categories categories);
 
+    void deleteById(UUID id);
+    Categories update(Categories categoriesRequest, MultipartFile images);
 }
