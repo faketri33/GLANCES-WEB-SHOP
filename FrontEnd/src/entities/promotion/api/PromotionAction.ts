@@ -76,6 +76,7 @@ export const PromotionAction = {
       .then((response) => {
         console.log(response);
         // Обработка успешного ответа
+        alert("Данные успешно обновлены");
       })
       .catch((error) => {
         alert(

@@ -20,7 +20,12 @@ export const ProductActions = {
     );
   },
   async deleteProduct(id: string) {
-    return await $axios.post(`/product/delete/${id}`);
+    return await $axios
+      .post(`/product/delete/${id}`)
+      .then(() => alert("Продукт успешно удален."))
+      .catch(() =>
+        alert("Ошибка удаления продукта. Попробуйте повторить попытку позже.")
+      );
   },
   async searchProduct(
     pageNum: number,
@@ -35,7 +40,7 @@ export const ProductActions = {
     params.append("number", String(pageNum));
     params.append("size", String(pageSize));
     if (categoriesId) params.append("categories", String(categoriesId));
-    params.append("name", encodeURIComponent(name));
+    params.append("name", name);
     /* eslint-disable */
     if (characteristics) params.append(
       "characteristics",
@@ -106,11 +111,12 @@ export const ProductActions = {
     })
       .then((response) => {
         console.log(response);
-        // Обработка успешного ответа
+        alert("Данные о продукте успешно обновлены.")
       })
       .catch((error) => {
         console.log(error);
         // Обработка ошибки
+        alert("Ошибка обновления данных. Проверьте корректность данных.")
       });
   },
 
@@ -132,11 +138,10 @@ export const ProductActions = {
       },
     })
       .then((response) => {
-        console.log(response);
-        // Обработка успешного ответа
+        alert("Продукт успешно сохранен.");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         // Обработка ошибки
         if (error.response.data.message) {
           let formattedErrors = [];

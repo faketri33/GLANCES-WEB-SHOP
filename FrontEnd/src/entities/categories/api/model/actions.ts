@@ -43,10 +43,12 @@ export const CategoriesAction = {
       .then((response) => {
         console.log(response);
         // Обработка успешного ответа
+        alert("Данные категории успешно обновлены.");
       })
       .catch((error) => {
         console.log(error);
         // Обработка ошибки
+        alert("Ошибка обновления данных.");
       });
   },
   saveCategories(categories: any, images: any) {
@@ -69,10 +71,12 @@ export const CategoriesAction = {
       .then((response) => {
         console.log(response);
         // Обработка успешного ответа
+        alert("Категория успешно сохранена.");
       })
       .catch((error) => {
         console.log(error);
         // Обработка ошибки
+        alert("Ошибка сохранения категории.");
       });
   },
 };

@@ -246,7 +246,9 @@ const removeProduct = (product) => {
 
 const submitPromotion = () => {
   console.log(promotion.value);
-  PromotionAction.updatePromotion(promotion.value, selectedFiles.value);
+  if (promotion.value.id)
+    PromotionAction.updatePromotion(promotion.value, selectedFiles.value);
+  else alert("Выберите продукт");
 };
 
 watch(searchQuery, (newQuery) => {

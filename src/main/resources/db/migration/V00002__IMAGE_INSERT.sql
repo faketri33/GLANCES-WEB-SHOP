@@ -46,7 +46,6 @@ INSERT INTO image (id, path) VALUES
 ('550e8400-e29b-41d4-a716-446655440035', '/app/images/product/samsung-3-galaxy-s21.png'),
 ('550e8400-e29b-41d4-a716-446655440036', '/app/images/product/samsung-4-galaxy-s21.png'),
 ('550e8400-e29b-41d4-a716-446655440037', '/app/images/product/samsung-5-galaxy-s21.png'),
-('550e8400-e29b-41d4-a716-446655440038', '/app/images/product/samsung-6-galaxy-s21.png'),
 -- Sony Vaio
 ('550e8400-e29b-41d4-a716-446655440039', '/app/images/product/sony-0-vaio.png'),
 ('550e8400-e29b-41d4-a716-446655440040', '/app/images/product/sony-1-vaio.png'),
@@ -85,4 +84,15 @@ INSERT INTO image (id, path) VALUES
 ('550e8400-e29b-41d4-a716-446655440069', '/app/images/product/Sony-2-Viao-Z.png'),
 -- Promotion banner
 ('550e8400-e29b-41d4-a716-446655440070','/app/images/promotion/promotion_banner_summber.png'),
-('550e8400-e29b-41d4-a716-446655440071','/app/images/promotion/promo_banner_sales.png');
+('550e8400-e29b-41d4-a716-446655440071','/app/images/promotion/promo_banner_sales.png'),
+-- Samsung-Galaxy-Note 20
+('550e8400-e29b-41d4-a716-446655440072', '/app/images/product/Samsung-Galaxy-Note-20.png'),
+('550e8400-e29b-41d4-a716-446655440073', '/app/images/product/Samsung-Galaxy-Note-20-1.png'),
+-- 3060
+('550e8400-e29b-41d4-a716-446655440074', '/app/images/product/msi-3060-1.png'),
+('550e8400-e29b-41d4-a716-446655440075', '/app/images/product/msi-3060-2.png'),
+('550e8400-e29b-41d4-a716-446655440076', '/app/images/product/msi-3060-3.png'),
+-- 2060
+('550e8400-e29b-41d4-a716-446655440077', '/app/images/product/gigabyte-2060-1.png'),
+('550e8400-e29b-41d4-a716-446655440078', '/app/images/product/gigabyte-2060-2.png'),
+('550e8400-e29b-41d4-a716-446655440079', '/app/images/product/gigabyte-2060-3.png');

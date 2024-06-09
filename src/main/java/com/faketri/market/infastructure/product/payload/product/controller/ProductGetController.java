@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 
@@ -85,10 +87,11 @@ public class ProductGetController {
                     defaultValue = "20") final Integer pageSize,
             @RequestParam(value = "minPrice", required = false) final Integer minPrice,
             @RequestParam(value = "maxPrice", required = false) final Integer maxPrice,
-            @RequestParam(value = "name", required = false) final String name,
+            @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "categories", required = false) final UUID categoriesId,
             @RequestParam(value = "characteristics", required = false) final List<UUID> filter
     ) {
+        name = URLDecoder.decode(name, StandardCharsets.UTF_8);
         log.info("getByFilter: " + String.format("Name product - %s , categories id - %s", name, categoriesId));
         return productService.findBySearchParam(PageRequest.of(pageNumber, pageSize), minPrice, maxPrice, name, filter, categoriesId);
 
