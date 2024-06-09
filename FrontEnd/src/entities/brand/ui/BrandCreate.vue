@@ -13,6 +13,8 @@
           type="text"
           placeholder="Название бренда"
           minlength="2"
+          min="2"
+          required
           v-model="brand.name"
         />
       </div>

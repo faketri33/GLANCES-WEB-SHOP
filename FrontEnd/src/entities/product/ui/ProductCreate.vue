@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <form class="d-flex flex-column gap-3">
+    <form class="d-flex flex-column gap-3" @submit.prevent="click">
       <select v-model="brandSelect" class="form-select" id="brand-combobox">
         <option value="Выберите бренд" selected disabled>Выберите бренд</option>
         <option v-for="brand in brands" :key="brand.id" :value="brand.name">
@@ -13,6 +13,7 @@
         id="nameModel"
         name="nameModel"
         type="text"
+        minlength="5"
         placeholder="Название модели"
       />
       <select
@@ -43,7 +44,7 @@
         class="input-group-text shadow"
         id="price"
         name="price"
-        type="text"
+        type="number"
         placeholder="Цена"
       />
       <label for="quantity">Количество</label>
@@ -59,6 +60,7 @@
       <textarea
         id="description"
         class="form-control"
+        minlength="105"
         v-model="product.description"
       ></textarea>
       <p>Характеристики</p>
@@ -88,9 +90,7 @@
         </button>
       </div>
 
-      <button type="button" @click="click" class="btn btn-success">
-        Добавить
-      </button>
+      <button type="submit" class="btn btn-success">Создать</button>
     </form>
   </div>
 </template>
@@ -124,13 +124,20 @@ const product = {
 };
 
 const click = () => {
+  if (categoriesSelect.value === "Выберите категорию") {
+    alert("Выберите категорию");
+    return false;
+  }
+  if (brandSelect.value === "Выберите бренд") {
+    alert("Выберите бренд");
+    return false;
+  }
   product.brand = brands.value.find(
     (brand) => brandSelect.value === brand.name
   );
   product.categories = categories.value.find(
     (categories) => categories.name === categoriesSelect.value
   );
-
   ProductActions.saveProduct(product, selectedFiles);
 };
 

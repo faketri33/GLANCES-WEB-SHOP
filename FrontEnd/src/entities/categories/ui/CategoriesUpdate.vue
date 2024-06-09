@@ -34,7 +34,7 @@
         accept="image/jpeg, image/gif, image/png"
         id="upload-file"
         placeholder="Изображение"
-        multiple
+        required
         @change="handleFileSelect"
       />
       <input
@@ -43,6 +43,7 @@
         class="input-group-text shadow"
         placeholder="Название категории"
         minlength="3"
+        required
       />
       <div v-if="selectedCategories.image" class="form-group">
         <div class="images-list d-flex">
@@ -83,14 +84,14 @@ const selectedCategories = ref({
 });
 
 const updateCategories = () => {
-  if (selectedCategories.value && selectedCategories.value.name)
+  if (selectedCategories.value && selectedCategories.value.id)
     CategoriesAction.update(selectedCategories.value, selectedFiles);
   else alert("Выберите категорию и заполните все поля.");
 };
 
 const handleFileSelect = (event) => {
   const files = event.target.files;
-  selectedFiles = files;
+  selectedFiles = files[0];
 };
 
 const selectCategories = (categories) => {

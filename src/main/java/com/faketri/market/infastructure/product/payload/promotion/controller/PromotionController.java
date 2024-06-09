@@ -79,7 +79,7 @@ public class PromotionController {
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void delete(@PathVariable("id") UUID id) {
         promotionService.deleteById(id);
     }

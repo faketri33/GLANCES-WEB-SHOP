@@ -55,18 +55,14 @@ function getKeyByValue(object, value) {
 }
 
 const paidOrders = async () => {
-  if (order.value && order.value.statusOrder == "Доставлен") {
-    const response = await OrdersActions.paidOrder(order.value.payment.id);
-    if (response) order.value.payment = response;
-  }
+  const response = await OrdersActions.paidOrder(order.value.payment.id);
+  if (response) order.value.payment = response;
 };
 
 const changeOrderStatus = async () => {
   const key = getKeyByValue(orderStatus.value, selectedStatus.value);
-  console.log(key);
   if (key) {
     const respsonse = await OrdersActions.updateStatus(order.value.id, key);
-    console.log(respsonse);
     if (respsonse) order.value = respsonse;
   }
 };
@@ -74,7 +70,6 @@ const changeOrderStatus = async () => {
 onMounted(async () => {
   order.value = await OrdersActions.loadOrderById(route.params.id.toString());
   orderStatus.value = await OrdersActions.getAllStatus();
-  console.log(orderStatus.value);
   return { order, orderStatus };
 });
 </script>

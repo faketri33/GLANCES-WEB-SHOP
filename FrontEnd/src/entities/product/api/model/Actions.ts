@@ -138,6 +138,16 @@ export const ProductActions = {
       .catch((error) => {
         console.log(error);
         // Обработка ошибки
+        if (error.response.data.message) {
+          let formattedErrors = [];
+          for (let key in error.response.data.message) {
+            if (error.response.data.message.hasOwnProperty(key)) {
+              formattedErrors.push(`${key}: ${error.response.data.message[key]}`);
+            }
+          }
+
+          alert(formattedErrors.join("\n"));
+        }
       });
   },
 };

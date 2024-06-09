@@ -63,6 +63,7 @@
           type="text"
           class="form-control"
           id="title"
+          minlength="10"
           v-model="promotion.title"
           required
         />
@@ -85,6 +86,8 @@
           id="description"
           v-model="promotion.description"
           rows="3"
+          minlength="100"
+          maxlength="255"
           required
         ></textarea>
       </div>
@@ -94,6 +97,8 @@
           class="form-control"
           id="conditions"
           v-model="promotion.conditions"
+          minlength="100"
+          maxlength="1024"
           rows="3"
           required
         ></textarea>
@@ -154,6 +159,7 @@
               min="0"
               max="95"
               step="1"
+              required
             />
           </div>
         </div>

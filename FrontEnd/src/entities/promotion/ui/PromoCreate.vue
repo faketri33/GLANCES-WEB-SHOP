@@ -36,7 +36,7 @@
           type="text"
           class="form-control"
           id="title"
-          minlength="6"
+          minlength="10"
           v-model="promotion.title"
           required
         />
@@ -51,6 +51,7 @@
         id="upload-file"
         placeholder="Изображение"
         @change="handleFileSelect"
+        required
       />
       <div class="form-group">
         <label for="description">Описание</label>
@@ -58,6 +59,7 @@
           class="form-control"
           id="description"
           minlength="100"
+          maxlength="255"
           v-model="promotion.description"
           rows="3"
           required
@@ -70,6 +72,7 @@
           id="conditions"
           v-model="promotion.conditions"
           minlength="100"
+          maxlength="1024"
           rows="3"
           required
         ></textarea>
@@ -130,6 +133,7 @@
               min="0"
               max="95"
               step="1"
+              required
             />
           </div>
         </div>
@@ -147,7 +151,7 @@ import { PromotionAction } from "@/entities/promotion/api/PromotionAction";
 
 const products = ref([]);
 const searchQuery = ref("");
-const selectedFiles = ref();
+const selectedFiles = ref(null);
 const todayStart = new Date(Date.now());
 todayStart.setDate(todayStart.getDate() + 1);
 const todayEnd = new Date(Date.now());
@@ -194,7 +198,14 @@ const removeProduct = (product) => {
 };
 
 const submitPromotion = () => {
-  console.log(promotion);
+  if (promotionProductItems.value.length === 0) {
+    alert("Выберите товары.");
+    return;
+  }
+  if (selectedFiles.value == null) {
+    alert("Выберите изображение.");
+    return;
+  }
   promotion.promotionProductItems = promotionProductItems.value;
   PromotionAction.createPromotion(promotion, selectedFiles.value);
 };

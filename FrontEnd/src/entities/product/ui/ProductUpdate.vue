@@ -68,6 +68,7 @@
         <textarea
           id="description"
           class="form-control"
+          maxlength="100"
           v-model="selectedProduct.description"
         ></textarea>
       </div>
@@ -76,6 +77,7 @@
         <input
           type="number"
           id="price"
+          min="100"
           class="form-control"
           v-model="selectedProduct.price"
         />
@@ -85,6 +87,8 @@
         <input
           type="number"
           id="discount"
+          min="0"
+          max="95"
           class="form-control"
           v-model="selectedProduct.discount"
         />
@@ -94,6 +98,7 @@
         <input
           type="number"
           id="quantity"
+          min="0"
           class="form-control"
           v-model="selectedProduct.quantity"
         />
@@ -103,6 +108,7 @@
         <input
           type="number"
           id="quantitySold"
+          min="0"
           class="form-control"
           v-model="selectedProduct.quantitySold"
         />
@@ -194,6 +200,7 @@ const categories = ref([]);
 const brands = ref([]);
 
 const selectedProduct = ref({
+  id: "",
   brand: null,
   nameModel: "",
   categories: null,
@@ -252,9 +259,21 @@ const loadProduct = async (searchQuery) => {
 };
 
 const updateProduct = () => {
-  console.log(selectedProduct.value);
-  console.log(selectedFiles);
-  ProductActions.updateProduct(selectedProduct.value, selectedFiles);
+  if (selectedProduct.value.description.length < 100) {
+    alert("Описание не может быть меньше 100 символов");
+    return;
+  }
+  if (selectedProduct.value.nameModel.length < 5) {
+    alert("Описание не может быть меньше 5 символов");
+    return;
+  }
+  if (selectedProduct.value.image.length === 0 && selectedFiles.length === 0) {
+    alert("Продукт не может быть без фото");
+    return;
+  }
+  if (selectedProduct.value.id)
+    ProductActions.updateProduct(selectedProduct.value, selectedFiles);
+  else alert("Выберите продукт.");
 };
 
 const removeImage = (id) => {

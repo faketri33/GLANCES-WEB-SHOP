@@ -9,7 +9,7 @@
       <router-link to="/user/workspace/promo/update" class="me-2"
         >Изменить</router-link
       >
-      <router-link to="/user/workspace/promo/update">Удалить</router-link>
+      <router-link to="/user/workspace/promo/delete">Удалить</router-link>
     </div>
     <router-view></router-view>
   </div>

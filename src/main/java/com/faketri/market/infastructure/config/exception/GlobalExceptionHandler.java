@@ -4,6 +4,7 @@ import com.faketri.market.entity.exception.ImageFormatException;
 import com.faketri.market.entity.exception.ResourceNotFoundException;
 import com.faketri.market.entity.product.payload.product.exception.NotEnoughProductException;
 import com.faketri.market.entity.product.payload.promotion.exception.ProductAlreadyParticipatesInPromoException;
+import com.faketri.market.entity.user.payload.order.exception.OrderStatusException;
 import com.faketri.market.entity.user.payload.user.exception.PasswordNotValidException;
 import com.faketri.market.entity.user.payload.user.exception.UserAlreadyExistsException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -138,6 +139,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PSQLException.class)
     public ResponseEntity<AppError> handlePSQLException(PSQLException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(OrderStatusException.class)
+    public ResponseEntity<AppError> handlePSQLException(OrderStatusException e) {
         return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

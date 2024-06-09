@@ -48,14 +48,17 @@
           class="input-group-text"
           :placeholder="userStore.getUser.name || 'Имя'"
           v-model="userStore.user.name"
+          @input="filterInput"
         />
         <input
           class="input-group-text"
           :placeholder="userStore.getUser.surname || 'Фамилия'"
           v-model="userStore.user.surname"
+          @input="filterInput"
         />
         <input
-          class="input-group-text"
+          type="date"
+          class="input-group"
           :placeholder="userStore.getUser.dateOfBirthday || 'День рождения'"
           v-model="userStore.user.dateOfBirthday"
         />
@@ -63,8 +66,10 @@
           class="input-group-text"
           :placeholder="userStore.getUser.city || 'Город'"
           v-model="userStore.user.city"
+          @input="filterInput"
         />
         <input
+          type="email"
           class="input-group-text"
           :placeholder="userStore.getUser.email"
           v-model="userStore.user.email"
@@ -93,6 +98,11 @@ const router = useRouter();
 const userStore = userStoreModule();
 const fileInput = ref<HTMLInputElement | null>(null);
 const orders = ref<Orders[]>([]);
+
+function filterInput(event: any) {
+  const regex = /[^a-zA-Zа-яА-Я\s]/g;
+  event.target.value = event.target.value.replace(regex, "");
+}
 
 const triggerFileInput = () => {
   if (fileInput.value) fileInput.value.click();

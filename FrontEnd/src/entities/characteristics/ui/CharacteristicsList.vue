@@ -10,7 +10,6 @@
           :min="min"
           :max="max"
           step="500"
-          @input="updateSlider"
         />
         <input
           type="range"
@@ -18,7 +17,6 @@
           :min="min"
           :max="max"
           step="500"
-          @input="updateSlider"
         />
       </div>
       <div class="row mt-3">
@@ -125,7 +123,8 @@ export default {
   },
   watch: {
     minPrice(val, old) {
-      if (val > this.max) this.minPrice = this.max;
+      if (val < 0) this.minPrice = 0;
+      else if (val > this.max) this.minPrice = this.max;
       else this.minPrice = val;
     },
     maxPrice(val, old) {

@@ -16,7 +16,11 @@ export const BrandAction = {
     return await $axios
       .post("/brand/update", brand)
       .then(() => alert("Данные успешно сохранены"))
-      .catch(() => alert("Ошбика сохранения данных"));
+      .catch(() =>
+        alert(
+          "Ошбика сохранения данных. Выберите бренд и проверьте корректность заполненых данных."
+        )
+      );
   },
   async searchByName(name: string): Promise<Categories[]> {
     return await $axios

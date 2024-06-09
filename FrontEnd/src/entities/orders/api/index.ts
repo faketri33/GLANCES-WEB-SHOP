@@ -16,7 +16,7 @@ export const OrdersActions = {
       });
   },
   createOrder: async function (product: Array<ProductItem>) {
-    if (product) {
+    if (!product) {
       alert("Заказ не может быть пустой");
       return;
     }
@@ -32,8 +32,8 @@ export const OrdersActions = {
       })
       .then((data) => data.data)
       .catch((err) => {
-        console.log(err);
-        alert("Не удалось обновить статус заказа.");
+        console.error(err);
+        alert(err.response.data.message);
       });
   },
   async getAllStatus(): Promise<Map<string, string>> {

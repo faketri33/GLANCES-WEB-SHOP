@@ -8,6 +8,12 @@ export const PromotionAction = {
       ? Promise.resolve(response.data)
       : Promise.reject(response);
   },
+  async delete(id: string) {
+    await $axios
+      .delete(`/promotion/delete/${id}`)
+      .then(() => alert("Акция удалена."))
+      .catch(() => alert("Ошибка удаления акции."));
+  },
   async loadPromoByName(
     name: string,
     number: number,
@@ -49,7 +55,7 @@ export const PromotionAction = {
       })
       .catch((error) => {
         alert(
-          "Ошибка создания, проверьте данные и повторите попытку. Возможно товар уже участвует в акции."
+          "Ошибка создания, проверьте данные и повторите попытку. Возможно товар уже участвует в акции. Максимальный размер изображения 1мб."
         );
         // Обработка ошибки
       });

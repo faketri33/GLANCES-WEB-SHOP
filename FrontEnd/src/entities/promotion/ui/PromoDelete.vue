@@ -1,6 +1,7 @@
 <script setup>
 import SearchComponent from "@/widgets/SearchComponent.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { PromotionAction } from "@/entities/promotion/api/PromotionAction";
 
 const promotions = ref([]);
 const searchQueryPromo = ref("");
@@ -15,13 +16,30 @@ const promotion = ref({
 });
 
 const selectPromo = (promo) => {
-  console.log(promo);
   promotion.value = promo;
 };
 
 const deletePromo = () => {
-  console.log(promotion.value);
+  if (promotion.value.id) {
+    PromotionAction.delete(promotion.value.id);
+  }
 };
+
+const loadPromo = async (searchQueryPromo) => {
+  promotions.value = await PromotionAction.loadPromoByName(
+    searchQueryPromo,
+    0,
+    10
+  );
+};
+
+watch(searchQueryPromo, (newQuery) => {
+  if (newQuery) {
+    loadPromo(newQuery);
+  } else {
+    promotions.value = [];
+  }
+});
 </script>
 
 <template>
@@ -54,12 +72,14 @@ const deletePromo = () => {
         </ul>
       </template>
     </search-component>
-    <div v-if="promotion" class="selected-product">
+    <div v-if="promotion.id" class="selected-product">
       <p>
-        Выбран продукт
+        Выбрана акция
         {{ promotion.title }}
       </p>
-      <button @click="deletePromo">Удалить</button>
+      <button class="btn btn-outline-danger" @click="deletePromo">
+        Удалить
+      </button>
     </div>
   </div>
 </template>

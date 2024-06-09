@@ -17,7 +17,7 @@
       </template>
     </search-component>
     <form
-      @submit.prevent="BrandAction.save(selectedBrand)"
+      @submit.prevent="BrandAction.update(selectedBrand)"
       class="form-inline d-inline-block"
     >
       <h2>Изменить бренд</h2>
@@ -30,6 +30,7 @@
           minlength="2"
           placeholder="Название бренда"
           v-model="selectedBrand.name"
+          required
         />
       </div>
       <button class="btn btn-success mt-2">Обновить</button>

@@ -11,7 +11,7 @@
         accept="image/jpeg, image/gif, image/png"
         id="upload-file"
         placeholder="Изображение"
-        multiple
+        required
         @change="handleFileSelect"
       />
       <input
@@ -20,6 +20,7 @@
         class="input-group-text shadow"
         placeholder="Название категории"
         minlength="3"
+        required
       />
       <button class="btn btn-success">Добавить</button>
     </form>

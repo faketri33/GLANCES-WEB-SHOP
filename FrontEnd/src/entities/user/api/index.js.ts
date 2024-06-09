@@ -25,8 +25,8 @@ export const userStoreModule = defineStore("user", {
     },
     isInBasketProduct: (state) => {
       return (id: string) => {
-        return state.user.basket?.products.some(
-          (productItem) => productItem.product.id === id
+        return state.user.basket?.products?.some(
+          (productItem) => productItem?.product.id === id
         );
       };
     },
@@ -99,7 +99,10 @@ export const userStoreModule = defineStore("user", {
     addBasket(product: string) {
       if (this.isLogin) {
         BasketAction.addProductBasket(this.user.basket.id, product).then(
-          (response) => (this.user.basket = response.data)
+          (response) => {
+            this.user.basket = response.data;
+            //this.user.basket.price = response.data?.price;
+          }
         );
       } else alert("Вы не авторизованы");
     },
@@ -112,7 +115,7 @@ export const userStoreModule = defineStore("user", {
         if (index > -1) {
           this.user.basket.products.splice(index, 1);
           BasketAction.removeFromBasket(this.user.basket.id, product)
-            .then((response) => (this.user.basket = response.data))
+            .then()
             .catch((err) => alert("Повторите попытку позже."));
         }
       } else alert("Вы не авторизованы");
