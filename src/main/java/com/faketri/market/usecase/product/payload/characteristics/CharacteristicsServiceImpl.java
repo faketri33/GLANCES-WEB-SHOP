@@ -49,7 +49,7 @@ public class CharacteristicsServiceImpl implements CharacteristicsService {
 
     @Override
     public Optional<Characteristics> findByNameAndValue(String name, String value) {
-        return characteristicsRepository.findByNameAndValue(name, value);
+        return characteristicsRepository.findFirstByNameAndValueOrderByIdAsc(name, value);
     }
 
     /**
@@ -59,7 +59,7 @@ public class CharacteristicsServiceImpl implements CharacteristicsService {
      * @return the characteristics
      */
     public Characteristics save(Characteristics characteristics) {
-        return characteristicsRepository.findByNameAndValue(
+        return characteristicsRepository.findFirstByNameAndValueOrderByIdAsc(
                 characteristics.getName(),
                 characteristics.getValue()
         ).orElseGet(() -> characteristicsRepository.save(characteristics));

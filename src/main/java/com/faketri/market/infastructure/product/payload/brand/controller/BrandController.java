@@ -39,11 +39,12 @@ public class BrandController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public Page<Brand> save(@RequestParam String name, @RequestParam(name = "number", required = true,
+    public Page<Brand> search(@RequestParam String name, @RequestParam(name = "number", required = true,
             defaultValue = "0") final Integer pageNumber,
                       @RequestParam(name = "size", required = true,
                               defaultValue = "20") final Integer pageSize) {
         name = URLDecoder.decode(name, StandardCharsets.UTF_8);
+        log.info("search: " + name);
         return brandService.searchByName(name, PageRequest.of(pageNumber, pageSize));
     }
 

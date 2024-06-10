@@ -26,7 +26,7 @@ export const BrandAction = {
     return await $axios
       .get("/brand/search", {
         params: {
-          name: encodeURIComponent(name),
+          name: name,
         },
       })
       .then((response) => response.data)

@@ -28,12 +28,6 @@ public class CharacteristicsController {
         this.characteristicsService = characteristicsService;
     }
 
-    /**
-     * Find characteristics by product category list.
-     *
-     * @param categoryId the category id
-     * @return the list
-     */
     @RequestMapping("/product/{categoryId}")
     public List<Characteristics> findCharacteristicsByProductCategory(
             @PathVariable(name = "categoryId") UUID categoryId
@@ -42,11 +36,6 @@ public class CharacteristicsController {
                 categoryId);
     }
 
-    /**
-     * Find all list.
-     *
-     * @return the list
-     */
     @RequestMapping("/")
     public List<Characteristics> findAll() {
         return characteristicsService.findAll();

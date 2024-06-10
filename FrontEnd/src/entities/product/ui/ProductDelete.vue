@@ -73,7 +73,9 @@ watch(searchQuery, (newQuery) => {
         Выбран продукт
         {{ selectedProducts.brand.name + " " + selectedProducts.nameModel }}
       </p>
-      <button @click="deleteProduct">Удалить</button>
+      <button class="btn btn-outline-danger" @click="deleteProduct">
+        Удалить
+      </button>
     </div>
   </div>
 </template>

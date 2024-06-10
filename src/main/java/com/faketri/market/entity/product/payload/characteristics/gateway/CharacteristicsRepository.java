@@ -27,15 +27,6 @@ public interface CharacteristicsRepository
     @Override
     List<Characteristics> findAll();
 
-
-    /**
-     * Update name and value by id int.
-     *
-     * @param name  the name
-     * @param value the value
-     * @param id    the id
-     * @return the int
-     */
     @Transactional
     @Modifying
     @Query("update Characteristics c set c.name = ?1, c.value = ?2 where c.id = ?3")
@@ -44,8 +35,7 @@ public interface CharacteristicsRepository
     @Query("select distinct c from Characteristics c inner join c.products products where products.categories.id = ?1")
     List<Characteristics> findDistinctByProducts_Categories_Id(UUID id);
 
-    @Query("select c from Characteristics c where c.name = ?1 and c.value = ?2")
-    Optional<Characteristics> findByNameAndValue(String name, String value);
+    Optional<Characteristics> findFirstByNameAndValueOrderByIdAsc(String name, String value);
 
 
 }

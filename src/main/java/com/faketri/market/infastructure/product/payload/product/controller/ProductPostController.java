@@ -51,7 +51,7 @@ public class ProductPostController {
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
-    @RequestMapping("/delete/{id}")
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id")UUID id) {
         productService.deleteById(id);
     }
