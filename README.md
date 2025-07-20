@@ -1,3 +1,4 @@
+
 ---
 
 # Интернет-магазин электроники
@@ -29,6 +30,8 @@
 - Spring Security
 - Hibernate
 - PostgreSQL
+- Flyway
+- JWT
 
 ### Frontend:
 - Vue.js
@@ -93,8 +96,8 @@
    ```
 
 4. **Доступ к приложению:**
-   - Frontend: `http://localhost:8080`
-   - Backend API: `http://localhost:9000/api`
+    - Frontend: `http://localhost:8080`
+    - Backend API: `http://localhost:9000/api`
 
 ### Структура проекта
 
@@ -156,3 +159,14 @@ OnlineMarket/
 - Обратите внимание, что пути и настройки могут отличаться в зависимости от вашей конкретной конфигурации и окружения.
 
 Если возникнут вопросы или проблемы, пожалуйста, создайте issue в репозитории.
+
+<details>
+  <summary>📸 Скриншоты (нажми, чтобы увидеть)</summary>
+
+![screencapture-localhost-8080-2025-07-20-23_00_04.png](screen/screencapture-localhost-8080-2025-07-20-23_00_04.png)
+![screencapture-localhost-8080-basket-2025-07-20-23_02_14.png](screen/screencapture-localhost-8080-basket-2025-07-20-23_02_14.png)
+![screencapture-localhost-8080-catalog-750e8400-e29b-41d4-a716-446655440001-2025-07-20-23_00_31.png](screen/screencapture-localhost-8080-catalog-750e8400-e29b-41d4-a716-446655440001-2025-07-20-23_00_31.png)
+![screencapture-localhost-8080-product-850e8400-e29b-41d4-a716-446655440001-2025-07-20-23_01_58.png](screen/screencapture-localhost-8080-product-850e8400-e29b-41d4-a716-446655440001-2025-07-20-23_01_58.png)
+![screencapture-localhost-8080-promotion-660e8400-e29b-41d4-a716-446655440000-2025-07-20-23_03_06.png](screen/screencapture-localhost-8080-promotion-660e8400-e29b-41d4-a716-446655440000-2025-07-20-23_03_06.png)
+
+</details>

@@ -42,10 +42,11 @@ export const ProductActions = {
     if (categoriesId) params.append("categories", String(categoriesId));
     params.append("name", name);
     /* eslint-disable */
-    if (characteristics) params.append(
-      "characteristics",
-      characteristics?.map((c) => c.id).join(",")
-    );
+    if (characteristics)
+      params.append(
+        "characteristics",
+        characteristics?.map((c) => c.id).join(",")
+      );
     if (minPrice) params.append("minPrice", String(minPrice));
     if (maxPrice) params.append("maxPrice", String(maxPrice));
     return await $axios
@@ -111,12 +112,12 @@ export const ProductActions = {
     })
       .then((response) => {
         console.log(response);
-        alert("Данные о продукте успешно обновлены.")
+        alert("Данные о продукте успешно обновлены.");
       })
       .catch((error) => {
         console.log(error);
         // Обработка ошибки
-        alert("Ошибка обновления данных. Проверьте корректность данных.")
+        alert("Ошибка обновления данных. Проверьте корректность данных.");
       });
   },
 
@@ -147,7 +148,9 @@ export const ProductActions = {
           let formattedErrors = [];
           for (let key in error.response.data.message) {
             if (error.response.data.message.hasOwnProperty(key)) {
-              formattedErrors.push(`${key}: ${error.response.data.message[key]}`);
+              formattedErrors.push(
+                `${key}: ${error.response.data.message[key]}`
+              );
             }
           }
 
