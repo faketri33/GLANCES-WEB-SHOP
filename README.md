@@ -77,7 +77,7 @@
 2. **Настройка окружения:**
    Создайте файл `.env` в корневой директории и добавьте следующие переменные:
    ```env
-    DB_CONNECT=jdbc:postgresql://postgres/postgres
+    DB_CONNECT_DOCKER=jdbc:postgresql://postgres/postgres
    
     POSTGRES_USER=postgres
     POSTGRES_PASSWORD=your_password
