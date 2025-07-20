@@ -1,16 +1,15 @@
-FROM node:lts-alpine
-
-RUN npm install -g http-server
-
+# Step 1: Build Vue Project
+FROM node:lts-alpine as build-stage
 WORKDIR /app
-
-COPY /FrontEnd/package*.json ./
-
+COPY FrontEnd/package*.json ./
 RUN npm install
-
-COPY /FrontEnd/ .
-
+COPY FrontEnd .
 RUN npm run build
 
-EXPOSE 8080
-CMD [ "http-server", "dist" ]
+# Step 2: Create Nginx Server
+FROM nginx:stable-alpine as production-stage
+COPY FrontEnd/Docker/nginx.conf /etc/nginx/nginx.conf
+
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+CMD ["nginx", "-g", "daemon off;"]
